@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content">
 
                 <EditText
-                    android:id="@+id/jhgjhg"
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_password"
@@ -62,7 +62,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:password="true"
-                    android:text="hgjhgjhg" />
+                    android:text="" />
 
             </android.support.design.widget.TextInputLayout>
 
