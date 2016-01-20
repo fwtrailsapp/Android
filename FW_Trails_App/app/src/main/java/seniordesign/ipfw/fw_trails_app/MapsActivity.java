@@ -9,6 +9,9 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+//import com.google.maps.android.kml.KmlLayer;
+
+import java.io.InputStream;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -66,5 +69,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+
+//        mMap.setMyLocationEnabled(true);
+//        mMap.getUiSettings().setMapToolbarEnabled(false);
+
+        InputStream is = getResources().openRawResource(R.raw.doc);
+//        KmlLayer layer = new KmlLayer(getMap(), R.raw.kmlFile, getApplicationContext());
+//        try {
+//            KmlLayer layer = new KmlLayer(mMap, is, getApplicationContext());
+//            layer.addLayerToMap();
+//        }
+//        catch(org.xmlpull.v1.XmlPullParserException e){
+//
+//        }
+//        catch(java.io.IOException e){
+//
+//        }
     }
 }
