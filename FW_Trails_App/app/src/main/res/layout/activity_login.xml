@@ -22,8 +22,8 @@
         android:layout_height="match_parent"
         android:fillViewport="false"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/login_progress"
-        android:layout_toEndOf="@+id/login_progress">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -59,7 +59,7 @@
         android:singleLine="true"
         android:password="true"
         android:text=""
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="27dp"
         android:layout_below="@+id/usernameEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -72,8 +72,10 @@
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:singleLine="true"
-        android:layout_centerVertical="true"
-        />
+        android:layout_below="@+id/sponsorImage"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="46dp"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -81,19 +83,48 @@
         android:scaleType="fitXY"
         android:id="@+id/sponsorImage"
         android:src="@drawable/sponsor_image"
-        android:layout_above="@+id/usernameEditText"
+        android:layout_below="@+id/login_progress"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="21dp"></ImageView>
+        android:layout_marginTop="16dp"></ImageView>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/buttonOK_text"
-        android:id="@+id/button_OK"
+        android:text="@string/button_Ok_text"
+        android:id="@+id/button_Ok"
+        android:layout_marginLeft="21dp"
+        android:layout_marginStart="21dp"
+        android:layout_marginTop="39dp"
         android:layout_below="@+id/passwordEditText"
         android:layout_toRightOf="@+id/login_progress"
-        android:layout_toEndOf="@+id/login_progress"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="50dp"/>
+        android:layout_toEndOf="@+id/login_progress"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_Cancel_text"
+        android:id="@+id/button_Cancel"
+        android:layout_marginRight="44dp"
+        android:layout_marginEnd="44dp"
+        android:layout_alignTop="@+id/button_Ok"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/textview_NewUser_text"
+        android:id="@+id/textViewNewUser"
+        android:textSize="24dp"
+        android:layout_below="@+id/button_Cancel"
+        android:layout_centerHorizontal="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/createAccount_text"
+        android:id="@+id/button_CreateAccount"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/textViewNewUser"
+        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

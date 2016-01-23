@@ -13,14 +13,15 @@
     <string name="error_field_required">This field is required</string>
     <string name="login_hint_name">Name</string>
     <string name="login_hint_password">Password</string>
-    <string name="login_OK_button_text">Ok</string>
-    <string name="login_CANCEL_button_text">Cancel</string>
     <string name="login_new_user_text">New User?</string>
     <string name="login_create_account_button_text">Create New Account</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="buttonOK_text">Ok</string>
+    <string name="button_Ok_text">Ok</string>
+    <string name="button_Cancel_text">Cancel</string>
+    <string name="textview_NewUser_text">New User?</string>
+    <string name="createAccount_text">Create New Account</string>
     <!-- End Strings related to LoginActivity-->
 
     <string name="title_activity_maps">Map</string>
