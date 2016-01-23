@@ -20,7 +20,10 @@
         android:id="@+id/login_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="false">
+        android:fillViewport="false"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/login_progress"
+        android:layout_toEndOf="@+id/login_progress">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -71,4 +74,14 @@
         android:singleLine="true"
         android:layout_centerVertical="true"
         />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:id="@+id/sponsorImage"
+        android:src="@drawable/sponsor_image"
+        android:layout_above="@+id/usernameEditText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="21dp"></ImageView>
 </RelativeLayout>
