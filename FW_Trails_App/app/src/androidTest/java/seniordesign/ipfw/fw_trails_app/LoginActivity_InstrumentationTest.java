@@ -27,8 +27,10 @@ import android.test.suitebuilder.annotation.LargeTest;
 public class LoginActivity_InstrumentationTest {
 
 
-   private String usernameHint = "Name";
-   private String passwordHint = "Password";
+   private String usernameHint     = "Name";
+   private String passwordHint     = "Password";
+   private String button_OK_String = "Ok";
+
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
    @Rule
    public ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule(LoginActivity.class);
@@ -61,5 +63,16 @@ public class LoginActivity_InstrumentationTest {
    @Test
    public void verifySponsorImage(){
       onView(withId(R.id.sponsorImage)).check(matches(isDisplayed()));
+   }
+
+   // Verifies the Ok button exists.
+   @Test
+   public void okButtonExists(){
+      onView(withId(R.id.button_OK)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   public void okButtonTextVerification(){
+      onView(withId(R.id.button_OK)).check(matches(withText(button_OK_String)));
    }
 }

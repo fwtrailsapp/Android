@@ -84,4 +84,16 @@
         android:layout_above="@+id/usernameEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="21dp"></ImageView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonOK_text"
+        android:id="@+id/button_OK"
+        android:layout_below="@+id/passwordEditText"
+        android:layout_toRightOf="@+id/login_progress"
+        android:layout_toEndOf="@+id/login_progress"
+        android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="50dp"/>
 </RelativeLayout>
