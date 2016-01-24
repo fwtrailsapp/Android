@@ -9,7 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import org.mockito.runners.MockitoJUnitRunner;
-
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import dalvik.annotation.TestTargetClass;
 
 /**
@@ -19,6 +21,7 @@ public class AccountCreateActivity_UnitTests {
 
    private static AccountCreateActivity actCreate;
    private String createNewAccountTitle = "Create New Account";
+
 
    // Tests that the AccountCreateActivity class can be instantiated.
    @BeforeClass
@@ -36,5 +39,4 @@ public class AccountCreateActivity_UnitTests {
 
       assertNotNull(actCreate);
    }
-
 }

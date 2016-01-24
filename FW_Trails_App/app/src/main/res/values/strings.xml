@@ -33,9 +33,17 @@
     <string name="weight_editText_text">Weight (in pounds)</string>
     <string name="age_editText_text">Age</string>
     <string name="gender_dropDown">Gender</string>
-    <string name="disclaimer_textView_text">"Disclaimer: This information is used for
-        for calories burned prediction."
+    <string name="disclaimer_textView_text">"Disclaimer: This information is used
+        for calories burned estimation."
     </string>
+    <string name="email_editText_text">Email</string>
+    <string name="gender_SpinnerPrompt">Choose Gender</string>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Prefer not to disclose</item>
+    </string-array>
+    <string name="button_createAccount_text">Create Account</string>
     <!-- End Strings related to AccountCreateActivity -->
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_account_create">AccountCreateActivity</string>
