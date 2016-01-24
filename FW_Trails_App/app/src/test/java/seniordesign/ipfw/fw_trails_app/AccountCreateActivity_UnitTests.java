@@ -37,9 +37,4 @@ public class AccountCreateActivity_UnitTests {
       assertNotNull(actCreate);
    }
 
-   @Test
-   public void createNewAccountTitleVerification() {
-      assertEquals(createNewAccountTitle,actCreate.getSupportActionBar().getTitle());
-   }
-
 }

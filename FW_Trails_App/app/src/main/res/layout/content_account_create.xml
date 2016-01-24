@@ -1,17 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
+
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="seniordesign.ipfw.fw_trails_app.AccountCreateActivity"
-    tools:showIn="@layout/activity_account_create">
+    tools:showIn="@layout/activity_account_create"
+    >
 
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/firstName_editText_text"
+        android:ems="10"
+        android:id="@+id/firstName_editText"
+        android:layout_marginTop="37dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/lastName_editText_text"
+        android:ems="10"
+        android:id="@+id/lastName_editText"
+        android:layout_marginTop="18dp"
+        android:layout_below="@+id/firstName_editText"
+        android:layout_alignLeft="@+id/firstName_editText"
+        android:layout_alignStart="@+id/firstName_editText"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:hint="@string/height_editText_text"
+        android:id="@+id/height_editText"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/lastName_editText"
+        android:layout_centerHorizontal="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberDecimal"
+        android:ems="10"
+        android:id="@+id/weight_editText"
+        android:hint="@string/weight_editText_text"
+        android:layout_below="@+id/height_editText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/age_editText"
+        android:hint="@string/age_editText_text"
+        android:layout_marginTop="22dp"
+        android:layout_below="@+id/weight_editText"
+        android:layout_alignLeft="@+id/weight_editText"
+        android:layout_alignStart="@+id/weight_editText"/>
 </RelativeLayout>

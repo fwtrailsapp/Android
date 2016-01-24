@@ -27,7 +27,15 @@
 
     <!-- Strings related to AccountCreateActivity -->
     <string name="createNewAccountToolbarTitle">Create New Account</string>
-
+    <string name="firstName_editText_text">First Name</string>
+    <string name="lastName_editText_text">Last Name</string>
+    <string name="height_editText_text">Height (in inches)</string>
+    <string name="weight_editText_text">Weight (in pounds)</string>
+    <string name="age_editText_text">Age</string>
+    <string name="gender_dropDown">Gender</string>
+    <string name="disclaimer_textView_text">"Disclaimer: This information is used for
+        for calories burned prediction."
+    </string>
     <!-- End Strings related to AccountCreateActivity -->
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_account_create">AccountCreateActivity</string>
