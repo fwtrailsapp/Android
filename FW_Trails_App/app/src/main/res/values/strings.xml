@@ -24,6 +24,12 @@
     <string name="createAccount_text">Create New Account</string>
     <!-- End Strings related to LoginActivity-->
 
+
+    <!-- Strings related to AccountCreateActivity -->
+    <string name="createNewAccountToolbarTitle">Create New Account</string>
+
+    <!-- End Strings related to AccountCreateActivity -->
     <string name="title_activity_maps">Map</string>
+    <string name="title_activity_account_create">AccountCreateActivity</string>
 
 </resources>
