@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
@@ -23,5 +23,6 @@
         android:layout_marginTop="54dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:onClick="goToMap"/>
+        android:onClick="goToMap"
+        android:layout_gravity="center_horizontal"/>
 </LinearLayout>

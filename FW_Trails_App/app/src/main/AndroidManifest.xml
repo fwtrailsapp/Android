@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="seniordesign.ipfw.fw_trails_app"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="seniordesign.ipfw.fw_trails_app">
 
     <uses-sdk android:minSdkVersion="17"/>
 
@@ -62,9 +62,6 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
-        <activity
             android:name=".AccountCreateActivity"
             android:label="@string/title_activity_account_create"
             android:parentActivityName=".LoginActivity"
@@ -72,6 +69,13 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="seniordesign.ipfw.fw_trails_app.LoginActivity"/>
+        </activity>
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="seniordesign.ipfw.fw_trails_app.MainActivity"/>
         </activity>
     </application>
 
