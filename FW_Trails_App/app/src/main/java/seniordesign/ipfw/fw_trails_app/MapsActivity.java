@@ -1,8 +1,11 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -21,6 +24,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Polyline line;
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,25 +51,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
         mMap.getUiSettings().setMapToolbarEnabled(false);
 
+        addKMLLayerToMap();
+        addPolylineToMap();
+
+    }
+
+    /**
+     * 
+     */
+    private void addPolylineToMap() {
+        line = mMap.addPolyline(new PolylineOptions()
+                .width(10)
+                .color(Color.BLUE));
+    }
+
+    /**
+     *
+     */
+    private void addKMLLayerToMap(){
         InputStream is = getResources().openRawResource(R.raw.doc);
         try {
             KmlLayer layer = new KmlLayer(mMap, is, getApplicationContext());
             layer.addLayerToMap();
         }
         catch(org.xmlpull.v1.XmlPullParserException e){
-//            Log.i(null, "catch1");
         }
         catch(java.io.IOException e){
-//            Log.i(null, "catch2");
         }
-
-        line = mMap.addPolyline(new PolylineOptions()
-                .width(10)
-                .color(Color.BLUE));
-
-
     }
 }
