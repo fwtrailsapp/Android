@@ -2,6 +2,10 @@
     <string name="app_name">FW_Trails_App</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Strings related to MapsActivity-->
+    <string name="startStopRecording">Start</string>
+    <string name="finishRecording">Finish</string>
+    <!-- Strings related to MapsActivity-->
 
     <!-- Strings related to LoginActivity-->
     <string name="title_activity_login">Sign in</string>
