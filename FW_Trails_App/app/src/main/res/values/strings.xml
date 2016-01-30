@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FW_Trails_App</string>
+    <string name="app_name">FW Trails</string>
     <string name="action_settings">Settings</string>
 
     <!-- Strings related to MapsActivity-->
