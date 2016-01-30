@@ -62,25 +62,15 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".AccountCreateActivity"
-            android:label="@string/title_activity_account_create"
-            android:parentActivityName=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="seniordesign.ipfw.fw_trails_app.LoginActivity"/>
-        </activity>
-        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="seniordesign.ipfw.fw_trails_app.MainActivity"/>
         </activity>
-        <activity
-            android:name=".AccountStatisticsActivity"
-            android:label="@string/title_activity_account_statistics"
-            android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".AccountStatisticsActivity">
+        </activity>
+        <activity android:name=".AccountCreateActivity">
         </activity>
     </application>
 
