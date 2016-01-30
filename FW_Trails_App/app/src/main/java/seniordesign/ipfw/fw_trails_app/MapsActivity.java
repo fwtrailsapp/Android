@@ -86,10 +86,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        LatLng fortWayne = new LatLng(41.0856087, -85.1397336);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10));
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
         }
         mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setIndoorEnabled(false);
 
         addKMLLayerToMap();
         addPolylineToMap();
