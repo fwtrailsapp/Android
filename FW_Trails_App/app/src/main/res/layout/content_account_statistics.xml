@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="seniordesign.ipfw.fw_trails_app.AccountStatisticsActivity"
+    tools:showIn="@layout/app_bar_account_statistics">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/overallStatText"
+        android:id="@+id/overallStatTextView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/overallTotalTimeText"
+        android:id="@+id/overallTotalTimeTextView"
+        android:layout_below="@+id/overallStatTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="22dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTimeAmount"
+        android:id="@+id/overallTotalTimeAmountTextView"
+        android:layout_alignTop="@+id/overallTotalTimeTextView"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/overallTotalDistanceText"
+        android:id="@+id/overallTotalDistanceTextView"
+        android:layout_below="@+id/overallTotalTimeTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultDistanceAmount"
+        android:id="@+id/overallTotalDistanceAmountTextView"
+        android:layout_alignTop="@+id/overallTotalDistanceTextView"
+        android:layout_alignLeft="@+id/overallTotalTimeAmountTextView"
+        android:layout_alignStart="@+id/overallTotalTimeAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/overallTopSpeedText"
+        android:id="@+id/overallTopSpeedTextView"
+        android:layout_below="@+id/overallTotalDistanceTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTopSpeed"
+        android:id="@+id/overallTopSpeedAmountTextView"
+        android:layout_alignTop="@+id/overallTopSpeedTextView"
+        android:layout_alignLeft="@+id/overallTotalDistanceAmountTextView"
+        android:layout_alignStart="@+id/overallTotalDistanceAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/overallAverageSpeedText"
+        android:id="@+id/overallAverageSpeedTextView"
+        android:layout_below="@+id/overallTopSpeedTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTopSpeed"
+        android:id="@+id/overallAverageSpeedAmountTextView"
+        android:layout_alignTop="@+id/overallAverageSpeedTextView"
+        android:layout_alignLeft="@+id/overallTopSpeedAmountTextView"
+        android:layout_alignStart="@+id/overallTopSpeedAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/overallNumberOfActivitiesText"
+        android:id="@+id/overallNumberOfActivitiesTextView"
+        android:layout_below="@+id/overallAverageSpeedTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultNumberOfActivities"
+        android:id="@+id/overallNumberOfActivitiesAmountTextView"
+        android:layout_alignTop="@+id/overallNumberOfActivitiesTextView"
+        android:layout_alignLeft="@+id/overallAverageSpeedAmountTextView"
+        android:layout_alignStart="@+id/overallAverageSpeedAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/activitySpecificStatText"
+        android:id="@+id/activitySpecificStatTextView"
+        android:layout_below="@+id/overallNumberOfActivitiesTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="78dp"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        android:id="@+id/activity_Spinner"
+        android:prompt="@string/activity_SpinnerPrompt"
+        android:entries="@array/activityEntries"
+        android:layout_below="@+id/activitySpecificStatTextView"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/activitySpecificStatTextView"
+        android:layout_alignEnd="@+id/activitySpecificStatTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/activitySpecificTotalTimeText"
+        android:id="@+id/activitySpecificTotalTimeTextView"
+        android:layout_below="@+id/activity_Spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTimeAmount"
+        android:id="@+id/activitySpecificTotalTimeAmountTextView"
+        android:layout_alignBottom="@+id/activitySpecificTotalTimeTextView"
+        android:layout_alignLeft="@+id/overallNumberOfActivitiesAmountTextView"
+        android:layout_alignStart="@+id/overallNumberOfActivitiesAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/activitySpecificTotalDistanceText"
+        android:id="@+id/activitySpecificTotalDistanceTextView"
+        android:layout_below="@+id/activitySpecificTotalTimeTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultDistanceAmount"
+        android:id="@+id/activitySpecificTotalDistanceAmountTextView"
+        android:layout_alignTop="@+id/activitySpecificTotalDistanceTextView"
+        android:layout_alignRight="@+id/activitySpecificTotalTimeAmountTextView"
+        android:layout_alignLeft="@+id/activitySpecificTotalTimeAmountTextView"
+        android:layout_alignStart="@+id/activitySpecificTotalTimeAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/activitySpecificTopSpeedText"
+        android:id="@+id/activitySpecificTopSpeedTextView"
+        android:layout_below="@+id/activitySpecificTotalDistanceTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTopSpeed"
+        android:id="@+id/activitySpecificTopSpeedAmountTextView"
+        android:layout_alignTop="@+id/activitySpecificTopSpeedTextView"
+        android:layout_alignRight="@+id/overallAverageSpeedAmountTextView"
+        android:layout_alignEnd="@+id/overallAverageSpeedAmountTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/activitySpecificAverageSpeedText"
+        android:id="@+id/activitySpecificAverageSpeedTextView"
+        android:layout_below="@+id/activitySpecificTopSpeedTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/defaultTopSpeed"
+        android:id="@+id/activitySpecificAverageSpeedAmountTextView"
+        android:layout_alignTop="@+id/activitySpecificAverageSpeedTextView"
+        android:layout_alignRight="@+id/activitySpecificTopSpeedAmountTextView"
+        android:layout_alignEnd="@+id/activitySpecificTopSpeedAmountTextView"/>
+</RelativeLayout>

@@ -49,7 +49,38 @@
     </string-array>
     <string name="button_createAccount_text">Create Account</string>
     <!-- End Strings related to AccountCreateActivity -->
+
+    <!-- Strings related to Account Statistics Activity-->
+    <string name="overallStatText">Overall Statistics</string>
+    <string name="overallTotalTimeText">Total Time</string>
+    <string name="defaultTimeAmount">00:00:00</string>
+    <string name="overallTotalDistanceText">Total Distance</string>
+    <string name="defaultDistanceAmount">0.00 mi.</string>
+    <string name="overallTopSpeedText">Top Speed</string>
+    <string name="defaultTopSpeed">0.00 mph</string>
+    <string name="overallAverageSpeedText">Average Speed</string>
+    <string name="overallNumberOfActivitiesText">Number of Activities</string>
+    <string name="defaultNumberOfActivities">0</string>
+    <string name="activitySpecificStatText">View Activity Statistics</string>
+    <string-array name="activityEntries">
+        <item>Biking</item>
+        <item>Running</item>
+        <item>Walking</item>
+        <item>Skateboarding</item>
+        <item>Skating</item>
+    </string-array>
+    <string name="activity_SpinnerPrompt">Choose an Activity</string>
+    <string name="activitySpecificTotalTimeText">Total Time</string>
+    <string name="activitySpecificTotalDistanceText">Total Distance</string>
+    <string name="activitySpecificTopSpeedText">Top Speed</string>
+    <string name="activitySpecificAverageSpeedText">Average Speed</string>
+    <!--End Strings related to Account Statistics Activity-->
+
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_account_create">AccountCreateActivity</string>
+    <string name="title_activity_account_statistics">AccountStatisticsActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
 </resources>
