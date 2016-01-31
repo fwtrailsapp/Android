@@ -10,6 +10,9 @@
     <string name="navDrawer_accountStatistics">Account Statistics</string>
     <string name="navDrawer_accountDetails">Account Details</string>
     <string name="navDrawer_exit">Exit</string>
+    <string name="navDrawer_311Text">"Please call 311 to request city information or
+        non emergency services."
+    </string>
     <!--End Navigation Drawer Strings-->
 
     <!-- Strings related to MapsActivity-->
@@ -92,5 +95,6 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_demo_main">DemoMainActivity</string>
 
 </resources>

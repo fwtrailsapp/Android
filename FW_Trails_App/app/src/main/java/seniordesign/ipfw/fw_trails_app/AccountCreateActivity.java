@@ -11,7 +11,7 @@ public class AccountCreateActivity extends AppCompatActivity {
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_account_create);
-      getSupportActionBar().setTitle(createAcctActivityTitle);
-      getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+      //getSupportActionBar().setTitle(createAcctActivityTitle);
+     // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
    }
 }
