@@ -68,7 +68,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="seniordesign.ipfw.fw_trails_app.MainActivity"/>
         </activity>
-        <activity android:name=".AccountStatisticsActivity">
+        <activity android:name=".AccountStatisticsFragment">
         </activity>
         <activity android:name=".AccountCreateActivity">
         </activity>

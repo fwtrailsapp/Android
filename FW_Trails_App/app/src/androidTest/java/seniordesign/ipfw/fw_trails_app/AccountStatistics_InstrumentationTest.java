@@ -54,7 +54,7 @@ public class AccountStatistics_InstrumentationTest {
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
    @Rule
-   public ActivityTestRule<AccountStatisticsActivity> mActivityRule = new ActivityTestRule(AccountStatisticsActivity.class);
+   public ActivityTestRule<AccountStatisticsFragment> mActivityRule = new ActivityTestRule(AccountStatisticsFragment.class);
 
    // Ignore these tests until toolbar and nav drawer is made
    // Make sure the toolbar is displayed.
