@@ -1,0 +1,33 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_recordActivity"
+            android:icon="@drawable/ic_directions_run_black_24dp"
+            android:title="@string/navDrawer_recordActivity" />
+        <item
+            android:id="@+id/nav_activityHistory"
+            android:icon="@drawable/ic_history_black_24dp"
+            android:title="@string/navDrawer_activityHistory" />
+        <item
+            android:id="@+id/nav_achievements"
+            android:icon="@drawable/ic_stars_black_24dp"
+            android:title="@string/navDrawer_achievements" />
+        <item
+            android:id="@+id/nav_trailMap"
+            android:icon="@drawable/ic_explore_black_24dp"
+            android:title="@string/navDrawer_trailMap" />
+        <item
+            android:id="@+id/nav_accountStatistics"
+            android:icon="@drawable/ic_trending_up_black_24dp"
+            android:title="@string/navDrawer_accountStatistics" />
+        <item
+            android:id="@+id/nav_accountDetails"
+            android:icon="@drawable/ic_account_circle_black_24dp"
+            android:title="@string/navDrawer_accountDetails" />
+        <item
+            android:id="@+id/nav_exit"
+            android:icon="@drawable/ic_not_interested_black_24dp"
+            android:title="@string/navDrawer_exit" />
+    </group>
+</menu>

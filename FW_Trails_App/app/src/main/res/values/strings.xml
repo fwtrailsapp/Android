@@ -2,6 +2,16 @@
     <string name="app_name">FW Trails</string>
     <string name="action_settings">Settings</string>
 
+    <!--Navigation Drawer Strings-->
+    <string name="navDrawer_recordActivity">Record Activity</string>
+    <string name="navDrawer_activityHistory">Activity History</string>
+    <string name="navDrawer_achievements">Achievements</string>
+    <string name="navDrawer_trailMap">Trail Map</string>
+    <string name="navDrawer_accountStatistics">Account Statistics</string>
+    <string name="navDrawer_accountDetails">Account Details</string>
+    <string name="navDrawer_exit">Exit</string>
+    <!--End Navigation Drawer Strings-->
+
     <!-- Strings related to MapsActivity-->
     <string name="startStopRecording">Start</string>
     <string name="finishRecording">Finish</string>
