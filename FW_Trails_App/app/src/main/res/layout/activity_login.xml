@@ -59,7 +59,7 @@
         android:singleLine="true"
         android:password="true"
         android:text=""
-        android:layout_marginTop="27dp"
+        android:layout_marginTop="36dp"
         android:layout_below="@+id/usernameEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:id="@+id/sponsorImage"
-        android:src="@drawable/sponsor_image"
+        android:src="@drawable/sponsor_image2"
         android:layout_below="@+id/login_progress"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"></ImageView>
