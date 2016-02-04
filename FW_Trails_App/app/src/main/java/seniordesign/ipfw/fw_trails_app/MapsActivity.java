@@ -3,6 +3,7 @@ package seniordesign.ipfw.fw_trails_app;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -10,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,6 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private boolean recording = false;
     Button startStopButton;
     Button finishButton;
+    private LocationListener locationListener;
 
     /**
      *
@@ -99,6 +102,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         addKMLLayerToMap();
         addPolylineToMap();
 
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                //Gets called when a new location is found by the network location provider.
+                updateLocation(location);
+            }
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+        };
+
+    }
+
+    private void updateLocation(Location location)
+    {
+        LatLng updatedLocation = new LatLng(location.getLatitude(),location.getLongitude());
+//        if(firstCoordinate) {
+//            mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
+//                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+//            lastLocationTime = System.currentTimeMillis();
+//            lastLocation = updatedLocation;
+//        }
+//        else{
+//            durationSinceLastLocation = System.currentTimeMillis()-lastLocationTime;
+//            lastLocationTime = System.currentTimeMillis();
+//            tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation)/metersPerMile;
+//            totalDistance += tempDistance;
+//            distance.setText(String.valueOf(distanceFormat.format(totalDistance)) + " miles");
+//            currentSpeed = tempDistance/metersPerMile/durationSinceLastLocation*1000*secondsPerHour;
+//            speed.setText(speedFormat.format(currentSpeed) + " mph");
+//            lastLocation = updatedLocation;
+//        }
+//        coordinates.add(updatedLocation);
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
+//        line.setPoints(coordinates);
+//        firstCoordinate = false;
     }
 
     /**
