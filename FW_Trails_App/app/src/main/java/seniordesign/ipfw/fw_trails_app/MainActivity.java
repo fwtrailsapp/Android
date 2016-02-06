@@ -129,14 +129,12 @@ public class MainActivity extends AppCompatActivity
             viewIsAtHome = false;
             break;
 
-         // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
-        /* case R.id.nav_recordActivity:
+        case R.id.nav_recordActivity:
             fragment = new RecordActivityFragment();
             title = ((RecordActivityFragment)fragment).getTitle();
             viewIsAtHome = true;
             break;
 
-         */
          case R.id.nav_exit:
             initializeExitAlert();
             AlertDialog alert = builder.create();
