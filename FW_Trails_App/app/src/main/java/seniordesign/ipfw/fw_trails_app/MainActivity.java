@@ -123,21 +123,18 @@ public class MainActivity extends AppCompatActivity
             viewIsAtHome = false;
             break;
 
-         // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
-        /* case R.id.nav_recordActivity:
-            fragment = new RecordActivityFragment();
-            title = ((RecordActivityFragment)fragment).getTitle();
-            viewIsAtHome = true;
-            break;
-
-
-
          case R.id.nav_activityHistory:
             fragment = new ActivityHistoryFragment();
             title = ((ActivityHistoryFragment)fragment).getTitle();
             viewIsAtHome = false;
             break;
 
+         // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
+        /* case R.id.nav_recordActivity:
+            fragment = new RecordActivityFragment();
+            title = ((RecordActivityFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
 
          */
          case R.id.nav_exit:
