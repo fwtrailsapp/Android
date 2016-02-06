@@ -1,6 +1,5 @@
 package seniordesign.ipfw.fw_trails_app;
 
-import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.support.v7.widget.Toolbar;
 import android.test.suitebuilder.annotation.LargeTest;
@@ -17,7 +16,6 @@ import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
 import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
@@ -54,7 +52,7 @@ public class AccountStatistics_InstrumentationTest {
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
    @Rule
-   public ActivityTestRule<AccountStatisticsFragment> mActivityRule = new ActivityTestRule(AccountStatisticsFragment.class);
+   //public ActivityTestRule<AccountStatisticsFragment> mActivityRule = new ActivityTestRule(AccountStatisticsFragment.class);
 
    // Ignore these tests until toolbar and nav drawer is made
    // Make sure the toolbar is displayed.

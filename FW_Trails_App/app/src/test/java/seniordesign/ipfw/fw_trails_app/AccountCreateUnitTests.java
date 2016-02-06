@@ -1,6 +1,6 @@
 package seniordesign.ipfw.fw_trails_app;
 
-import android.test.ActivityInstrumentationTestCase2;
+
 
 import junit.framework.*;
 
@@ -13,25 +13,23 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import dalvik.annotation.TestTargetClass;
-
 /**
- * Created by Jaron on 1/23/2016.
+ * Created by Jaron on 2/6/2016.
  */
-public class AccountCreateActivity_UnitTests {
+public class AccountCreateUnitTests {
 
-   private static AccountCreateActivity actCreate;
-   private String createNewAccountTitle = "Create New Account";
+   private AccountCreateFragment actCreate = new AccountCreateFragment();
 
 
-   // Tests that the AccountCreateActivity class can be instantiated.
+   // What needs to be done before the class is ran
    @BeforeClass
    public static void setUp() {
-      actCreate = new AccountCreateActivity();
+
    }
 
+   // what needs to be done after the class is ran
    @AfterClass
    public static void tearDown() {
-      actCreate = null;
    }
 
    @Test

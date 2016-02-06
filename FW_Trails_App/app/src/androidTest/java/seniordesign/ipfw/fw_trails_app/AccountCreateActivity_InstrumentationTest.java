@@ -49,8 +49,7 @@ public class AccountCreateActivity_InstrumentationTest {
    private String cancelCreateNewAcctBtn = "Cancel";
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
-   @Rule
-   public ActivityTestRule<AccountCreateActivity> mActivityRule = new ActivityTestRule(AccountCreateActivity.class);
+
 
    //Ignore tests until toolbar/nav drawer iscreated
    @Ignore

@@ -41,7 +41,7 @@
     <!-- End Strings related to LoginActivity-->
 
 
-    <!-- Strings related to AccountCreateActivity -->
+    <!-- Strings related to AccountCreate -->
     <string name="createNewAccountToolbarTitle">Create New Account</string>
     <string name="firstName_editText_text">First Name</string>
     <string name="lastName_editText_text">Last Name</string>
@@ -60,7 +60,7 @@
         <item>Prefer not to disclose</item>
     </string-array>
     <string name="button_createAccount_text">Create Account</string>
-    <!-- End Strings related to AccountCreateActivity -->
+    <!-- End Strings related to AccountCreate -->
 
     <!-- Strings related to Account Statistics Activity-->
     <string name="overallStatText">Overall Statistics</string>
@@ -96,5 +96,8 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_demo_main">DemoMainActivity</string>
     <string name="title_activity_main">MainActivity</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
