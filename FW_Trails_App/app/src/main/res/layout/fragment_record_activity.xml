@@ -1,13 +1,35 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context="seniordesign.ipfw.fw_trails_app.RecordActivityFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
 
-</FrameLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/map"
+            android:text="@string/startStopRecording"
+            android:id="@+id/startStopButton"
+            android:layout_gravity="center_horizontal|bottom"
+            android:onClick="startStopRecording" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/finishRecording"
+            android:id="@+id/finishButton"
+            android:visibility="gone"
+            android:layout_gravity="center"
+            android:onClick="finishRecording"/>
+
+
+</RelativeLayout>

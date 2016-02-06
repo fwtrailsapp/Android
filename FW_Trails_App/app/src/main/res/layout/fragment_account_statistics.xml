@@ -41,8 +41,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/defaultTimeAmount"
         android:id="@+id/overallTotalTimeAmountTextView"
-        android:layout_alignTop="@+id/overallTotalTimeTextView"
-        android:layout_centerHorizontal="true"/>
+        android:layout_above="@+id/overallTotalDistanceAmountTextView"
+        android:layout_toRightOf="@+id/activitySpecificStatTextView"
+        android:layout_toEndOf="@+id/activitySpecificStatTextView"/>
 
     <TextView
         android:layout_width="wrap_content"

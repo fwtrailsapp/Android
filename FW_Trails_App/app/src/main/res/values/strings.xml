@@ -14,10 +14,10 @@
     </string>
     <!--End Navigation Drawer Strings-->
 
-    <!-- Strings related to MapsActivity-->
+    <!-- Strings related to RecordActivityFragment-->
     <string name="startStopRecording">Start</string>
     <string name="finishRecording">Finish</string>
-    <!-- Strings related to MapsActivity-->
+    <!-- Strings related to RecordActivityFragment-->
 
     <!-- Strings related to LoginActivity-->
     <string name="title_activity_login">Sign in</string>
