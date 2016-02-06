@@ -104,6 +104,12 @@ public class MainActivity extends AppCompatActivity
             title  = ((AccountStatisticsFragment)fragment).getTitle();
             viewIsAtHome = false;
             break;
+
+         case R.id.nav_achievements:
+            fragment = new AchievementsFragment();
+            title = ((AchievementsFragment)fragment).getTitle();
+            viewIsAtHome = false;
+            break;
          // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
         /* case R.id.nav_recordActivity:
             fragment = new RecordActivityFragment();
@@ -114,29 +120,23 @@ public class MainActivity extends AppCompatActivity
          case R.id.nav_trailMap:
             fragment = new TrailMapFragment();
             title = ((TrailMapFragment)fragment).getTitle();
-            viewIsAtHome = true;
+            viewIsAtHome = false;
             break;
 
          case R.id.nav_activityHistory:
             fragment = new ActivityHistoryFragment();
             title = ((ActivityHistoryFragment)fragment).getTitle();
-            viewIsAtHome = true;
-            break;
-
-         case R.id.nav_achievements:
-            fragment = new AchievementsFragment();
-            title = ((AchievementsFragment)fragment).getTitle();
-            viewIsAtHome = true;
+            viewIsAtHome = false;
             break;
 
          case R.id.nav_accountDetails:
             fragment = new AccountDetailsFragment();
             title = ((AccountDetailsFragment)fragment).getTitle();
-            viewIsAtHome = true;
+            viewIsAtHome = false;
             break;
          */
          case R.id.nav_exit:
-            initializeAlert();
+            initializeExitAlert();
             AlertDialog alert = builder.create();
             alert.show();
             break;
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity
 
 
    // The Alert for Exit Navigation drawer Item
-   private void initializeAlert(){
+   private void initializeExitAlert(){
       builder = new AlertDialog.Builder(this);
 
       // Set the properties
