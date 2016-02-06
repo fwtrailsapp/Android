@@ -1,21 +1,22 @@
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.view.View;
+import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -35,12 +36,18 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         OnMapReadyCallback {
 
+   private final String exitDialogMessage = "Are you sure you want to exit?";
+   private final String exitDialogTitle = "Confirm";
+   private final String YES = "YES";
+   private final String NO = "NO";
    private final String mainActivityTitle = "Record Activity";
+   Button startStopButton;
+   Button finishButton;
+   AlertDialog.Builder builder;
+   private boolean viewIsAtHome;  // Record Activity is the Home View.
    private GoogleMap mMap;
    private Polyline line;
    private boolean recording = false;
-   Button startStopButton;
-   Button finishButton;
    private LocationListener locationListener;
 
    @Override
@@ -61,8 +68,10 @@ public class MainActivity extends AppCompatActivity
       drawer.setDrawerListener(toggle);
       toggle.syncState();
 
+
       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
       navigationView.setNavigationItemSelectedListener(this);
+      displayView(R.id.nav_accountStatistics);
    }
 
    @Override
@@ -70,24 +79,120 @@ public class MainActivity extends AppCompatActivity
       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       if (drawer.isDrawerOpen(GravityCompat.START)) {
          drawer.closeDrawer(GravityCompat.START);
+      }
+      if (!viewIsAtHome) { //if the current view is not the Home fragment
+         displayView(R.id.nav_accountStatistics); //display the Home fragment
+         //Todo: displayView(R.id.nav_recordActivity);
+
       } else {
-         super.onBackPressed();
+         moveTaskToBack(true);  //If view is in Record Activity fragment, exit application
       }
    }
 
+   // Determines what fragment to display based on the viewId passed in
+   // from the onNavigationItemSelected method.
+   public void displayView(int viewId) {
 
-   @SuppressWarnings("StatementWithEmptyBody")
-   @Override
-   public boolean onNavigationItemSelected(MenuItem item) {
-      // Handle navigation view item clicks here.
-      int id = item.getItemId();
+      Fragment fragment = null;
+
+      // Set the default title to the record activity title.
+      String title = getString(R.string.navDrawer_recordActivity);
+
+      switch (viewId) {
+         case R.id.nav_accountStatistics:
+            fragment = new AccountStatisticsFragment();
+            title  = ((AccountStatisticsFragment)fragment).getTitle();
+            viewIsAtHome = false;
+            break;
+         // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
+        /* case R.id.nav_recordActivity:
+            fragment = new RecordActivityFragment();
+            title = ((RecordActivityFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
+
+         case R.id.nav_trailMap:
+            fragment = new TrailMapFragment();
+            title = ((TrailMapFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
+
+         case R.id.nav_activityHistory:
+            fragment = new ActivityHistoryFragment();
+            title = ((ActivityHistoryFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
+
+         case R.id.nav_achievements:
+            fragment = new AchievementsFragment();
+            title = ((AchievementsFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
+
+         case R.id.nav_accountDetails:
+            fragment = new AccountDetailsFragment();
+            title = ((AccountDetailsFragment)fragment).getTitle();
+            viewIsAtHome = true;
+            break;
+         */
+         case R.id.nav_exit:
+            initializeAlert();
+            AlertDialog alert = builder.create();
+            alert.show();
+            break;
+      }
+
+      // Changes the current fragment
+      if (fragment != null) {
+         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+         ft.replace(R.id.frameLayoutContent, fragment);
+         ft.commit();
+      }
+
+      // set the toolbar title
+      if (getSupportActionBar() != null) {
+         getSupportActionBar().setTitle(title);
+      }
 
       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       drawer.closeDrawer(GravityCompat.START);
+   }
+
+   // Triggers when a Navigation Drawer Item is selected.
+   @Override
+   public boolean onNavigationItemSelected(MenuItem item) {
+      displayView(item.getItemId());
       return true;
    }
 
 
+   // The Alert for Exit Navigation drawer Item
+   private void initializeAlert(){
+      builder = new AlertDialog.Builder(this);
+
+      // Set the properties
+      builder.setTitle(exitDialogTitle);
+      builder.setMessage(exitDialogMessage);
+
+      // Create the yes and no listeners
+      builder.setPositiveButton(YES, new DialogInterface.OnClickListener() {
+
+         public void onClick(DialogInterface dialog, int which) {
+            // Do nothing but close the dialog
+            dialog.dismiss();
+            finish();
+         }
+
+      });
+
+      builder.setNegativeButton(NO, new DialogInterface.OnClickListener() {
+
+         @Override
+         public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+         }
+      });
+   }
    /**
     * Manipulates the map once available.
     * This callback is triggered when the map is ready to be used.
@@ -125,7 +230,6 @@ public class MainActivity extends AppCompatActivity
 
          public void onProviderDisabled(String provider) {}
       };
-
    }
 
    private void updateLocation(Location location)

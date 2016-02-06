@@ -32,4 +32,8 @@ public class AccountStatisticsFragment extends Fragment {
       // findViewById(R.id.someGuiElement);
       return loadedRelativeLayout; // We must return the loaded Layout
    }
+
+   public String getTitle(){
+      return accountStatTitle;
+   }
 }
