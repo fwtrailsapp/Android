@@ -110,6 +110,12 @@ public class MainActivity extends AppCompatActivity
             title = ((AchievementsFragment)fragment).getTitle();
             viewIsAtHome = false;
             break;
+
+         case R.id.nav_accountDetails:
+            fragment = new AccountDetailsFragment();
+            title = ((AccountDetailsFragment)fragment).getTitle();
+            viewIsAtHome = false;
+            break;
          // todo: Add rest of the nav drawer fragments to switch statement and create each fragment
         /* case R.id.nav_recordActivity:
             fragment = new RecordActivityFragment();
@@ -129,11 +135,7 @@ public class MainActivity extends AppCompatActivity
             viewIsAtHome = false;
             break;
 
-         case R.id.nav_accountDetails:
-            fragment = new AccountDetailsFragment();
-            title = ((AccountDetailsFragment)fragment).getTitle();
-            viewIsAtHome = false;
-            break;
+
          */
          case R.id.nav_exit:
             initializeExitAlert();

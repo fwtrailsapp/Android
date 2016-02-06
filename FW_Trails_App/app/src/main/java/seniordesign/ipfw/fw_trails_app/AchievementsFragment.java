@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
  */
 public class AchievementsFragment extends Fragment {
 
-   private final String achievementsTitle = "Achievements";
+   private final String fragmentTitle = "Achievements";
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
@@ -44,6 +44,6 @@ public class AchievementsFragment extends Fragment {
    }
 
    public String getTitle(){
-      return achievementsTitle;
+      return fragmentTitle;
    }
 }

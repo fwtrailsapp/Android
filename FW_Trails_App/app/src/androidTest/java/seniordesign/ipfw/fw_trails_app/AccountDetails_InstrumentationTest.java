@@ -9,12 +9,10 @@ import android.widget.TextView;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -22,12 +20,8 @@ import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFro
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
-import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 
@@ -38,9 +32,9 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class Achievements_InstrumentationTest {
+public class AccountDetails_InstrumentationTest {
 
-   private final String toolbarTitle = "Achievements";
+   private final String toolbarTitle = "Account Details";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -52,7 +46,7 @@ public class Achievements_InstrumentationTest {
    public void navDrawerOpen(){
       openDrawer();
       onView(withId(R.id.nav_drawerImage)).check(matches(isDisplayed()));
-      onView(withText(R.string.navDrawer_achievements)).perform(click());
+      onView(withText(R.string.navDrawer_accountDetails)).perform(click());
    }
    // Close Nav Drawer after each test
    @After
