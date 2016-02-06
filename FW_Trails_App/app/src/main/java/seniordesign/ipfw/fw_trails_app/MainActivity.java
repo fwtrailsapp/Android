@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity
 
       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
       navigationView.setNavigationItemSelectedListener(this);
-      displayView(R.id.nav_accountStatistics);
+      displayView(R.id.nav_recordActivity);
    }
 
    @Override
@@ -72,9 +72,7 @@ public class MainActivity extends AppCompatActivity
          drawer.closeDrawer(GravityCompat.START);
       }
       if (!viewIsAtHome) { //if the current view is not the Home fragment
-         displayView(R.id.nav_accountStatistics); //display the Home fragment
-         //Todo: displayView(R.id.nav_recordActivity);
-
+         displayView(R.id.nav_recordActivity); //display the Home fragment
       } else {
          moveTaskToBack(true);  //If view is in Record Activity fragment, exit application
       }
@@ -86,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 
       Fragment fragment = null;
 
+      //todo: figure out a way to hold current toolbar title if user cancels exit dialog.
       // Set the default title to the record activity title.
       String title = getString(R.string.navDrawer_recordActivity);
 
