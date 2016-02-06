@@ -65,7 +65,7 @@ public class Achievements_InstrumentationTest {
    // Ignore these tests until toolbar and nav drawer is made
    // Make sure the toolbar is displayed.
    @Test
-   public void accountStatisticsToolbarExists() {
+   public void toolbarExists() {
       onView(withId(R.id.toolbar)).check(matches(isDisplayed()));
    }
 
@@ -74,7 +74,7 @@ public class Achievements_InstrumentationTest {
    // title. The title is set in the onCreate method.
    // source: http://www.captechconsulting.com/blogs/introduction-to-espresso
    @Test
-   public void AccountStatisticsToolbarTitleVerification() {
+   public void achievementsToolbarTitleVerification() {
       onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
               .check(matches(withText(toolbarTitle)));
    }

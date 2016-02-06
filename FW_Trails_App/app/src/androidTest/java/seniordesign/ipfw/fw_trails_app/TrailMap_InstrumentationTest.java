@@ -32,9 +32,9 @@ import static org.hamcrest.Matchers.not;
 
 @RunWith(AndroidJUnit4.class)
 @LargeTest
-public class AccountDetails_InstrumentationTest {
+public class TrailMap_InstrumentationTest {
 
-   private final String toolbarTitle = "Account Details";
+   private final String toolbarTitle = "Trail Map";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -46,7 +46,7 @@ public class AccountDetails_InstrumentationTest {
    public void navDrawerOpen(){
       openDrawer();
       onView(withId(R.id.nav_drawerImage)).check(matches(isDisplayed()));
-      onView(withText(R.string.navDrawer_accountDetails)).perform(click());
+      onView(withText(R.string.navDrawer_trailMap)).perform(click());
    }
    // Close Nav Drawer after each test
    @After
@@ -68,7 +68,7 @@ public class AccountDetails_InstrumentationTest {
    // title. The title is set in the onCreate method.
    // source: http://www.captechconsulting.com/blogs/introduction-to-espresso
    @Test
-   public void accountDetailsToolbarTitleVerification() {
+   public void trailMapToolbarTitleVerification() {
       onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
               .check(matches(withText(toolbarTitle)));
    }
