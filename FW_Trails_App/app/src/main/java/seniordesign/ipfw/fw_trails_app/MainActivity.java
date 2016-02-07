@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity
    private final String exitDialogTitle = "Confirm";
    private final String YES = "YES";
    private final String NO = "NO";
+   private MenuItem currentMenuItem = null;
    private final String mainActivityTitle = "Record Activity";
    AlertDialog.Builder builder;
    private boolean viewIsAtHome;  // Record Activity is the Home View.
@@ -86,8 +87,8 @@ public class MainActivity extends AppCompatActivity
 
       //todo: figure out a way to hold current toolbar title if user cancels exit dialog.
       // Set the default title to the record activity title.
-      String title = getString(R.string.navDrawer_recordActivity);
-
+      String title = mainActivityTitle;
+      String currentTitle = (String) getSupportActionBar().getTitle();
       switch (viewId) {
          case R.id.nav_accountStatistics:
             fragment = new AccountStatisticsFragment();
@@ -129,6 +130,7 @@ public class MainActivity extends AppCompatActivity
             initializeExitAlert();
             AlertDialog alert = builder.create();
             alert.show();
+            title = currentTitle;
             break;
       }
 
@@ -151,7 +153,24 @@ public class MainActivity extends AppCompatActivity
    // Triggers when a Navigation Drawer Item is selected.
    @Override
    public boolean onNavigationItemSelected(MenuItem item) {
+
+      if(currentMenuItem == null)
+      {
+         currentMenuItem = item;
+      }
+
       displayView(item.getItemId());
+
+      // Don't select Exit Item since it doesn't relate to the current fragment being displayed
+      if(item.getTitle().equals("Exit"))
+      {
+         currentMenuItem.setChecked(true);
+      }
+      else
+      {
+         currentMenuItem = item;
+      }
+
       return true;
    }
 

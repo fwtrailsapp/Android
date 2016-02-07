@@ -29,6 +29,7 @@
         <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_not_interested_black_24dp"
-            android:title="@string/navDrawer_exit" />
+            android:title="@string/navDrawer_exit"
+            android:checkable="false"/>
     </group>
 </menu>
