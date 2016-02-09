@@ -17,7 +17,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import com.google.android.gms.location.LocationListener;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity
    private final String mainActivityTitle = "Record Activity";
    AlertDialog.Builder builder;
    private boolean viewIsAtHome;  // Record Activity is the Home View.
+   Button startButton, pauseButton, resumeButton, finishButton;
 
 
    @Override
@@ -174,7 +177,6 @@ public class MainActivity extends AppCompatActivity
       return true;
    }
 
-
    // The Alert for Exit Navigation drawer Item
    private void initializeExitAlert(){
       builder = new AlertDialog.Builder(this);
@@ -201,5 +203,41 @@ public class MainActivity extends AppCompatActivity
             dialog.dismiss();
          }
       });
+   }
+
+   public void startRecording(View v){
+      startButton = (Button) findViewById(R.id.startButton);
+      pauseButton = (Button) findViewById(R.id.pauseButton);
+      startButton.setVisibility(View.GONE);
+      pauseButton.setVisibility(View.VISIBLE);
+      Log.i("Development", "startRecording");
+   }
+
+   public void pauseRecording(View v){
+      pauseButton = (Button) findViewById(R.id.pauseButton);
+      resumeButton = (Button) findViewById(R.id.resumeButton);
+      finishButton = (Button) findViewById(R.id.finishButton);
+      pauseButton.setVisibility(View.GONE);
+      resumeButton.setVisibility(View.VISIBLE);
+      finishButton.setVisibility(View.VISIBLE);
+      Log.i("Development", "pauseRecording");
+   }
+
+   public void resumeRecording(View v){
+      pauseButton = (Button) findViewById(R.id.pauseButton);
+      resumeButton = (Button) findViewById(R.id.resumeButton);
+      finishButton = (Button) findViewById(R.id.finishButton);
+      pauseButton.setVisibility(View.VISIBLE);
+      resumeButton.setVisibility(View.GONE);
+      finishButton.setVisibility(View.GONE);
+      Log.i("Development", "resumeRecording");
+   }
+
+   public void finishRecording(View v){
+      resumeButton = (Button) findViewById(R.id.resumeButton);
+      finishButton = (Button) findViewById(R.id.finishButton);
+      resumeButton.setVisibility(View.GONE);
+      finishButton.setVisibility(View.GONE);
+      Log.i("Development", "finishRecording");
    }
 }
