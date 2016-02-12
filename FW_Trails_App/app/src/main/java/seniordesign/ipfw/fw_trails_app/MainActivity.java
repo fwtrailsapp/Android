@@ -1,15 +1,10 @@
 package seniordesign.ipfw.fw_trails_app;
 
-import android.Manifest;
 import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,22 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.kml.KmlLayer;
-
-import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,8 +25,6 @@ public class MainActivity extends AppCompatActivity
    private final String mainActivityTitle = "Record Activity";
    AlertDialog.Builder builder;
    private boolean viewIsAtHome;  // Record Activity is the Home View.
-   Button startButton, pauseButton, resumeButton, finishButton;
-
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
@@ -203,41 +181,5 @@ public class MainActivity extends AppCompatActivity
             dialog.dismiss();
          }
       });
-   }
-
-   public void startRecording(View v){
-      startButton = (Button) findViewById(R.id.startButton);
-      pauseButton = (Button) findViewById(R.id.pauseButton);
-      startButton.setVisibility(View.GONE);
-      pauseButton.setVisibility(View.VISIBLE);
-      Log.i("Development", "startRecording");
-   }
-
-   public void pauseRecording(View v){
-      pauseButton = (Button) findViewById(R.id.pauseButton);
-      resumeButton = (Button) findViewById(R.id.resumeButton);
-      finishButton = (Button) findViewById(R.id.finishButton);
-      pauseButton.setVisibility(View.GONE);
-      resumeButton.setVisibility(View.VISIBLE);
-      finishButton.setVisibility(View.VISIBLE);
-      Log.i("Development", "pauseRecording");
-   }
-
-   public void resumeRecording(View v){
-      pauseButton = (Button) findViewById(R.id.pauseButton);
-      resumeButton = (Button) findViewById(R.id.resumeButton);
-      finishButton = (Button) findViewById(R.id.finishButton);
-      pauseButton.setVisibility(View.VISIBLE);
-      resumeButton.setVisibility(View.GONE);
-      finishButton.setVisibility(View.GONE);
-      Log.i("Development", "resumeRecording");
-   }
-
-   public void finishRecording(View v){
-      resumeButton = (Button) findViewById(R.id.resumeButton);
-      finishButton = (Button) findViewById(R.id.finishButton);
-      resumeButton.setVisibility(View.GONE);
-      finishButton.setVisibility(View.GONE);
-      Log.i("Development", "finishRecording");
    }
 }

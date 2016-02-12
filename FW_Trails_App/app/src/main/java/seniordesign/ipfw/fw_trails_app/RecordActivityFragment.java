@@ -73,6 +73,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
    private Polyline line;
    Button startButton;
    Button pauseButton;
+   Button resumeButton;
    Button finishButton;
    private LocationListener locationListener;
    private GoogleApiClient mGoogleApiClient;
@@ -93,20 +94,14 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
    private double metersPerMile = 1609.34;
    private double secondsPerHour = 3600.0;
    private ArrayList<LatLng> coordinates = new ArrayList<>();
-   //Jaron Test
-   private View.OnClickListener startButtonListener = new View.OnClickListener() {
-
-      @Override
-      public void onClick(View v) {
-         startRecording();
-      }
-   };
-   //
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       // Replace LinearLayout by the type of the root element of the layout you're trying to load
       RelativeLayout loadedRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_record_activity, container, false);
       startButton = (Button) loadedRelativeLayout.findViewById(R.id.startButton);
+      pauseButton = (Button) loadedRelativeLayout.findViewById(R.id.pauseButton);
+      resumeButton = (Button) loadedRelativeLayout.findViewById(R.id.resumeButton);
+      finishButton = (Button) loadedRelativeLayout.findViewById(R.id.finishButton);
       buildGoogleApiClient();
 
       // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -115,6 +110,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
       mSupportMapFragment.getMapAsync(this);
 
       startButton.setOnClickListener(startButtonListener);
+      pauseButton.setOnClickListener(pauseButtonListener);
+      resumeButton.setOnClickListener(resumeButtonListener);
+      finishButton.setOnClickListener(finishButtonListener);
       // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
       // the class, just initialize them here
 
@@ -270,11 +268,71 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
       }
    }
 
+   private View.OnClickListener startButtonListener = new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+         startRecording();
+      }
+   };
+
    public void startRecording(){
       startButton = (Button) getView().findViewById(R.id.startButton);
       pauseButton = (Button) getView().findViewById(R.id.pauseButton);
       startButton.setVisibility(View.GONE);
       pauseButton.setVisibility(View.VISIBLE);
       Log.i("Development", "startRecording");
+   }
+
+   private View.OnClickListener pauseButtonListener = new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+         pauseRecording();
+      }
+   };
+
+   public void pauseRecording(){
+      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+      finishButton = (Button) getView().findViewById(R.id.finishButton);
+      pauseButton.setVisibility(View.GONE);
+      resumeButton.setVisibility(View.VISIBLE);
+      finishButton.setVisibility(View.VISIBLE);
+      Log.i("Development", "pauseRecording");
+   }
+
+   private View.OnClickListener resumeButtonListener = new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+         resumeRecording();
+      }
+   };
+
+   public void resumeRecording(){
+      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+      finishButton = (Button) getView().findViewById(R.id.finishButton);
+      pauseButton.setVisibility(View.VISIBLE);
+      resumeButton.setVisibility(View.GONE);
+      finishButton.setVisibility(View.GONE);
+      Log.i("Development", "resumeRecording");
+   }
+
+   private View.OnClickListener finishButtonListener = new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+         finishRecording();
+      }
+   };
+
+   public void finishRecording(){
+      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+      finishButton = (Button) getView().findViewById(R.id.finishButton);
+      resumeButton.setVisibility(View.GONE);
+      finishButton.setVisibility(View.GONE);
+      Log.i("Development", "finishRecording");
    }
 }
