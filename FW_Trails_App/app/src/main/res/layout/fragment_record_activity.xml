@@ -20,7 +20,6 @@
         android:id="@+id/startButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="startRecording"
         android:visibility="visible"/>
 
     <Button

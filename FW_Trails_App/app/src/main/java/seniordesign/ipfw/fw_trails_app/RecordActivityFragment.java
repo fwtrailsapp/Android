@@ -3,6 +3,7 @@ package seniordesign.ipfw.fw_trails_app;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -71,6 +72,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
    private GoogleMap mMap;
    private Polyline line;
    Button startButton;
+   Button pauseButton;
    Button finishButton;
    private LocationListener locationListener;
    private GoogleApiClient mGoogleApiClient;
@@ -91,11 +93,20 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
    private double metersPerMile = 1609.34;
    private double secondsPerHour = 3600.0;
    private ArrayList<LatLng> coordinates = new ArrayList<>();
+   //Jaron Test
+   private View.OnClickListener startButtonListener = new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+         startRecording();
+      }
+   };
+   //
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       // Replace LinearLayout by the type of the root element of the layout you're trying to load
       RelativeLayout loadedRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_record_activity, container, false);
-
+      startButton = (Button) loadedRelativeLayout.findViewById(R.id.startButton);
       buildGoogleApiClient();
 
       // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -103,6 +114,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
       SupportMapFragment mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
       mSupportMapFragment.getMapAsync(this);
 
+      startButton.setOnClickListener(startButtonListener);
       // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
       // the class, just initialize them here
 
@@ -256,5 +268,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
       } catch (org.xmlpull.v1.XmlPullParserException e) {
       } catch (java.io.IOException e) {
       }
+   }
+
+   public void startRecording(){
+      startButton = (Button) getView().findViewById(R.id.startButton);
+      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+      startButton.setVisibility(View.GONE);
+      pauseButton.setVisibility(View.VISIBLE);
+      Log.i("Development", "startRecording");
    }
 }
