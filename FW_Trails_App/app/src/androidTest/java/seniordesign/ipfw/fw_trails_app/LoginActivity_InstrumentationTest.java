@@ -35,8 +35,8 @@ public class LoginActivity_InstrumentationTest {
    private String button_CreateNewAccount_String = "Create New Account";
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
-   @Rule
-   public ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule(LoginActivity.class);
+  // @Rule
+  // public ActivityTestRule<LoginActivity> mActivityRule = new ActivityTestRule(LoginActivity.class);
 
    // Checks to see if the Username Edit Text is on the screen.
    @Test
