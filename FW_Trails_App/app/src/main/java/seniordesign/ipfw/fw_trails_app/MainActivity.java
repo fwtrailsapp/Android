@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity
    private final String exitDialogTitle = "Confirm";
    private final String YES = "YES";
    private final String NO = "NO";
-   private MenuItem currentMenuItem = null;
    private final String mainActivityTitle = "Record Activity";
    AlertDialog.Builder builder;
    private boolean viewIsAtHome;  // Record Activity is the Home View.
@@ -35,7 +34,6 @@ public class MainActivity extends AppCompatActivity
       Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
       setSupportActionBar(toolbar);
 
-      getSupportActionBar().setTitle(mainActivityTitle);
       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
       ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
               this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -210,18 +208,9 @@ public class MainActivity extends AppCompatActivity
    @Override
    public boolean onNavigationItemSelected(MenuItem item) {
 
-      if (currentMenuItem == null) {
-         currentMenuItem = item;
-      }
 
       displayView(item.getItemId());
 
-      // Don't select Exit Item since it doesn't relate to the current fragment being displayed
-      if (item.getTitle().equals("Exit")) {
-         currentMenuItem.setChecked(true);
-      } else {
-         currentMenuItem = item;
-      }
 
       return true;
    }
