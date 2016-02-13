@@ -1,24 +1,20 @@
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,305 +30,300 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.kml.KmlLayer;
-
-import java.io.InputStream;
-
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.location.Location;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.maps.android.kml.KmlLayer;
 
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
-
 public class RecordActivityFragment extends Fragment implements OnMapReadyCallback,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener  {
-   private final String fragmentTitle = "Record Activity";
-   private GoogleMap mMap;
-   private Polyline line;
-   Button startButton;
-   Button pauseButton;
-   Button resumeButton;
-   Button finishButton;
-   private LocationListener locationListener;
-   private GoogleApiClient mGoogleApiClient;
-   protected LocationRequest mLocationRequest;
-   private Location mLastLocation;
-   private boolean recording = false;
-   private boolean firstCoordinate = false;
-   private long lastLocationTime;
-   private LatLng lastLocation;
-   private long durationSinceLastLocation;
-   private double currentSpeed;
-   NumberFormat speedFormat = new DecimalFormat("##0.0");
-   NumberFormat distanceFormat = new DecimalFormat("##0.000");
-   double tempDistance;
-   double totalDistance = 0.0;
-   private TextView speed;
-   private TextView distance;
-   private double metersPerMile = 1609.34;
-   private double secondsPerHour = 3600.0;
-   private ArrayList<LatLng> coordinates = new ArrayList<>();
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-      // Replace LinearLayout by the type of the root element of the layout you're trying to load
-      RelativeLayout loadedRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_record_activity, container, false);
-      startButton = (Button) loadedRelativeLayout.findViewById(R.id.startButton);
-      pauseButton = (Button) loadedRelativeLayout.findViewById(R.id.pauseButton);
-      resumeButton = (Button) loadedRelativeLayout.findViewById(R.id.resumeButton);
-      finishButton = (Button) loadedRelativeLayout.findViewById(R.id.finishButton);
-      buildGoogleApiClient();
+    private final String fragmentTitle = "Record Activity";
 
-      // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//      SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-      SupportMapFragment mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-      mSupportMapFragment.getMapAsync(this);
+    private GoogleMap mMap;
+    private Polyline line;
+    private GoogleApiClient mGoogleApiClient;
 
-      startButton.setOnClickListener(startButtonListener);
-      pauseButton.setOnClickListener(pauseButtonListener);
-      resumeButton.setOnClickListener(resumeButtonListener);
-      finishButton.setOnClickListener(finishButtonListener);
-      // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-      // the class, just initialize them here
+    private Location mLastLocation;
+    private LocationListener locationListener;
+    protected LocationRequest mLocationRequest;
 
-      // Content of previous onCreate() here
-      // ...
-      // Don't use this method, it's handled by inflater.inflate() above :
-      // setContentView(R.layout.activity_layout);
+    private boolean recording = false;
+    private boolean firstCoordinate = false;
+    private ArrayList<LatLng> coordinates = new ArrayList<>();
+    private LatLng lastLocation;
 
-      // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
-      // loadedRelativeLayout.findViewById(R.id.someGuiElement);
-      // Instead of :
-      // findViewById(R.id.someGuiElement);
-      return loadedRelativeLayout; // We must return the loaded Layout
-   }
+    private double metersPerMile = 1609.34;
+    private double secondsPerHour = 3600.0;
+    private long lastLocationTime;
+    private long durationSinceLastLocation;
+    private double currentSpeed;
+    NumberFormat speedFormat = new DecimalFormat("#0.0");
+    NumberFormat distanceFormat = new DecimalFormat("#0.00");
+    double tempDistance;
+    double totalDistance = 0.0;
 
-   protected synchronized void buildGoogleApiClient() {
-      mGoogleApiClient = new GoogleApiClient.Builder(getContext())
-              .addConnectionCallbacks(this)
-              .addOnConnectionFailedListener(this)
-              .addApi(LocationServices.API)
-              .build();
-      createLocationRequest();
-   }
+    private TextView speed;
+    private TextView distance;
+    private TextView duration;
+    private TextView calories;
+    private int caloriesInt = 0;
+    Button startButton;
+    Button pauseButton;
+    Button resumeButton;
+    Button finishButton;
 
-   protected void createLocationRequest() {
-      mLocationRequest = new LocationRequest();
-      mLocationRequest.setInterval(1000);
-      mLocationRequest.setFastestInterval(100);
-      mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-   }
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Replace LinearLayout by the type of the root element of the layout you're trying to load
+        RelativeLayout loadedRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_record_activity, container, false);
+        startButton = (Button) loadedRelativeLayout.findViewById(R.id.startButton);
+        pauseButton = (Button) loadedRelativeLayout.findViewById(R.id.pauseButton);
+        resumeButton = (Button) loadedRelativeLayout.findViewById(R.id.resumeButton);
+        finishButton = (Button) loadedRelativeLayout.findViewById(R.id.finishButton);
+        buildGoogleApiClient();
 
-   public void onConnected(Bundle connectionHint) {
-      if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-      }
-      if (mLastLocation != null) {
-      }
-      startLocationUpdates();
-   }
+        SupportMapFragment mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mSupportMapFragment.getMapAsync(this);
 
-   protected void startLocationUpdates() {
-      locationListener = new LocationListener() {
-         public void onLocationChanged(Location location) {
-            if(recording) {
-               updateLocation(location);
-            }
-         }
-      };
-      if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, locationListener);
-      }
-   }
+        startButton.setOnClickListener(startButtonListener);
+        pauseButton.setOnClickListener(pauseButtonListener);
+        resumeButton.setOnClickListener(resumeButtonListener);
+        finishButton.setOnClickListener(finishButtonListener);
+        Log.i("Development", "onCreateView");
+        return loadedRelativeLayout; // We must return the loaded Layout
+    }
 
-   public void onConnectionSuspended(int n){
+    protected synchronized void buildGoogleApiClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+        createLocationRequest();
+        Log.i("Development","buildGoogleApiClient");
+    }
 
-   }
+    protected void createLocationRequest() {
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        Log.i("Development","createLocationRequest");
+    }
 
-   public void onConnectionFailed(ConnectionResult cr){
-
-   }
-
-   public String getTitle() {
-      return fragmentTitle;
-   }
-
-   /**
-    * Manipulates the map once available.
-    * This callback is triggered when the map is ready to be used.
-    * This is where we can add markers or lines, add listeners or move the camera. In this case,
-    * we just add a marker near Sydney, Australia.
-    * If Google Play services is not installed on the device, the user will be prompted to install
-    * it inside the SupportMapFragment. This method will only be triggered once the user has
-    * installed Google Play services and returned to the app.
-    */
-   @Override
-   public void onMapReady(GoogleMap googleMap) {
-      mMap = googleMap;
-
-      LatLng fortWayne = new LatLng(41.0856087, -85.1397336);
-      mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10));
-
-      if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-         mMap.setMyLocationEnabled(true);
-      }
-      mMap.getUiSettings().setMapToolbarEnabled(false);
-      mMap.getUiSettings().setZoomControlsEnabled(true);
-      mMap.setIndoorEnabled(false);
-
-      addKMLLayerToMap();
-      addPolylineToMap();
-
-      locationListener = new LocationListener() {
-         public void onLocationChanged(Location location) {
-            //Gets called when a new location is found by the network location provider.
-            updateLocation(location);
-         }
-
-         public void onStatusChanged(String provider, int status, Bundle extras) {
-         }
-
-         public void onProviderEnabled(String provider) {
-         }
-
-         public void onProviderDisabled(String provider) {
-         }
-      };
-
-   }
-
-   private void updateLocation(Location location) {
-      LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        if(firstCoordinate) {
-            mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            lastLocationTime = System.currentTimeMillis();
-            lastLocation = updatedLocation;
+    public void onConnected(Bundle connectionHint) {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         }
-        else{
-            durationSinceLastLocation = System.currentTimeMillis()-lastLocationTime;
+        if (mLastLocation != null) {
+        }
+        startLocationUpdates();
+        Log.i("Development","onConnected");
+    }
+
+    protected void startLocationUpdates() {
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                if (recording) {
+                    updateLocation(location);
+                }
+            }
+        };
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, locationListener);
+        }
+        Log.i("Development","startLocationUpdates");
+    }
+
+    public void onConnectionSuspended(int n) {
+        Log.i("Development","onConnectionSuspended");
+    }
+
+    public void onConnectionFailed(ConnectionResult cr) {
+        Log.i("Development","onConnectionFailed");
+    }
+
+    public String getTitle() {
+        Log.i("Development","getTitle");
+        return fragmentTitle;
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+
+        speed = (TextView) getView().findViewById(R.id.speed);
+        distance = (TextView) getView().findViewById(R.id.distance);
+        duration = (TextView) getView().findViewById(R.id.duration);
+        calories = (TextView) getView().findViewById(R.id.calories);
+
+        LatLng fortWayne = new LatLng(41.0856087, -85.1397336);
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10));
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
+        mMap.getUiSettings().setMapToolbarEnabled(false);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.setIndoorEnabled(false);
+
+        addKMLLayerToMap();
+        addPolylineToMap();
+
+        locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                //Gets called when a new location is found by the network location provider.
+                updateLocation(location);
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+        Log.i("Development","onMapReady");
+    }
+
+    private void addPolylineToMap() {
+        line = mMap.addPolyline(new PolylineOptions()
+                .width(10)
+                .color(Color.BLUE));
+        Log.i("Development","addPolylineToMap");
+    }
+
+    private void addKMLLayerToMap() {
+        InputStream inputStream = getResources().openRawResource(R.raw.doc);
+        try {
+            KmlLayer layer = new KmlLayer(mMap, inputStream, getContext());
+            layer.addLayerToMap();
+        } catch (org.xmlpull.v1.XmlPullParserException e) {
+        } catch (java.io.IOException e) {
+        }
+        Log.i("Development","addKMLLayerToMap");
+    }
+
+    private void updateLocation(Location location) {
+        LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
+//        Log.i("Development", Double.toString(updatedLocation.latitude) + " " + Double.toString(updatedLocation.longitude));
+        if (firstCoordinate) {
+            captureFirstCoordinate(updatedLocation);
+        } else {
+            caloriesInt++;
+            durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
             lastLocationTime = System.currentTimeMillis();
-            tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation)/metersPerMile;
+            tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
             totalDistance += tempDistance;
             distance.setText(String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-            currentSpeed = tempDistance/metersPerMile/durationSinceLastLocation*1000*secondsPerHour;
+//            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
+            currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
             speed.setText(speedFormat.format(currentSpeed) + " mph");
+//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
+            calories.setText(Integer.toString(caloriesInt) + " calories");
+
             lastLocation = updatedLocation;
         }
         coordinates.add(updatedLocation);
-      mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         line.setPoints(coordinates);
         firstCoordinate = false;
-   }
+        Log.i("Development","updateLocation");
+    }
 
-   /**
-    *
-    */
-   private void addPolylineToMap() {
-      line = mMap.addPolyline(new PolylineOptions()
-              .width(10)
-              .color(Color.BLUE));
-   }
+    private void captureFirstCoordinate(LatLng updatedLocation) {
+        mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        lastLocationTime = System.currentTimeMillis();
+        lastLocation = updatedLocation;
+    }
 
-   /**
-    *
-    */
-   private void addKMLLayerToMap() {
-      InputStream is = getResources().openRawResource(R.raw.doc);
-      try {
-         KmlLayer layer = new KmlLayer(mMap, is, getContext());
-         layer.addLayerToMap();
-      } catch (org.xmlpull.v1.XmlPullParserException e) {
-      } catch (java.io.IOException e) {
-      }
-   }
+    private View.OnClickListener startButtonListener = new View.OnClickListener() {
 
-   private View.OnClickListener startButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            startRecording();
+        }
+    };
 
-      @Override
-      public void onClick(View v) {
-         startRecording();
-      }
-   };
+    public void startRecording() {
+        recording = true;
+        firstCoordinate = true;
+        startButton = (Button) getView().findViewById(R.id.startButton);
+        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+        startButton.setVisibility(View.GONE);
+        pauseButton.setVisibility(View.VISIBLE);
+        Log.i("Development", "startRecording");
+    }
 
-   public void startRecording(){
-      startButton = (Button) getView().findViewById(R.id.startButton);
-      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
-      startButton.setVisibility(View.GONE);
-      pauseButton.setVisibility(View.VISIBLE);
-      Log.i("Development", "startRecording");
-   }
+    private View.OnClickListener pauseButtonListener = new View.OnClickListener() {
 
-   private View.OnClickListener pauseButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            pauseRecording();
+        }
+    };
 
-      @Override
-      public void onClick(View v) {
-         pauseRecording();
-      }
-   };
+    public void pauseRecording() {
+        recording = false;
+        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        pauseButton.setVisibility(View.GONE);
+        resumeButton.setVisibility(View.VISIBLE);
+        finishButton.setVisibility(View.VISIBLE);
+        Log.i("Development", "pauseRecording");
+    }
 
-   public void pauseRecording(){
-      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
-      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-      finishButton = (Button) getView().findViewById(R.id.finishButton);
-      pauseButton.setVisibility(View.GONE);
-      resumeButton.setVisibility(View.VISIBLE);
-      finishButton.setVisibility(View.VISIBLE);
-      Log.i("Development", "pauseRecording");
-   }
+    private View.OnClickListener resumeButtonListener = new View.OnClickListener() {
 
-   private View.OnClickListener resumeButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            resumeRecording();
+        }
+    };
 
-      @Override
-      public void onClick(View v) {
-         resumeRecording();
-      }
-   };
+    public void resumeRecording() {
+        recording = true;
+        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        pauseButton.setVisibility(View.VISIBLE);
+        resumeButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.GONE);
+        Log.i("Development", "resumeRecording");
+    }
 
-   public void resumeRecording(){
-      pauseButton = (Button) getView().findViewById(R.id.pauseButton);
-      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-      finishButton = (Button) getView().findViewById(R.id.finishButton);
-      pauseButton.setVisibility(View.VISIBLE);
-      resumeButton.setVisibility(View.GONE);
-      finishButton.setVisibility(View.GONE);
-      Log.i("Development", "resumeRecording");
-   }
+    private View.OnClickListener finishButtonListener = new View.OnClickListener() {
 
-   private View.OnClickListener finishButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            finishRecording();
+        }
+    };
 
-      @Override
-      public void onClick(View v) {
-         finishRecording();
-      }
-   };
-
-   public void finishRecording(){
-      resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-      finishButton = (Button) getView().findViewById(R.id.finishButton);
-      resumeButton.setVisibility(View.GONE);
-      finishButton.setVisibility(View.GONE);
-      Log.i("Development", "finishRecording");
-   }
+    public void finishRecording() {
+        recording = false;
+        mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size()-1)).title("Stop Location"));
+        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
+        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        resumeButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.GONE);
+        Log.i("Development", "finishRecording");
+    }
 }
