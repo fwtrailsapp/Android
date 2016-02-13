@@ -27,7 +27,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 public class LoginActivity_InstrumentationTest {
 
 
-   private String usernameHint     = "Name";
+   private String usernameHint     = "Username";
    private String passwordHint     = "Password";
    private String button_OK_String = "Ok";
    private String button_CANCEL_String = "Cancel";

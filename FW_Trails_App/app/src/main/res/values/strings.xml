@@ -23,11 +23,11 @@
     <string name="title_activity_login">Sign in</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_username">This username is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="login_hint_name">Name</string>
+    <string name="login_hint_name">Username</string>
     <string name="login_hint_password">Password</string>
     <string name="login_new_user_text">New User?</string>
     <string name="login_create_account_button_text">Create New Account</string>
