@@ -7,8 +7,10 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +68,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     double tempDistance;
     double totalDistance = 0.0;
 
+    //Jaron Test
+    private static View view;
+    //
     private TextView speed;
     private TextView distance;
     private TextView duration;
@@ -77,12 +82,28 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     Button finishButton;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Replace LinearLayout by the type of the root element of the layout you're trying to load
-        RelativeLayout loadedRelativeLayout = (RelativeLayout) inflater.inflate(R.layout.fragment_record_activity, container, false);
-        startButton = (Button) loadedRelativeLayout.findViewById(R.id.startButton);
-        pauseButton = (Button) loadedRelativeLayout.findViewById(R.id.pauseButton);
-        resumeButton = (Button) loadedRelativeLayout.findViewById(R.id.resumeButton);
-        finishButton = (Button) loadedRelativeLayout.findViewById(R.id.finishButton);
+        // Check if we have created the view already, if we haven't create it.
+        if(view != null)
+        {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if(parent != null)
+            {
+                parent.removeView(view);
+            }
+        }
+        try
+        {
+            view = inflater.inflate(R.layout.fragment_record_activity, container, false);
+        }
+        catch(InflateException e){
+            e.printStackTrace();
+        }
+
+        startButton = (Button) view.findViewById(R.id.startButton);
+        pauseButton = (Button) view.findViewById(R.id.pauseButton);
+        resumeButton = (Button) view.findViewById(R.id.resumeButton);
+        finishButton = (Button) view.findViewById(R.id.finishButton);
+
         buildGoogleApiClient();
 
         SupportMapFragment mSupportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -93,7 +114,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setOnClickListener(resumeButtonListener);
         finishButton.setOnClickListener(finishButtonListener);
         Log.i("Development", "onCreateView");
-        return loadedRelativeLayout; // We must return the loaded Layout
+        return view; // We must return the loaded Layout
     }
 
     protected synchronized void buildGoogleApiClient() {
@@ -243,7 +264,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         line.setPoints(coordinates);
         firstCoordinate = false;
-        Log.i("Development","updateLocation");
+        Log.i("Development", "updateLocation");
     }
 
     private void captureFirstCoordinate(LatLng updatedLocation) {

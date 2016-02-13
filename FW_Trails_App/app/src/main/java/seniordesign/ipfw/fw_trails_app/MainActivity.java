@@ -208,9 +208,7 @@ public class MainActivity extends AppCompatActivity
    @Override
    public boolean onNavigationItemSelected(MenuItem item) {
 
-
       displayView(item.getItemId());
-
 
       return true;
    }
