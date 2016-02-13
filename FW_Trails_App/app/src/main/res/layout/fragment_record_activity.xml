@@ -54,5 +54,47 @@
         android:onClick="finishRecording"
         android:visibility="gone"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00.0mph"
+        android:id="@+id/speed"
+        android:layout_below="@+id/map"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:textSize="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00.00miles"
+        android:id="@+id/distance"
+        android:layout_below="@+id/map"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="12dp"
+        android:textSize="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0m 00.0s"
+        android:id="@+id/duration"
+        android:layout_below="@+id/map"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="56dp"
+        android:textSize="32dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 calories"
+        android:id="@+id/calories"
+        android:layout_below="@+id/map"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="56dp"
+        android:textSize="32dp"/>
+
 
 </RelativeLayout>
