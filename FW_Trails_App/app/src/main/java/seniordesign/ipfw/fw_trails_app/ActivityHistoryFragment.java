@@ -23,10 +23,6 @@ public class ActivityHistoryFragment extends Fragment {
 
       ListView listView = (ListView) view.findViewById(R.id.activity_history_listView);
 
-      View headerView = inflater.inflate(R.layout.activity_history_header,listView,false);
-
-      // Add header view to liist view
-      listView.addHeaderView(headerView);
 
       String[] items=getResources().getStringArray(R.array.test_list_items);
       ListViewAdapter adapter=new ListViewAdapter(getContext(),R.layout.activity_history_row,R.id.durationText,items);
