@@ -73,6 +73,17 @@ public class ActivityHistory_InstrumentationTest {
               .check(matches(withText(toolbarTitle)));
    }
 
+   // Tests that the list view component exists
+   @Test
+   public void listViewExists(){
+      onView(withId(R.id.activity_history_listView)).check(matches(isDisplayed()));
+   }
+
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestItemVerification(){
+      onView(withText(R.string.activityHistoryTestText)).check(matches(isDisplayed()));
+   }
    // Opens the Navigation Drawer
    private void openDrawer()
    {

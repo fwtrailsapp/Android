@@ -8,17 +8,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ActivityHistoryFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ActivityHistoryFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ActivityHistoryFragment extends Fragment {
    private final String fragmentTitle = "Activity History";
 
@@ -26,20 +19,20 @@ public class ActivityHistoryFragment extends Fragment {
                             Bundle savedInstanceState) {
       FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
       // Replace LinearLayout by the type of the root element of the layout you're trying to load
-      RelativeLayout loadedRelativeLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_activity_history, container, false);
-      // Of course you will want to faActivity and llLayout in the class and not this method to access them in the rest of
-      // the class, just initialize them here
+      View view = inflater.inflate(R.layout.fragment_activity_history, container, false);
 
-      // Content of previous onCreate() here
-      // ...
-      // Don't use this method, it's handled by inflater.inflate() above :
-      // setContentView(R.layout.activity_layout);
+      ListView listView = (ListView) view.findViewById(R.id.activity_history_listView);
 
-      // The FragmentActivity doesn't contain the layout directly so we must use our instance of     LinearLayout :
-      // loadedRelativeLayout.findViewById(R.id.someGuiElement);
-      // Instead of :
-      // findViewById(R.id.someGuiElement);
-      return loadedRelativeLayout; // We must return the loaded Layout
+      View headerView = inflater.inflate(R.layout.activity_history_header,listView,false);
+
+      // Add header view to liist view
+      listView.addHeaderView(headerView);
+
+      String[] items=getResources().getStringArray(R.array.test_list_items);
+      ListViewAdapter adapter=new ListViewAdapter(getContext(),R.layout.activity_history_row,R.id.durationText,items);
+      // Bind data to the ListView
+      listView.setAdapter(adapter);
+      return view; // We must return the loaded Layout
    }
 
    public String getTitle(){

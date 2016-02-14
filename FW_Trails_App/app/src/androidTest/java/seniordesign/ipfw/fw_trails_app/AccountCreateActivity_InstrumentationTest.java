@@ -67,27 +67,6 @@ public class AccountCreateActivity_InstrumentationTest {
               .check(matches(withText(createNewAccountTitle)));
    }
 
-   // Tests if the first name edit text box is displayed.
-   @Test
-   public void firstNameEditTextExists(){
-      onView(withId(R.id.firstName_editText)).check(matches(isDisplayed()));
-   }
-
-   // Tests if the first name text is correct
-   @Test
-   public void firstNameEditTextVerification() {
-      onView(withId(R.id.firstName_editText)).check(matches(withHint(firstNameEditText)));
-   }
-
-   @Test
-   public void lastNameEditTextExists(){
-      onView(withId(R.id.lastName_editText)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void lastNameEditTextVerification() {
-      onView(withId(R.id.lastName_editText)).check(matches(withHint(lastNameEditText)));
-   }
 
    @Test
    public void heightEditTextExists(){
@@ -119,15 +98,7 @@ public class AccountCreateActivity_InstrumentationTest {
       onView(withId(R.id.age_editText)).check(matches(withHint(ageEditText)));
    }
 
-   @Test
-   public void emailEditTextExists() {
-      onView(withId(R.id.email_editText)).check(matches(isDisplayed()));
-   }
 
-   @Test
-   public void emailEditTextVerification() {
-      onView(withId(R.id.email_editText)).check(matches(withHint(emailEditText)));
-   }
 
    @Test
    public void genderSpinnerExists(){
