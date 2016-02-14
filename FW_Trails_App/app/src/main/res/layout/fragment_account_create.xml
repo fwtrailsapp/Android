@@ -5,26 +5,9 @@
              tools:context="seniordesign.ipfw.fw_trails_app.AccountCreateFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="@string/firstName_editText_text"
-        android:ems="10"
-        android:id="@+id/firstName_editText"
-        android:layout_below="@+id/email_editText"
-        android:layout_alignLeft="@+id/email_editText"
-        android:layout_alignStart="@+id/email_editText"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="@string/lastName_editText_text"
-        android:ems="10"
-        android:id="@+id/lastName_editText"
-        android:layout_below="@+id/firstName_editText"
-        android:layout_centerHorizontal="true"/>
+
+
 
     <EditText
         android:layout_width="wrap_content"
@@ -33,9 +16,9 @@
         android:ems="10"
         android:hint="@string/height_editText_text"
         android:id="@+id/height_editText"
-        android:layout_below="@+id/lastName_editText"
-        android:layout_alignLeft="@+id/lastName_editText"
-        android:layout_alignStart="@+id/lastName_editText"/>
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/weight_editText"
+        android:layout_alignStart="@+id/weight_editText"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -45,8 +28,8 @@
         android:id="@+id/weight_editText"
         android:hint="@string/weight_editText_text"
         android:layout_below="@+id/height_editText"
-        android:layout_alignLeft="@+id/height_editText"
-        android:layout_alignStart="@+id/height_editText"/>
+        android:layout_alignLeft="@+id/age_editText"
+        android:layout_alignStart="@+id/age_editText"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -56,18 +39,9 @@
         android:id="@+id/age_editText"
         android:hint="@string/age_editText_text"
         android:layout_below="@+id/weight_editText"
-        android:layout_alignLeft="@+id/weight_editText"
-        android:layout_alignStart="@+id/weight_editText"/>
+        android:layout_alignLeft="@+id/gender_Spinner"
+        android:layout_alignStart="@+id/gender_Spinner"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/email_editText"
-        android:hint="@string/email_editText_text"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
 
     <Spinner
         android:layout_width="wrap_content"
@@ -77,11 +51,10 @@
         android:entries="@array/gender_array"
         android:prompt="@string/gender_SpinnerPrompt"
         android:layout_below="@+id/age_editText"
-        android:layout_alignLeft="@+id/age_editText"
-        android:layout_alignStart="@+id/age_editText"
-        android:layout_marginTop="20dp"
-        android:layout_alignRight="@+id/age_editText"
-        android:layout_alignEnd="@+id/age_editText"/>
+        android:layout_alignLeft="@+id/disclaimer_Textview"
+        android:layout_alignStart="@+id/disclaimer_Textview"
+        android:layout_alignRight="@+id/disclaimer_Textview"
+        android:layout_alignEnd="@+id/disclaimer_Textview"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -90,31 +63,82 @@
         android:text="@string/disclaimer_textView_text"
         android:id="@+id/disclaimer_Textview"
         android:layout_below="@+id/gender_Spinner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="44dp"/>
+        android:layout_centerHorizontal="true"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_createAccount_text"
         android:id="@+id/createAccountButton"
-        android:layout_marginTop="18dp"
         android:layout_below="@+id/disclaimer_Textview"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="45dp"
-        android:layout_marginStart="45dp"/>
+        android:layout_alignRight="@+id/accountInfoTextView"
+        android:layout_alignEnd="@+id/accountInfoTextView"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_Cancel_text"
         android:id="@+id/cancelCreateAccountButton"
-        android:layout_alignTop="@+id/createAccountButton"
+        android:layout_marginRight="36dp"
+        android:layout_marginEnd="36dp"
+        android:layout_below="@+id/disclaimer_Textview"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="35dp"
-        android:layout_marginEnd="35dp"
-        android:layout_alignBottom="@+id/createAccountButton"/>
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/accountInfoText"
+        android:id="@+id/accountInfoTextView"
+        android:layout_marginTop="29dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/createUsernameEditText"
+        android:hint="@string/usernameText"
+        android:layout_below="@+id/accountInfoTextView"
+        android:layout_alignLeft="@+id/accountInfoTextView"
+        android:layout_alignStart="@+id/accountInfoTextView"
+        android:layout_marginTop="22dp"
+        android:layout_alignRight="@+id/height_editText"
+        android:layout_alignEnd="@+id/height_editText"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:hint="@string/login_hint_password"
+        android:id="@+id/createPasswordEditText"
+        android:layout_below="@+id/createUsernameEditText"
+        android:layout_alignLeft="@+id/createUsernameEditText"
+        android:layout_alignStart="@+id/createUsernameEditText"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:hint="@string/retypePasswordText"
+        android:id="@+id/retypeCreatePasswordEditText"
+        android:layout_below="@+id/createPasswordEditText"
+        android:layout_alignLeft="@+id/createPasswordEditText"
+        android:layout_alignStart="@+id/createPasswordEditText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/personalInfoText"
+        android:id="@+id/textView"
+        android:layout_above="@+id/height_editText"
+        android:layout_alignLeft="@+id/height_editText"
+        android:layout_alignStart="@+id/height_editText"
+        android:layout_marginBottom="18dp"/>
 
 </RelativeLayout>

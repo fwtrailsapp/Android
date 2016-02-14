@@ -38,13 +38,12 @@
     <string name="button_Cancel_text">Cancel</string>
     <string name="textview_NewUser_text">New User?</string>
     <string name="createAccount_text">Create New Account</string>
+    <string name="retypePasswordText">Password (retype)</string>
     <!-- End Strings related to LoginActivity-->
 
 
     <!-- Strings related to AccountCreate -->
     <string name="createNewAccountToolbarTitle">Create New Account</string>
-    <string name="firstName_editText_text">First Name</string>
-    <string name="lastName_editText_text">Last Name</string>
     <string name="height_editText_text">Height (in inches)</string>
     <string name="weight_editText_text">Weight (in pounds)</string>
     <string name="age_editText_text">Age</string>
@@ -52,7 +51,6 @@
     <string name="disclaimer_textView_text">"Disclaimer: This information is used
         for calories burned estimation."
     </string>
-    <string name="email_editText_text">Email</string>
     <string name="gender_SpinnerPrompt">Choose Gender</string>
     <string-array name="gender_array">
         <item>Male</item>
@@ -60,6 +58,9 @@
         <item>Prefer not to disclose</item>
     </string-array>
     <string name="button_createAccount_text">Create Account</string>
+    <string name="accountInfoText">Account Info</string>
+    <string name="usernameText">Username</string>
+    <string name="personalInfoText">Personal Info (optional)</string>
     <!-- End Strings related to AccountCreate -->
 
     <!-- Strings related to Account Statistics Activity-->
