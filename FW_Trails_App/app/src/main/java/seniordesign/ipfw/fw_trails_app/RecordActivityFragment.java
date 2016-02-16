@@ -62,6 +62,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private double secondsPerHour = 3600.0;
     private long lastLocationTime;
     private long durationSinceLastLocation;
+    private long startMillis;
     private double currentSpeed;
     NumberFormat speedFormat = new DecimalFormat("#0.0");
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
@@ -76,6 +77,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private TextView duration;
     private TextView calories;
     private int caloriesInt = 0;
+    private int seconds = 0;
     Button startButton;
     Button pauseButton;
     Button resumeButton;
@@ -151,6 +153,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onLocationChanged(Location location) {
                 if (recording) {
                     updateLocation(location);
+                }
+                else{
+                    startMillis += 1000;
                 }
             }
         };
@@ -246,17 +251,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         if (firstCoordinate) {
             captureFirstCoordinate(updatedLocation);
         } else {
-            caloriesInt++;
-            durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
-            lastLocationTime = System.currentTimeMillis();
-            tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
-            totalDistance += tempDistance;
-            distance.setText(String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-//            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-            currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
-            speed.setText(speedFormat.format(currentSpeed) + " mph");
-//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
-            calories.setText(Integer.toString(caloriesInt) + " calories");
+            captureLaterCoordinate(updatedLocation);
 
             lastLocation = updatedLocation;
         }
@@ -267,10 +262,28 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Development", "updateLocation");
     }
 
+    private void captureLaterCoordinate(LatLng updatedLocation) {
+        caloriesInt++;
+        seconds++;
+        durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
+        lastLocationTime = System.currentTimeMillis();
+        tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
+        totalDistance += tempDistance;
+        distance.setText(String.valueOf(distanceFormat.format(totalDistance)) + " miles");
+//            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
+        currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
+        speed.setText(speedFormat.format(currentSpeed) + " mph");
+//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
+        calories.setText(Integer.toString(caloriesInt) + " calories");
+        duration.setText(Long.toString((lastLocationTime-startMillis)/1000/60) + "m " + Long.toString(((lastLocationTime-startMillis)/1000)%60) + "s");
+//        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
+    }
+
     private void captureFirstCoordinate(LatLng updatedLocation) {
         mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         lastLocationTime = System.currentTimeMillis();
+        startMillis = lastLocationTime;
         lastLocation = updatedLocation;
     }
 
