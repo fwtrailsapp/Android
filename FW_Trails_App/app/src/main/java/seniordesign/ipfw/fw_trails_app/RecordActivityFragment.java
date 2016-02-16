@@ -64,8 +64,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private long durationSinceLastLocation;
     private long startMillis;
     private double currentSpeed;
-    NumberFormat speedFormat = new DecimalFormat("#0.0");
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
+    NumberFormat calorieFormat = new DecimalFormat("#0.0");
+    NumberFormat speedFormat = new DecimalFormat("#0.00");
     double tempDistance;
     double totalDistance = 0.0;
 
@@ -269,14 +270,14 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         lastLocationTime = System.currentTimeMillis();
         tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
         totalDistance += tempDistance;
-        distance.setText(String.valueOf(distanceFormat.format(totalDistance)) + " miles");
+        distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
 //            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-        currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
-        speed.setText(speedFormat.format(currentSpeed) + " mph");
-//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
-        calories.setText(Integer.toString(caloriesInt) + " calories");
-        duration.setText(Long.toString((lastLocationTime-startMillis)/1000/60) + "m " + Long.toString(((lastLocationTime-startMillis)/1000)%60) + "s");
+        calories.setText("Calories: " + Integer.toString(caloriesInt) + ".00");
+        duration.setText("Duration: " + Long.toString((lastLocationTime-startMillis)/1000/60) + ":" + Long.toString(((lastLocationTime-startMillis)/1000)%60));
 //        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
+        currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
+        speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
+//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
     }
 
     private void captureFirstCoordinate(LatLng updatedLocation) {
