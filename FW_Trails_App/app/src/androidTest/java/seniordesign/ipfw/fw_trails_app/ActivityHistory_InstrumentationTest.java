@@ -35,6 +35,10 @@ import static org.hamcrest.Matchers.not;
 public class ActivityHistory_InstrumentationTest {
 
    private final String toolbarTitle = "Activity History";
+   private final String headerDateText = "Date";
+   private final String headerDurationText = "Duration";
+   private final String headerCaloriesText = "Calories";
+   private final String headerDistanceText = "Distance";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -81,8 +85,23 @@ public class ActivityHistory_InstrumentationTest {
 
    //Tests if a test activity item appears in the list view component.
    @Test
-   public void listViewTestItemVerification(){
-      onView(withText(R.string.activityHistoryTestText)).check(matches(isDisplayed()));
+   public void listViewTestHeaderDateVerification(){
+      onView(withText(headerDateText)).check(matches(isDisplayed()));
+   }
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderDurationVerification(){
+      onView(withText(headerDurationText)).check(matches(isDisplayed()));
+   }
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderCaloriesVerification(){
+      onView(withText(headerCaloriesText)).check(matches(isDisplayed()));
+   }
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderDistanceVerification(){
+      onView(withText(headerDistanceText)).check(matches(isDisplayed()));
    }
    // Opens the Navigation Drawer
    private void openDrawer()

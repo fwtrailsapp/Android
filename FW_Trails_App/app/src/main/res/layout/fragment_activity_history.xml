@@ -28,7 +28,7 @@
                 android:padding="10sp"
                 android:gravity="left"
                 android:textColor="#FFFFFF"
-                android:text="Duration"
+                android:text="@string/activityHistoryHeaderDuration"
                 android:background="#828fd4"
                 >
             </TextView>
@@ -37,7 +37,7 @@
                 android:padding="10sp"
                 android:gravity="left"
                 android:textColor="#FFFFFF"
-                android:text="Distance"
+                android:text="@string/activityHistoryHeaderDistance"
                 android:background="#828fd4"
                 >
             </TextView>
@@ -45,7 +45,7 @@
                 android:layout_column="3"
                 android:padding="10sp"
                 android:gravity="left"
-                android:text="Calories"
+                android:text="@string/activityHistoryHeaderCalories"
                 android:textColor="#FFFFFF"
                 android:background="#828fd4"
                 >
@@ -54,7 +54,7 @@
                 android:layout_column="4"
                 android:padding="10sp"
                 android:gravity="left"
-                android:text="Date"
+                android:text="@string/activityHistoryHeaderDate"
                 android:textColor="#FFFFFF"
                 android:background="#828fd4"
                 >

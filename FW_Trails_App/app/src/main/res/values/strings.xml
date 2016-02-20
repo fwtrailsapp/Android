@@ -99,7 +99,6 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- Strings related to Activity History Fragment-->
-    <string name="activityHistoryTestText">test</string>
     <string-array name="test_list_items">
         <item>00:15:57__3.1 mi__215__07/04/2013</item>
         <item>02:48:03__26.2 mi__410__11/4/2013</item>
@@ -119,8 +118,11 @@
         <item>01:00:01__2.3 mi__215__1/1/2000</item>
         <item>00:22:15__4.4 mi__410__2/4/1999</item>
         <item>02:44:26__24.6 mi__525__2/8/1999</item>
-
     </string-array>
+    <string name="activityHistoryHeaderDuration">Duration</string>
+    <string name="activityHistoryHeaderDistance">Distance</string>
+    <string name="activityHistoryHeaderCalories">Calories</string>
+    <string name="activityHistoryHeaderDate">Date</string>
     <!-- End strings related to Activity History Fragment-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
