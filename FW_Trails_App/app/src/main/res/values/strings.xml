@@ -147,6 +147,27 @@
         <item>1/03/2026__10 Year Crew__Use app for 10 year</item>
     </string-array>
     <!-- End Strings related to Achievements Fragment -->
+
+    <!-- Strings related to Account Details Fragment -->
+    <string name="accountDetailsInfoText">Account Info</string>
+    <string name="accountDetailsUsernameText">Username</string>
+    <string name="accountDetailsPasswordText">Password</string>
+    <string name="accountDetailsPasswordChangeText">Reset Password</string>
+    <string name="accountDetailsPersonalInfoText">Personal Info (optional)</string>
+    <string name="accountDetailsHeightText">Height</string>
+    <string name="accountDetailsWeightText">Weight</string>
+    <string name="accountDetailsAgeText">Birth Year</string>
+    <string name="accountDetailsSexText">Sex</string>
+    <string-array name="accountDetails_gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Prefer not to disclose</item>
+    </string-array>
+    <string name="testUsername">UserTest</string>
+    <string name="accountDetailsTestHeight">72 in</string>
+    <string name="accountDetailsTestWeight">188 lbs</string>
+    <string name="accountDetailsTestBirthYear">1994</string>
+    <!-- End Strings related to Account Details Fragment-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

@@ -13,15 +13,21 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFrom;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withHint;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 
@@ -35,12 +41,27 @@ import static org.hamcrest.Matchers.not;
 public class AccountDetails_InstrumentationTest {
 
    private final String toolbarTitle = "Account Details";
-
-
+   private final String acctInfoTitleText = "Account Info";
+   private final String testUsernameFieldText = "Username";
+   private final String userTest = "UserTest";
+   private final String passwordText = "Password";
+   private final String resetPasswordText = "Reset Password";
+   private final String heightText = "Height";
+   private final String weightText = "Weight";
+   private final String testWeight = "188 lbs";
+   private final String testHeight = "72 in";
+   private final String birthYearText = "Birth Year";
+   private final String testBirthYear = "1994";
+   private final String[] genderSpinner = {"Male","Female","Prefer not to disclose"};
+   private final String sexText = "Sex";
+   private final String acceptText = "Accept";
+   private final String cancelText = "Cancel";
+   
+   
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
    @Rule
    public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
-
+   
    // Open Nav Drawer before each test.
    @Before
    public void navDrawerOpen(){
@@ -71,6 +92,92 @@ public class AccountDetails_InstrumentationTest {
    public void accountDetailsToolbarTitleVerification() {
       onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
               .check(matches(withText(toolbarTitle)));
+   }
+
+   @Test
+   //Tests if the Account Info text appears within the fragment
+   public void accountDetailsInfoTextVerification(){
+      onView(withText(acctInfoTitleText)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the Account username text appears within the fragment
+   public void accountDetailsUsernameTextVerification(){
+      onView(withText(testUsernameFieldText)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the fake user text appears within the fragment
+   public void accountDetailsTestUsernameTextVerification(){
+      onView(withText(userTest)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the password text appears within the fragment
+   public void accountDetailsPasswordTextVerification(){
+      onView(withText(passwordText)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the password text appears within the fragment
+   public void accountDetailsPasswordResetTextVerification(){
+      onView(withText(resetPasswordText)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   //Tests if the height text appears within the fragment
+   public void accountDetailsHeightTextVerification(){
+      onView(withText(heightText)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the height text appears within the fragment
+   public void accountDetailsTestHeightTextVerification(){
+      onView(withHint(testHeight)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the weight text appears within the fragment
+   public void accountDetailsWeightTextVerification(){
+      onView(withText(weightText)).check(matches(isDisplayed()));
+   }
+   @Test
+   //Tests if the test weight text appears within the fragment
+   public void accountDetailsTestWeightTextVerification(){
+      onView(withHint(testWeight)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   // Tests if the birth year text appears within the fragment
+   public void accountDetailsBirthYearTextVerification(){
+      onView(withText(birthYearText)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   // Tests if the test birth year text appears within the fragment
+   public void accountDetailsBirthYearTestTextVerification(){
+      onView(withHint(testBirthYear)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   // Tests if the test birth year text appears within the fragment
+   public void accountDetailsSexTextVerification(){
+      onView(withText(sexText)).check(matches(isDisplayed()));
+   }
+   // Tests the entries of the gender spinner and verifies its existence
+   @Test
+   public void genderSpinnerVerification(){
+      for(int i = 0; i < genderSpinner.length; i++) {
+         onView(withId(R.id.accountDetails_gender_Spinner)).perform(click());
+         onData(allOf(is(instanceOf(String.class)), is(genderSpinner[i]))).perform(click());
+         onView(withId(R.id.accountDetails_gender_Spinner)).check(matches(withSpinnerText(containsString(genderSpinner[i]))));
+      }
+   }
+
+   // Tests that the accept button appears.
+   @Test
+   public void acceptButtonTextVerification(){
+      onView(withText(acceptText)).check(matches(isDisplayed()));
+   }
+
+   //Tests that the cancel button appears
+   @Test
+   public void cancelButtonTextVerification(){
+      onView(withText(cancelText)).check(matches(isDisplayed()));
    }
 
    // Opens the Navigation Drawer

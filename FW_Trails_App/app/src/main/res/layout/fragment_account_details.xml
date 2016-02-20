@@ -4,10 +4,179 @@
              android:layout_height="match_parent"
              tools:context="seniordesign.ipfw.fw_trails_app.AccountDetailsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello Account Details Fragment"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/accountDetailsInfoText"
+        android:id="@+id/accountDetailsInfoTextView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsUsernameText"
+        android:id="@+id/accountDetailsUsernameTextView"
+        android:layout_marginTop="19dp"
+        android:layout_below="@+id/accountDetailsInfoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/testUsername"
+        android:id="@+id/accountDetailsActualUsernameTextView"
+        android:layout_alignTop="@+id/accountDetailsUsernameTextView"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsPasswordText"
+        android:id="@+id/accountDetailsPasswordTextView"
+        android:singleLine="false"
+        android:layout_alignBottom="@+id/accountDetailsResetPWBtn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/accountDetailsPasswordChangeText"
+        android:id="@+id/accountDetailsResetPWBtn"
+        android:singleLine="false"
+        android:layout_below="@+id/accountDetailsActualUsernameTextView"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/accountDetailsPersonalInfoText"
+        android:id="@+id/personalInfoTextView"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/accountDetailsPasswordTextView"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsHeightText"
+        android:id="@+id/accountDetailsHeightTextView"
+        android:layout_above="@+id/accountDetailsWeightEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="@string/accountDetailsTestHeight"
+        android:id="@+id/accountDetailsHeight_editText"
+        android:layout_above="@+id/accountDetailsWeightEditText"
+        android:layout_alignLeft="@+id/accountDetailsWeightEditText"
+        android:layout_alignStart="@+id/accountDetailsWeightEditText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsWeightText"
+        android:id="@+id/accountDetailsWeightTextView"
+        android:layout_below="@+id/personalInfoTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="78dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="@string/accountDetailsTestWeight"
+        android:id="@+id/accountDetailsWeightEditText"
+        android:layout_above="@+id/accountDetailsBirthYearTextView"
+        android:layout_alignRight="@+id/personalInfoTextView"
+        android:layout_alignEnd="@+id/personalInfoTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsAgeText"
+        android:id="@+id/accountDetailsBirthYearTextView"
+        android:layout_marginTop="31dp"
+        android:layout_below="@+id/accountDetailsWeightTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:hint="@string/accountDetailsTestBirthYear"
+        android:id="@+id/accountDetailsBirthYearEditText"
+        android:layout_above="@+id/accountDetails_gender_Spinner"
+        android:layout_alignRight="@+id/personalInfoTextView"
+        android:layout_alignEnd="@+id/personalInfoTextView"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dialog"
+        android:id="@+id/accountDetails_gender_Spinner"
+        android:entries="@array/accountDetails_gender_array"
+        android:prompt="@string/gender_SpinnerPrompt"
+        android:layout_marginTop="17dp"
+        android:layout_below="@+id/accountDetailsBirthYearTextView"
+        android:layout_alignRight="@+id/personalInfoTextView"
+        android:layout_alignEnd="@+id/personalInfoTextView"
+        android:layout_alignLeft="@+id/accountDetailsBirthYearEditText"
+        android:layout_alignStart="@+id/accountDetailsBirthYearEditText"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsSexText"
+        android:id="@+id/accountDetailsSexTextView"
+        android:layout_alignTop="@+id/accountDetails_gender_Spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="18dp"/>
+
+    <Button
+        style="@style/AppCompat.Button.FW_Trails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/accountDetailsAcceptButton"
+        android:text="@string/accept"
+        android:drawableStart="@drawable/ic_send_white_18dp"
+        android:drawableLeft="@drawable/ic_send_white_18dp"
+        android:layout_marginTop="52dp"
+        android:layout_below="@+id/accountDetails_gender_Spinner"
+        android:layout_toRightOf="@+id/accountDetailsSexTextView"
+        android:layout_toEndOf="@+id/accountDetailsSexTextView"/>
+
+    <Button
+        style="@style/AppCompat.Button.FW_Trails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_Cancel_text"
+        android:id="@+id/accountDetailsCancelButton"
+        android:layout_alignBaseline="@+id/accountDetailsAcceptButton"
+        android:layout_alignBottom="@+id/accountDetailsAcceptButton"
+        android:layout_toRightOf="@+id/accountDetailsInfoTextView"
+        android:layout_toEndOf="@+id/accountDetailsInfoTextView"/>
 
 </RelativeLayout>

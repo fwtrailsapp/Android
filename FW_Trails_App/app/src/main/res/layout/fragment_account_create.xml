@@ -16,9 +16,10 @@
         android:ems="10"
         android:hint="@string/height_editText_text"
         android:id="@+id/height_editText"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/textView"
         android:layout_alignLeft="@+id/weight_editText"
-        android:layout_alignStart="@+id/weight_editText"/>
+        android:layout_alignStart="@+id/weight_editText"
+        android:layout_marginTop="18dp"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -66,24 +67,28 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_createAccount_text"
         android:id="@+id/createAccountButton"
-        android:layout_below="@+id/disclaimer_Textview"
+        android:layout_alignTop="@+id/cancelCreateAccountButton"
         android:layout_alignRight="@+id/accountInfoTextView"
-        android:layout_alignEnd="@+id/accountInfoTextView"/>
+        android:layout_alignEnd="@+id/accountInfoTextView"
+        android:layout_marginRight="29dp"
+        android:layout_marginEnd="29dp"/>
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_Cancel_text"
         android:id="@+id/cancelCreateAccountButton"
-        android:layout_marginRight="36dp"
-        android:layout_marginEnd="36dp"
         android:layout_below="@+id/disclaimer_Textview"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_toRightOf="@+id/createAccountButton"
+        android:layout_toEndOf="@+id/createAccountButton"
+        android:layout_marginLeft="44dp"
+        android:layout_marginStart="44dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -91,7 +96,6 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/accountInfoText"
         android:id="@+id/accountInfoTextView"
-        android:layout_marginTop="29dp"
         android:layout_alignParentTop="true"
         android:layout_alignLeft="@+id/textView"
         android:layout_alignStart="@+id/textView"/>
@@ -136,9 +140,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/personalInfoText"
         android:id="@+id/textView"
-        android:layout_above="@+id/height_editText"
+        android:layout_below="@+id/retypeCreatePasswordEditText"
         android:layout_alignLeft="@+id/height_editText"
         android:layout_alignStart="@+id/height_editText"
-        android:layout_marginBottom="18dp"/>
+        android:layout_marginTop="17dp"/>
 
 </RelativeLayout>

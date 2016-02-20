@@ -14,6 +14,7 @@
         android:layout_height="400dp" />
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Start"
@@ -23,6 +24,7 @@
         android:visibility="visible"/>
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pause"
@@ -33,6 +35,7 @@
         android:visibility="gone"/>
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Resume"
@@ -44,6 +47,7 @@
         android:visibility="gone"/>
 
     <Button
+        style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Finish"
