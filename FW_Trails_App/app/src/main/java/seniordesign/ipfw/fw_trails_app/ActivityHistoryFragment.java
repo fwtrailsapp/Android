@@ -1,7 +1,5 @@
 package seniordesign.ipfw.fw_trails_app;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -9,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 
 public class ActivityHistoryFragment extends Fragment {
@@ -24,8 +21,9 @@ public class ActivityHistoryFragment extends Fragment {
       ListView listView = (ListView) view.findViewById(R.id.activity_history_listView);
 
 
-      String[] items=getResources().getStringArray(R.array.test_list_items);
-      ListViewAdapter adapter=new ListViewAdapter(getContext(),R.layout.activity_history_row,R.id.durationText,items);
+      String[] items=getResources().getStringArray(R.array.activity_statistics_test_list_items);
+      ActivityHistoryListViewAdapter adapter = new ActivityHistoryListViewAdapter(getContext(),R.layout.activity_history_row,R.id.durationText,items);
+
       // Bind data to the ListView
       listView.setAdapter(adapter);
       return view; // We must return the loaded Layout

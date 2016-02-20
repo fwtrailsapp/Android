@@ -99,7 +99,7 @@
     <string name="title_activity_main">MainActivity</string>
 
     <!-- Strings related to Activity History Fragment-->
-    <string-array name="test_list_items">
+    <string-array name="activity_statistics_test_list_items">
         <item>00:15:57__3.1 mi__215__07/04/2013</item>
         <item>02:48:03__26.2 mi__410__11/4/2013</item>
         <item>00:04:37__1.0 mi__525__5/8/2011</item>
@@ -124,6 +124,29 @@
     <string name="activityHistoryHeaderCalories">Calories</string>
     <string name="activityHistoryHeaderDate">Date</string>
     <!-- End strings related to Activity History Fragment-->
+
+    <!-- Strings related to Achievements Fragment -->
+    <string name="achievementsHeaderDateEarned">Date Earned</string>
+    <string name="achievementsHeaderName">Name</string>
+    <string name="achievementsHeaderDescription">Description</string>
+    <string-array name="achievement_test_list_items">
+        <item>1/03/2016__Daily Dose__Bike for 24 hours</item>
+        <item>4/30/2016__Around The Clock__Run for 24 hours</item>
+        <item>5/25/2016__Day and Night__Walk for 24 hours</item>
+        <item>6/29/2016__Centennial__Run 100 miles</item>
+        <item>7/03/2016__Unbirthday__Use app for 6 months</item>
+        <item>1/03/2017__1 Year Crew__Use app for 1 year</item>
+        <item>1/03/2018__2 Year Crew__Use app for 2 year</item>
+        <item>1/03/2019__3 Year Crew__Use app for 3 year</item>
+        <item>1/03/2020__4 Year Crew__Use app for 4 year</item>
+        <item>1/03/2021__5 Year Crew__Use app for 5 year</item>
+        <item>1/03/2022__6 Year Crew__Use app for 6 year</item>
+        <item>1/03/2023__7 Year Crew__Use app for 7 year</item>
+        <item>1/03/2024__8 Year Crew__Use app for 8 year</item>
+        <item>1/03/2025__9 Year Crew__Use app for 9 year</item>
+        <item>1/03/2026__10 Year Crew__Use app for 10 year</item>
+    </string-array>
+    <!-- End Strings related to Achievements Fragment -->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

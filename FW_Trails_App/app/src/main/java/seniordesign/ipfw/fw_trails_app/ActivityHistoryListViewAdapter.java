@@ -13,12 +13,12 @@ import android.widget.TextView;
  * Created by Jaron on 2/13/2016.
  */
 
-public class ListViewAdapter extends ArrayAdapter<String> {
+public class ActivityHistoryListViewAdapter extends ArrayAdapter<String> {
    int groupid;
    String[] item_list;
    ArrayList<String> desc;
    Context context;
-   public ListViewAdapter(Context context, int vg, int id, String[] item_list){
+   public ActivityHistoryListViewAdapter(Context context, int vg, int id, String[] item_list){
       super(context,vg, id, item_list);
       this.context=context;
       groupid=vg;

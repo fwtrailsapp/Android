@@ -41,6 +41,9 @@ import static org.hamcrest.Matchers.not;
 public class Achievements_InstrumentationTest {
 
    private final String toolbarTitle = "Achievements";
+   private final String dateEarnedHeaderText = "Date Earned";
+   private final String nameHeaderText = "Name";
+   private final String descriptionHeaderText = "Description";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -78,7 +81,21 @@ public class Achievements_InstrumentationTest {
       onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
               .check(matches(withText(toolbarTitle)));
    }
-
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderDateEarnedVerification(){
+      onView(withText(dateEarnedHeaderText)).check(matches(isDisplayed()));
+   }
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderNameVerification(){
+      onView(withText(nameHeaderText)).check(matches(isDisplayed()));
+   }
+   //Tests if a test activity item appears in the list view component.
+   @Test
+   public void listViewTestHeaderDescriptionVerification(){
+      onView(withText(descriptionHeaderText)).check(matches(isDisplayed()));
+   }
    // Opens the Navigation Drawer
    private void openDrawer()
    {
