@@ -35,10 +35,13 @@ import com.google.maps.android.kml.KmlLayer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class RecordActivityFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -63,12 +66,15 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private long lastLocationTime;
     private long durationSinceLastLocation;
     private long startMillis;
+    private long finishMillis;
     private double currentSpeed;
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
     NumberFormat calorieFormat = new DecimalFormat("#0.0");
+//    NumberFormat secondFormat = new IntegerFormat("00");
     NumberFormat speedFormat = new DecimalFormat("#0.00");
     double tempDistance;
     double totalDistance = 0.0;
+    private activityTypes activityType;
 
     //Jaron Test
     private static View view;
@@ -273,7 +279,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
 //            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
         calories.setText("Calories: " + Integer.toString(caloriesInt) + ".00");
-        duration.setText("Duration: " + Long.toString((lastLocationTime-startMillis)/1000/60) + ":" + Long.toString(((lastLocationTime-startMillis)/1000)%60));
+        Long secondsLong = ((lastLocationTime-startMillis)/1000)%60;
+        String seconds = "";
+        if(secondsLong < 10){seconds += "0";}
+        seconds += secondsLong;
+        duration.setText("Duration: " + Long.toString((lastLocationTime-startMillis)/1000/60) + ":" + seconds);
 //        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
@@ -298,25 +308,21 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     };
 
     public void selectActivityType(){
-        CharSequence colors[] = new CharSequence[] {"Biking", "Running", "Walking", "Skateboarding", "Skating"};
+        CharSequence colors[] = new CharSequence[] {"Bike", "Run", "Walk", "Other"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
-        builder.setTitle("Pick a color");
+        builder.setTitle("Select Exercise Type");
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch(which) {
-                    case 0: startRecording();
+                    case 0: startRecording(activityTypes.Bike);
                         break;
-                    case 1: startRecording();
+                    case 1: startRecording(activityTypes.Run);
                         break;
-                    case 2: startRecording();
+                    case 2: startRecording(activityTypes.Walk);
                         break;
-                    case 3: startRecording();
-                        break;
-                    case 4: startRecording();
-                        break;
-                    default: startRecording();
+                    default: startRecording(activityTypes.Other);
                         break;
                 }
             }
@@ -324,7 +330,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         builder.show();
     }
 
-    public void startRecording() {
+    public void startRecording(activityTypes activityType) {
+        this.activityType = activityType;
         recording = true;
         firstCoordinate = true;
         startButton = (Button) getView().findViewById(R.id.startButton);
@@ -382,11 +389,48 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public void finishRecording() {
         recording = false;
+        finishMillis = System.currentTimeMillis();
         mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size()-1)).title("Stop Location"));
         resumeButton = (Button) getView().findViewById(R.id.resumeButton);
         finishButton = (Button) getView().findViewById(R.id.finishButton);
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
+        sendToFile();
         Log.i("Development", "finishRecording");
+    }
+
+    private void sendToFile() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+        int second = cal.get(Calendar.SECOND);
+        String FILENAME = "RA " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+        String output = year + "\n" + month + "\n" + day + "\n" + hour + "\n" + minute + "\n" + second;
+        output += "\n" + activityType;
+        output += "\n" + totalDistance;
+        output += "\n" + caloriesInt;
+        output += "\n" + duration;
+        for(int i = 0; i < coordinates.size(); i++){
+            output += "\n" + coordinates.get(i).toString();
+        }
+
+        try {
+            FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
+            fos.write(output.getBytes());
+            fos.close();
+        }catch (Exception e){
+
+        }
+        Log.i("Development", "sendToFile");
+
+        String[] fileList = getContext().fileList();
+        for(int i = 0; i < fileList.length; i++){
+            Log.i("Development", "FILENAME: " + fileList[i]);
+        }
     }
 }

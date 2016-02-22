@@ -1,5 +1,6 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
@@ -13,7 +14,10 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import java.io.FileOutputStream;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,6 +51,23 @@ public class MainActivity extends AppCompatActivity
       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
       navigationView.setNavigationItemSelectedListener(this);
       displayView(R.id.nav_recordActivity);
+
+//      String FILENAME = "hello_file";
+//      String string = "hello world!";
+//
+//      try {
+//         FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+//         fos.write(string.getBytes());
+//         fos.close();
+//         Log.i("Development", "It happppppeeeeennnnnnnneeeeeedddd");
+//      }catch(Exception e){
+//
+//      }
+//
+//      String[] fileList = fileList();
+//      for(int i = 0; i < fileList.length; i++){
+//         Log.i("Development", "FILENAME: " + fileList[i]);
+//      }
    }
 
    // Method creates a backstack listener and keeps the nav drawer up to date with what
