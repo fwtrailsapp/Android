@@ -2,10 +2,12 @@
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -35,6 +37,7 @@ import com.google.maps.android.kml.KmlLayer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.DecimalFormat;
@@ -432,5 +435,21 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         for(int i = 0; i < fileList.length; i++){
             Log.i("Development", "FILENAME: " + fileList[i]);
         }
+
+        File f = getTempFile(getContext(), FILENAME);
+        Log.i("Development", f.toString());
     }
+
+    public File getTempFile(Context context, String url) {
+        File file = new File("Texty");
+        Log.i("Development", "getTempFile");
+        try {
+            String fileName = Uri.parse(url).getLastPathSegment();
+            file = File.createTempFile(fileName, null, context.getCacheDir());
+            return file;
+            }catch(Exception e){
+                Log.i("Development", "faaaaaaaaaaaaiiiiiiiiiiiiiiiiilllllllllllllllll");
+            }
+            return file;
+        }
 }
