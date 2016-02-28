@@ -4,7 +4,7 @@ package seniordesign.ipfw.fw_trails_app;
  * Created by Jaron on 2/27/2016.
  */
 public class BikeExerciseType extends ExerciseType {
-   private final int bikeIcon =R.drawable.ic_directions_bike_black_24dp; // icon for Biking.
+   private final int bikeIcon =R.drawable.ic_directions_bike_black_18dp; // icon for Biking.
    private final String exerciseType = "Bike";
    private final double bikingMET = 8.0;
 

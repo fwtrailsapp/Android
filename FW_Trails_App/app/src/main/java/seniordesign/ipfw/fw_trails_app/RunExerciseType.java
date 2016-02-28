@@ -4,7 +4,7 @@ package seniordesign.ipfw.fw_trails_app;
  * Created by Jaron on 2/27/2016.
  */
 public class RunExerciseType extends ExerciseType {
-   private final int runIcon = R.drawable.ic_directions_run_black_24dp; // icon for running.
+   private final int runIcon = R.drawable.ic_directions_run_black_18dp; // icon for running.
    private final String exerciseType = "Run";
    private final double runningMET = 7.5;
 

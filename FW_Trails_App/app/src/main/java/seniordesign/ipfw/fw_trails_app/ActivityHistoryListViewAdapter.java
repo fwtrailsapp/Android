@@ -13,18 +13,19 @@ import android.widget.TextView;
  * Created by Jaron on 2/13/2016.
  */
 
-public class ActivityHistoryListViewAdapter extends ArrayAdapter<String> {
+public class ActivityHistoryListViewAdapter extends ArrayAdapter<ActivityHistoryModel> {
    int groupid;
-   String[] item_list;
-   ArrayList<String> desc;
+   ArrayList<ActivityHistoryModel> item_list;
+
    Context context;
-   public ActivityHistoryListViewAdapter(Context context, int vg, int id, String[] item_list){
+   public ActivityHistoryListViewAdapter(Context context, int vg, int id, ArrayList<ActivityHistoryModel> item_list){
       super(context,vg, id, item_list);
       this.context=context;
       groupid=vg;
       this.item_list=item_list;
 
    }
+
    // Hold views of the ListView to improve its scrolling performance
    static class ViewHolder {
       public ImageView activityImage;
@@ -51,14 +52,16 @@ public class ActivityHistoryListViewAdapter extends ArrayAdapter<String> {
          rowView.setTag(viewHolder);
 
       }
+
       // Set text to each TextView of ListView item
-      String[] items=item_list[position].split("__");
+      ActivityHistoryModel items = item_list.get(position);
       ViewHolder holder = (ViewHolder) rowView.getTag();
-      holder.durationText.setText(items[0]);
-      holder.distanceText.setText(items[1]);
-      holder.caloriesText.setText(items[2]);
-      holder.dateText.setText(items[3]);
-      holder.activityImage.setImageResource(R.drawable.ic_directions_run_black_24dp);
+      holder.durationText.setText(items.getDuration());
+      holder.distanceText.setText(String.valueOf(items.getMileage()));
+      holder.caloriesText.setText(String.valueOf(items.getCalsBurned()));
+      holder.dateText.setText(items.getDate());
+      holder.activityImage.setImageResource(items.getExerciseTypeIconID());
+
       return rowView;
    }
 

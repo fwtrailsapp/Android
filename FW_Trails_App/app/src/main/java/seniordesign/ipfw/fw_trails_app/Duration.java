@@ -25,7 +25,7 @@ public class Duration {
    // Returns the duration in number of seconds
    // ie 55:33:11 == 199,991 seconds
    public int getDurationInSeconds(){
-      int totalSeconds = 0;
+      int totalSeconds;
       String durationPieces[] = theDuration.split(":");
 
       // Parse the integers from HH:MM:SS

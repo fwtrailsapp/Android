@@ -69,13 +69,14 @@ public class ActivityHistoryModelUnitTests {
       assertNotNull(activityHistoryModel.getDate());
    }
 
-   // This method checks that the date time object ist he same as the datetime object
-   // that was passed in initially.
+
+   // This method tests the format of the date
+   // mm/dd/yyyy
    @Test
-   public void verifyDateTimeObject(){
-      printInfo("verifyDateTimeObject",activityHistoryModel.getDate()+
-      " should be "+nowAsISO);
-      assertEquals(nowAsISO, activityHistoryModel.getDate());
+   public void verifyDateObjectFormat(){
+      printInfo("verifyDateObjectFormat",activityHistoryModel.getDate()+
+              " should be "+formatDate(nowAsISO));
+      assertEquals(formatDate(nowAsISO),activityHistoryModel.getDate());
    }
 
    // This method tests that we have a duration method/field in activityHistoryModel.
@@ -138,6 +139,15 @@ public class ActivityHistoryModelUnitTests {
       assertEquals(theExerciseType.getExerciseType(),
               activityHistoryModel.getExerciseType());
    }
+
+   //Verify the exercise type has the correct resource ID for the icon
+   @Test
+   public void verifyExerciseTypeIconID(){
+      printInfo("verifyExerciseTypeIconID",activityHistoryModel.getExerciseTypeIconID()+
+              " should be "+ theExerciseType.getIconResourceId());
+      assertEquals(activityHistoryModel.getExerciseTypeIconID(),
+              theExerciseType.getIconResourceId());
+   }
    // Tests that the class exists.
    @Test
    public void classExists() {
@@ -151,5 +161,20 @@ public class ActivityHistoryModelUnitTests {
    }
    private void printInfo(String methodName, double info) {
       System.out.println("ActivityHistoryModelUnitTest::"+methodName+": "+ info);
+   }
+
+   // Precondition that the original date is in the format of
+   // yyyy-MM-dd'T'HH:mm:ss
+   private static String formatDate(String originalDate){
+      String newDate;
+
+      String allDatePieces[] = originalDate.split("T");
+
+      String datePiece = allDatePieces[0];
+      String onlyDatePieces[] = datePiece.split("-");
+
+      newDate = onlyDatePieces[1]+"/"+onlyDatePieces[2]+"/"+onlyDatePieces[0];
+
+      return newDate;
    }
 }

@@ -21,9 +21,9 @@ public class ExerciseTypeUnitTests {
    // MET Values per http://appliedresearch.cancer.gov/atus-met/met.php
 
    private final String runType = "Run";
-   private final int runIconID = R.drawable.ic_directions_run_black_24dp;
-   private final int walkIconID = R.drawable.ic_directions_walk_black_24dp;
-   private final int bikeIconID = R.drawable.ic_directions_bike_black_24dp;
+   private final int runIconID = R.drawable.ic_directions_run_black_18dp;
+   private final int walkIconID = R.drawable.ic_directions_walk_black_18dp;
+   private final int bikeIconID = R.drawable.ic_directions_bike_black_18dp;
    private static final String testTime = "55:33:11";
    private final int testRunCalsBurned = 1499933;
    private final int testBikeCalsBurned = 1599928;

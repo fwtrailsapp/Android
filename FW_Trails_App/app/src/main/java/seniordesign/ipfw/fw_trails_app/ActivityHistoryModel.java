@@ -16,7 +16,7 @@ public class ActivityHistoryModel {
    public ActivityHistoryModel(String theDate, Duration theDuration, double theMileage,
                                int theCalsBurned, ExerciseType theExercise) {
       this.theDuration = theDuration;
-      this.theDate = theDate;
+      this.theDate = formatDate(theDate);
       this.theCalsBurned = theCalsBurned;
       this.theMileage = theMileage;
       this.theExercise = theExercise;
@@ -46,5 +46,25 @@ public class ActivityHistoryModel {
    // ie "Run", "Walk", "Bike"
    public String getExerciseType(){
       return theExercise.getExerciseType();
+   }
+
+   // Returns the Exercise Type's icon ID
+   public int getExerciseTypeIconID(){
+      return theExercise.getIconResourceId();
+   }
+
+   // Precondition that the original date is in the format of
+   // yyyy-MM-dd'T'HH:mm:ss
+   private String formatDate(String originalDate){
+      String newDate;
+
+      String allDatePieces[] = originalDate.split("T");
+
+      String datePiece = allDatePieces[0];
+      String onlyDatePieces[] = datePiece.split("-");
+
+      newDate = onlyDatePieces[1]+"/"+onlyDatePieces[2]+"/"+onlyDatePieces[0];
+
+      return newDate;
    }
 }
