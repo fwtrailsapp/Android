@@ -197,9 +197,9 @@ public class ExerciseTypeUnitTests {
 
    // Helper methods to watch the values of the unit tests as they execute.
    private void printInfo(String methodName, String info) {
-      System.out.println("ActivityHistoryModelUnitTest::" + methodName + ": " + info);
+      System.out.println("ExerciseTypeUnitTest::" + methodName + ": " + info);
    }
    private void printInfo(String methodName, double info) {
-      System.out.println("ActivityHistoryModelUnitTest::"+methodName+": "+ info);
+      System.out.println("ExerciseTypeUnitTest::"+methodName+": "+ info);
    }
 }

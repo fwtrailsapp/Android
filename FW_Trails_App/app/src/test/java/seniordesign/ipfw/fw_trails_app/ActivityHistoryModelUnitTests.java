@@ -1,8 +1,6 @@
 package seniordesign.ipfw.fw_trails_app;
 
 
-import android.util.Log;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,7 +12,7 @@ import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import android.util.Log;
+
 
 /**
  * Created by Jaron on 2/6/2016.
@@ -59,6 +57,7 @@ public class ActivityHistoryModelUnitTests {
    // what needs to be done after the class is ran
    @AfterClass
    public static void tearDown() {
+
    }
 
    //This method verifies that we have a date time object getter method and object.
