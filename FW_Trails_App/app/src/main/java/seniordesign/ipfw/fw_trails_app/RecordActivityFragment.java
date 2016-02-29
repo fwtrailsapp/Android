@@ -37,9 +37,14 @@ import com.google.maps.android.kml.KmlLayer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -73,7 +78,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private double currentSpeed;
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
     NumberFormat calorieFormat = new DecimalFormat("#0.0");
-//    NumberFormat secondFormat = new IntegerFormat("00");
+    //    NumberFormat secondFormat = new IntegerFormat("00");
     NumberFormat speedFormat = new DecimalFormat("#0.00");
     double tempDistance;
     double totalDistance = 0.0;
@@ -95,19 +100,15 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Check if we have created the view already, if we haven't create it.
-        if(view != null)
-        {
+        if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
-            if(parent != null)
-            {
+            if (parent != null) {
                 parent.removeView(view);
             }
         }
-        try
-        {
+        try {
             view = inflater.inflate(R.layout.fragment_record_activity, container, false);
-        }
-        catch(InflateException e){
+        } catch (InflateException e) {
             e.printStackTrace();
         }
 
@@ -137,7 +138,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                 .build();
         mGoogleApiClient.connect();
         createLocationRequest();
-        Log.i("Development","buildGoogleApiClient");
+        Log.i("Development", "buildGoogleApiClient");
     }
 
     protected void createLocationRequest() {
@@ -145,7 +146,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(100);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        Log.i("Development","createLocationRequest");
+        Log.i("Development", "createLocationRequest");
     }
 
     public void onConnected(Bundle connectionHint) {
@@ -155,7 +156,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         if (mLastLocation != null) {
         }
         startLocationUpdates();
-        Log.i("Development","onConnected");
+        Log.i("Development", "onConnected");
     }
 
     protected void startLocationUpdates() {
@@ -163,8 +164,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onLocationChanged(Location location) {
                 if (recording) {
                     updateLocation(location);
-                }
-                else{
+                } else {
                     startMillis += 1000;
                 }
             }
@@ -172,19 +172,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, locationListener);
         }
-        Log.i("Development","startLocationUpdates");
+        Log.i("Development", "startLocationUpdates");
     }
 
     public void onConnectionSuspended(int n) {
-        Log.i("Development","onConnectionSuspended");
+        Log.i("Development", "onConnectionSuspended");
     }
 
     public void onConnectionFailed(ConnectionResult cr) {
-        Log.i("Development","onConnectionFailed");
+        Log.i("Development", "onConnectionFailed");
     }
 
     public String getTitle() {
-        Log.i("Development","getTitle");
+        Log.i("Development", "getTitle");
         return fragmentTitle;
     }
 
@@ -234,14 +234,14 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onProviderDisabled(String provider) {
             }
         };
-        Log.i("Development","onMapReady");
+        Log.i("Development", "onMapReady");
     }
 
     private void addPolylineToMap() {
         line = mMap.addPolyline(new PolylineOptions()
                 .width(10)
                 .color(Color.BLUE));
-        Log.i("Development","addPolylineToMap");
+        Log.i("Development", "addPolylineToMap");
     }
 
     private void addKMLLayerToMap() {
@@ -252,7 +252,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         } catch (org.xmlpull.v1.XmlPullParserException e) {
         } catch (java.io.IOException e) {
         }
-        Log.i("Development","addKMLLayerToMap");
+        Log.i("Development", "addKMLLayerToMap");
     }
 
     private void updateLocation(Location location) {
@@ -282,11 +282,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
 //            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
         calories.setText("Calories: " + Integer.toString(caloriesInt) + ".00");
-        Long secondsLong = ((lastLocationTime-startMillis)/1000)%60;
+        Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
         String seconds = "";
-        if(secondsLong < 10){seconds += "0";}
+        if (secondsLong < 10) {
+            seconds += "0";
+        }
         seconds += secondsLong;
-        duration.setText("Duration: " + Long.toString((lastLocationTime-startMillis)/1000/60) + ":" + seconds);
+        duration.setText("Duration: " + Long.toString((lastLocationTime - startMillis) / 1000 / 60) + ":" + seconds);
 //        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
@@ -310,22 +312,26 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         }
     };
 
-    public void selectActivityType(){
-        CharSequence colors[] = new CharSequence[] {"Bike", "Run", "Walk", "Other"};
+    public void selectActivityType() {
+        CharSequence colors[] = new CharSequence[]{"Bike", "Run", "Walk", "Other"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
         builder.setTitle("Select Exercise Type");
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch(which) {
-                    case 0: startRecording(activityTypes.Bike);
+                switch (which) {
+                    case 0:
+                        startRecording(activityTypes.Bike);
                         break;
-                    case 1: startRecording(activityTypes.Run);
+                    case 1:
+                        startRecording(activityTypes.Run);
                         break;
-                    case 2: startRecording(activityTypes.Walk);
+                    case 2:
+                        startRecording(activityTypes.Walk);
                         break;
-                    default: startRecording(activityTypes.Other);
+                    default:
+                        startRecording(activityTypes.Other);
                         break;
                 }
             }
@@ -393,16 +399,52 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     public void finishRecording() {
         recording = false;
         finishMillis = System.currentTimeMillis();
-        mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size()-1)).title("Stop Location"));
+        mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location"));
         resumeButton = (Button) getView().findViewById(R.id.resumeButton);
         finishButton = (Button) getView().findViewById(R.id.finishButton);
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
-        sendToFile();
+
+        String filename = sendToFile();
+        File file = getFile(filename);
+        if(file == null){
+            Log.i("Development", "Returned file is null");
+        }
+        else{
+            openFile(file);
+        }
         Log.i("Development", "finishRecording");
+
+        String message = "";
+        message += "Exercise Type: " + activityType;
+        Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
+        String seconds = "";
+        if (secondsLong < 10) {
+            seconds += "0";
+        }
+        seconds += secondsLong;
+        message += "\nDuration: " + Long.toString((lastLocationTime - startMillis) / 1000 / 60) + ":" + seconds;
+        message += "\nDistance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi";
+        message += "\nCalories: " + caloriesInt;
+        message += "\nTop Speed: " + "15 mph";
+        message += "\nAverage Speed: " + "10 mph";
+        displayStatistics(message);
     }
 
-    private void sendToFile() {
+    public void displayStatistics(String message){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Activity Summary");
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private String sendToFile() {
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -418,7 +460,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         output += "\n" + totalDistance;
         output += "\n" + caloriesInt;
         output += "\n" + duration;
-        for(int i = 0; i < coordinates.size(); i++){
+        for (int i = 0; i < coordinates.size(); i++) {
             output += "\n" + coordinates.get(i).toString();
         }
 
@@ -426,30 +468,114 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
             fos.write(output.getBytes());
             fos.close();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         Log.i("Development", "sendToFile");
 
+        //Print list of all app files
         String[] fileList = getContext().fileList();
-        for(int i = 0; i < fileList.length; i++){
+        for (int i = 0; i < fileList.length; i++) {
             Log.i("Development", "FILENAME: " + fileList[i]);
         }
 
-        File f = getTempFile(getContext(), FILENAME);
-        Log.i("Development", f.toString());
+        return FILENAME;
     }
 
-    public File getTempFile(Context context, String url) {
-        File file = new File("Texty");
-        Log.i("Development", "getTempFile");
-        try {
-            String fileName = Uri.parse(url).getLastPathSegment();
-            file = File.createTempFile(fileName, null, context.getCacheDir());
+    public File getFile(String filename) {
+        Log.i("Development", "getFile");
+        try{
+            File file = new File(getContext().getFilesDir(), filename);
             return file;
-            }catch(Exception e){
-                Log.i("Development", "faaaaaaaaaaaaiiiiiiiiiiiiiiiiilllllllllllllllll");
-            }
-            return file;
+        } catch (Exception e){
+            Log.e("Development", "Failed to open file");
+            return null;
         }
+    }
+
+    public void openFile(File file){
+
+//        String eol = System.getProperty("line.separator");
+//        BufferedReader input = null;
+//        try {
+//            input = new BufferedReader(new InputStreamReader(openFileInput(file)));
+//            String line;
+//            StringBuffer buffer = new StringBuffer();
+//            while ((line = input.readLine()) != null) {
+//                buffer.append(line + eol);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            if (input != null) {
+//                try {
+//                    input.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+
+
+        FileInputStream fis = null;
+        try{
+            fis = new FileInputStream(file);
+        }catch (Exception e) {
+            e.printStackTrace();
+            Log.i("Development", "1NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
+        }
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr);
+
+        String temp;
+        int lineCounter = 0;
+        try{
+            while((temp = br.readLine()) != null){
+                lineCounter++;
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+            Log.i("Development", "2NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
+        }
+
+
+        try
+        {
+            fis.getChannel().position(0);
+            Log.i("Development", "Reset");
+        }
+        catch (Exception e) {e.printStackTrace();}
+
+
+        String[] output = new String[lineCounter];
+        String line;
+        int counter = 0;
+        try{
+            Log.i("Development", "Try printing-----------------------------------------------------------");
+            for (int i = 0; i < lineCounter; i++){
+//                String line2 = br.readLine();
+//                output[i] = line2;
+                output[i] = br.readLine();
+                Log.i("Development", output[i]);
+            }
+//            while((line = br.readLine()) != null){
+//                output[counter] = line;
+//                Log.i("Development", "Line: " + line);
+//                counter++;
+//            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.i("Development", "3NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
+        }
+
+        String printMe = "";
+        for(int i = 0; i < output.length; i++){
+//            Log.i("Development", "Here");
+//            Log.i("Development", Integer.toString(output.length));
+            printMe += output[i];
+        }
+        Log.i("Develop", printMe);
+
+        Log.i("Development", "openfile");
+    }
 }
