@@ -79,8 +79,6 @@
         <item>Biking</item>
         <item>Running</item>
         <item>Walking</item>
-        <item>Skateboarding</item>
-        <item>Skating</item>
     </string-array>
     <string name="activity_SpinnerPrompt">Choose an Activity</string>
     <string name="activitySpecificTotalTimeText">Total Time</string>

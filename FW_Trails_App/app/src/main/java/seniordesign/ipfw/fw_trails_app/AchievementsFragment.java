@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,7 +25,7 @@ import android.widget.RelativeLayout;
 public class AchievementsFragment extends Fragment {
 
    private final String fragmentTitle = "Achievements";
-
+   ArrayList<AchievementModel> items;
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
       FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
@@ -33,7 +35,9 @@ public class AchievementsFragment extends Fragment {
       ListView listView = (ListView) view.findViewById(R.id.achievements_listView);
 
 
-      String[] items=getResources().getStringArray(R.array.achievement_test_list_items);
+      //TODO: API GET Call goes here to grab achievements from server.
+      loadTestAchievements();
+
       AchievementsListViewAdapter adapter = new AchievementsListViewAdapter(getContext(),R.layout.achievement_row,R.id.dateEarnedText,items);
 
       // Bind data to the ListView
@@ -44,5 +48,22 @@ public class AchievementsFragment extends Fragment {
 
    public String getTitle(){
       return fragmentTitle;
+   }
+
+   private void loadTestAchievements(){
+      if(items == null) {
+         items = new ArrayList<>(2);
+         final String achievName = "Daily Dose";
+         final String achievDate = "02/22/2016";
+         final String achievDesc = "Bike for 24 hours";
+         final String notEarnedAchievName = "Joker";
+         final String notEarnedAchievDesc = "Kill the Batman";
+
+         AchievementModel achievEarned = new AchievementModel(achievName, achievDate, achievDesc);
+         AchievementModel notEarnedAchiev = new AchievementModel(notEarnedAchievName, null,
+                 notEarnedAchievDesc);
+         items.add(achievEarned);
+         items.add(notEarnedAchiev);
+      }
    }
 }

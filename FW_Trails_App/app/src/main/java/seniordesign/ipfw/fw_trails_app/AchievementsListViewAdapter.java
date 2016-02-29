@@ -14,12 +14,12 @@ import java.util.ArrayList;
  * Created by Jaron on 2/13/2016.
  */
 
-public class AchievementsListViewAdapter extends ArrayAdapter<String> {
+public class AchievementsListViewAdapter extends ArrayAdapter<AchievementModel> {
    int groupid;
-   String[] item_list;
-   ArrayList<String> desc;
+   ArrayList<AchievementModel> item_list;
    Context context;
-   public AchievementsListViewAdapter(Context context, int vg, int id, String[] item_list){
+   public AchievementsListViewAdapter(Context context, int vg, int id,
+                                      ArrayList<AchievementModel> item_list){
       super(context,vg, id, item_list);
       this.context=context;
       groupid=vg;
@@ -51,11 +51,11 @@ public class AchievementsListViewAdapter extends ArrayAdapter<String> {
       }
 
       // Set text to each TextView of ListView item
-      String[] items = item_list[position].split("__");
+      AchievementModel item = item_list.get(position);
       ViewHolder holder = (ViewHolder) rowView.getTag();
-      holder.dateEarnedText.setText(items[0]);
-      holder.nameText.setText(items[1]);
-      holder.descriptionText.setText(items[2]);
+      holder.dateEarnedText.setText(item.getDate());
+      holder.nameText.setText(item.getName());
+      holder.descriptionText.setText(item.getDescription());
       return rowView;
    }
 
