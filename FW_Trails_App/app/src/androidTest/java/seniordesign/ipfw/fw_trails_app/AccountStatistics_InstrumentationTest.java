@@ -43,16 +43,17 @@ public class AccountStatistics_InstrumentationTest {
    private final String dummyTime = "00:00:00";
    private final String toolbarTitle = "Your Statistics";
    private final String overallStatText = "Overall Statistics";
-   private final String totalTimeText   = "Total Time";
+   private final String totalTimeText   = "Total Duration";
    private final String dummyDistance = "0.00 mi.";
    private final String totalDistanceText = "Total Distance";
-   private final String topSpeedText = "Top Speed";
-   private final String dummyTopSpeed = "0.00 mph";
-   private final String averageSpeedText = "Average Speed";
    private final String numberOfActivitiesText = "Number of Activities";
    private final String dummyNumOfActivities = "0";
    private final String activitySpecificText = "View Activity Statistics";
-   private final String[] activitySpinner = {"Running","Biking","Walking","Skateboarding","Skating"};
+   private final String[] activitySpinner = {"Running","Biking","Walking"};
+   private final String overallCalsExpendedText = "Total Calories Expended";
+   private final String defaultCalorieAmount = "0 kcal";
+   private final String accountActiveText = "Account Active";
+   private final String accountActiveDefaultAmount = "< 1 year";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -129,6 +130,37 @@ public class AccountStatistics_InstrumentationTest {
    public void overallTotalDistanceTextViewVerification() {
       onView(withId(R.id.overallTotalDistanceTextView)).check(matches(withText(totalDistanceText)));
    }
+
+   @Test
+   public void overallCaloriesExpendedVerification() {
+      onView(withId(R.id.totalCaloriesExpendedTextView)).check(matches(withText(overallCalsExpendedText)));
+   }
+
+   @Test
+   public void overallCaloriesExpendedAmountVerification() {
+      onView(withId(R.id.totalCaloriesExpendedAmountTextView)).check(matches(withText(defaultCalorieAmount)));
+   }
+
+   @Test
+   public void specificActivityCaloriesExpendedVerification() {
+      onView(withId(R.id.activitySpecificCaloriesExpendedTextView)).check(matches(withText(overallCalsExpendedText)));
+   }
+
+   @Test
+   public void specificActivityCaloriesExpendedAmountVerification() {
+      onView(withId(R.id.activitySpecificCaloriesExpendedAmountTextView)).check(matches(withText(defaultCalorieAmount)));
+   }
+
+   @Test
+   public void accountActiveVerification(){
+      onView(withId(R.id.accountActiveTextView)).check(matches(withText(accountActiveText)));
+   }
+
+   @Test
+   public void accountActiveAmountVerification() {
+      onView(withId(R.id.accountActiveAmountTextView)).check(matches(withText(accountActiveDefaultAmount)));
+   }
+
    @Test
    public void overallTotalDistanceAmountTextViewExists() {
       onView(withId(R.id.overallTotalDistanceAmountTextView)).check(matches(isDisplayed()));
@@ -138,43 +170,6 @@ public class AccountStatistics_InstrumentationTest {
       onView(withId(R.id.overallTotalDistanceAmountTextView)).check(matches(withText(dummyDistance)));
    }
 
-   @Test
-   public void overallTopSpeedTextViewExists() {
-      onView(withId(R.id.overallTopSpeedTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void overallTopSpeedTextViewVerification() {
-      onView(withId(R.id.overallTopSpeedTextView)).check(matches(withText(topSpeedText)));
-   }
-   @Test
-   public void overallTopSpeedAmountTextViewExists() {
-      onView(withId(R.id.overallTopSpeedAmountTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void overallTopSpeedAmountTextViewVerification() {
-      onView(withId(R.id.overallTopSpeedAmountTextView)).check(matches(withText(dummyTopSpeed)));
-   }
-   @Test
-   public void overallAverageSpeedTextViewExists() {
-      onView(withId(R.id.overallAverageSpeedTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void overallAverageSpeedTextViewVerification() {
-      onView(withId(R.id.overallAverageSpeedTextView)).check(matches(withText(averageSpeedText)));
-   }
-
-   @Test
-   public void overallAverageSpeedAmountTextViewExists() {
-      onView(withId(R.id.overallAverageSpeedAmountTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void overallAverageSpeedAmountTextViewVerification() {
-      onView(withId(R.id.overallAverageSpeedAmountTextView)).check(matches(withText(dummyTopSpeed)));
-   }
 
    @Test
    public void overallNumberOfActivitiesTextViewExists() {
@@ -260,45 +255,7 @@ public class AccountStatistics_InstrumentationTest {
       onView(withId(R.id.activitySpecificTotalDistanceAmountTextView)).check(matches(withText(dummyDistance)));
    }
 
-   @Test
-   public void activitySpecificTopSpeedExists(){
-      onView(withId(R.id.activitySpecificTopSpeedTextView)).check(matches(isDisplayed()));
-   }
 
-   @Test
-   public void activitySpecificTopSpeedVerification() {
-      onView(withId(R.id.activitySpecificTopSpeedTextView)).check(matches(withText(topSpeedText)));
-   }
-
-   @Test
-   public void activitySpecificTopSpeedAmountExists(){
-      onView(withId(R.id.activitySpecificTopSpeedAmountTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void activitySpecificTopSpeedAmountVerification() {
-      onView(withId(R.id.activitySpecificTopSpeedAmountTextView)).check(matches(withText(dummyTopSpeed)));
-   }
-
-   @Test
-   public void activitySpecificAverageSpeedExists(){
-      onView(withId(R.id.activitySpecificAverageSpeedTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void activitySpecificAverageSpeedVerification() {
-      onView(withId(R.id.activitySpecificAverageSpeedTextView)).check(matches(withText(averageSpeedText)));
-   }
-
-   @Test
-   public void activitySpecificAverageSpeedAmountExists(){
-      onView(withId(R.id.activitySpecificAverageSpeedAmountTextView)).check(matches(isDisplayed()));
-   }
-
-   @Test
-   public void activitySpecificAverageSpeedAmountVerification() {
-      onView(withId(R.id.activitySpecificAverageSpeedAmountTextView)).check(matches(withText(dummyTopSpeed)));
-   }
 
    // Opens the Navigation Drawer
    private void openDrawer()

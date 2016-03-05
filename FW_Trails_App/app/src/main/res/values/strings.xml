@@ -65,7 +65,7 @@
 
     <!-- Strings related to Account Statistics Activity-->
     <string name="overallStatText">Overall Statistics</string>
-    <string name="overallTotalTimeText">Total Time</string>
+    <string name="overallTotalTimeText">Total Duration</string>
     <string name="defaultTimeAmount">00:00:00</string>
     <string name="overallTotalDistanceText">Total Distance</string>
     <string name="defaultDistanceAmount">0.00 mi.</string>
@@ -81,10 +81,14 @@
         <item>Walking</item>
     </string-array>
     <string name="activity_SpinnerPrompt">Choose an Activity</string>
-    <string name="activitySpecificTotalTimeText">Total Time</string>
+    <string name="activitySpecificTotalTimeText">Total Duration</string>
     <string name="activitySpecificTotalDistanceText">Total Distance</string>
     <string name="activitySpecificTopSpeedText">Top Speed</string>
     <string name="activitySpecificAverageSpeedText">Average Speed</string>
+    <string name="accountActiveText">Account Active</string>
+    <string name="activeDefaultText">&lt; 1 year</string>
+    <string name="defaultCaloriesExpendedText">Total Calories Expended</string>
+    <string name="defaultCaloriesExpendedAmount">0 kcal</string>
     <!--End Strings related to Account Statistics Activity-->
 
     <string name="title_activity_maps">Map</string>
