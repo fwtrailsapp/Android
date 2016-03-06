@@ -14,6 +14,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.lang.String;
+
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -46,7 +48,7 @@ public class AccountStatistics_InstrumentationTest {
    private final String totalTimeText   = "Total Duration";
    private final String dummyDistance = "0.00 mi.";
    private final String totalDistanceText = "Total Distance";
-   private final String numberOfActivitiesText = "Number of Activities";
+   private final String numberOfAchievements = "Achievements Earned";
    private final String dummyNumOfActivities = "0";
    private final String activitySpecificText = "View Activity Statistics";
    private final String[] activitySpinner = {"Running","Biking","Walking"};
@@ -173,22 +175,22 @@ public class AccountStatistics_InstrumentationTest {
 
    @Test
    public void overallNumberOfActivitiesTextViewExists() {
-      onView(withId(R.id.overallNumberOfActivitiesTextView)).check(matches(isDisplayed()));
+      onView(withId(R.id.overallNumberOfAchievementsTextView)).check(matches(isDisplayed()));
    }
 
    @Test
    public void overallNumberOfActivitiesTextViewVerification() {
-      onView(withId(R.id.overallNumberOfActivitiesTextView)).check(matches(withText(numberOfActivitiesText)));
+      onView(withId(R.id.overallNumberOfAchievementsTextView)).check(matches(withText(numberOfAchievements)));
    }
 
    @Test
    public void overallNumberOfActivitiesAmountTextViewExists() {
-      onView(withId(R.id.overallNumberOfActivitiesAmountTextView)).check(matches(isDisplayed()));
+      onView(withId(R.id.overallNumberOfAchievementsAmountTextView)).check(matches(isDisplayed()));
    }
 
    @Test
    public void overallNumberOfActivitiesAmountTextViewVerification() {
-      onView(withId(R.id.overallNumberOfActivitiesAmountTextView)).check(matches(withText(dummyNumOfActivities)));
+      onView(withId(R.id.overallNumberOfAchievementsAmountTextView)).check(matches(withText(dummyNumOfActivities)));
    }
 
    @Test

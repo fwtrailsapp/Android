@@ -70,8 +70,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/overallNumberOfActivitiesText"
-        android:id="@+id/overallNumberOfActivitiesTextView"
+        android:text="@string/overallNumberOfAchievementsText"
+        android:id="@+id/overallNumberOfAchievementsTextView"
         android:layout_below="@+id/totalCaloriesExpendedTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
@@ -80,10 +80,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/defaultNumberOfActivities"
-        android:id="@+id/overallNumberOfActivitiesAmountTextView"
-        android:layout_alignTop="@+id/overallNumberOfActivitiesTextView"
-        android:layout_alignLeft="@+id/overallNumberOfActivitiesTextView"
+        android:text="@string/defaultNumberOfAchievements"
+        android:id="@+id/overallNumberOfAchievementsAmountTextView"
+        android:layout_alignTop="@+id/overallNumberOfAchievementsTextView"
+        android:layout_alignLeft="@+id/overallNumberOfAchievementsTextView"
         android:layout_alignStart="@+id/overallTotalDistanceAmountTextView"/>
 
     <TextView
@@ -93,7 +93,7 @@
         android:text="@string/activitySpecificStatText"
         android:id="@+id/activitySpecificStatTextView"
         android:layout_marginTop="53dp"
-        android:layout_below="@+id/overallNumberOfActivitiesTextView"
+        android:layout_below="@+id/overallNumberOfAchievementsTextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
@@ -129,8 +129,8 @@
         android:text="@string/defaultTimeAmount"
         android:id="@+id/activitySpecificTotalTimeAmountTextView"
         android:layout_alignBottom="@+id/activitySpecificTotalTimeTextView"
-        android:layout_alignLeft="@+id/overallNumberOfActivitiesAmountTextView"
-        android:layout_alignStart="@+id/overallNumberOfActivitiesAmountTextView"/>
+        android:layout_alignLeft="@+id/overallNumberOfAchievementsAmountTextView"
+        android:layout_alignStart="@+id/overallNumberOfAchievementsAmountTextView"/>
 
     <TextView
         android:layout_width="wrap_content"

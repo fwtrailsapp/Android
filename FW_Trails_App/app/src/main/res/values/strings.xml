@@ -72,8 +72,8 @@
     <string name="overallTopSpeedText">Top Speed</string>
     <string name="defaultTopSpeed">0.00 mph</string>
     <string name="overallAverageSpeedText">Average Speed</string>
-    <string name="overallNumberOfActivitiesText">Number of Activities</string>
-    <string name="defaultNumberOfActivities">0</string>
+    <string name="overallNumberOfAchievementsText">Achievements Earned</string>
+    <string name="defaultNumberOfAchievements">0</string>
     <string name="activitySpecificStatText">View Activity Statistics</string>
     <string-array name="activityEntries">
         <item>Biking</item>
