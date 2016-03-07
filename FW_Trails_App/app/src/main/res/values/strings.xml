@@ -11,7 +11,7 @@
     <string name="navDrawer_accountDetails">Account Details</string>
     <string name="navDrawer_aboutTitle">About</string>
     <string name="navDrawer_exit">Exit</string>
-    <string name="navDrawer_311Text">"Please call 311 to request city information or non emergency services."
+    <string name="navDrawer_311Text">"Report a problem to 311"
     </string>
     <!--End Navigation Drawer Strings-->
 
@@ -116,6 +116,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_demo_main">DemoMainActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="phone_number_311">311</string>
 
     <!-- Strings related to Activity History Fragment-->
     <string-array name="activity_statistics_test_list_items">

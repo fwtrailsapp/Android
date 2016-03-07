@@ -2,6 +2,8 @@ package seniordesign.ipfw.fw_trails_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.support.v4.app.Fragment;
@@ -16,6 +18,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import java.io.FileOutputStream;
 
@@ -48,9 +52,19 @@ public class MainActivity extends AppCompatActivity
       // Also updates the app bar titel and nav drawer with the respective new fragment.
       setupBackStackListener();
 
+
+
       NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
       navigationView.setNavigationItemSelectedListener(this);
+
+      View headerView  = getLayoutInflater().inflate(R.layout.nav_header_main, navigationView, false);
+
+      // Add the nav drawer header
+      navigationView.addHeaderView(headerView);
+
       displayView(R.id.nav_recordActivity);
+
+      setupDialerListener(headerView);
 
 //      String FILENAME = "hello_file";
 //      String string = "hello world!";
@@ -169,7 +183,6 @@ public class MainActivity extends AppCompatActivity
 
       Fragment fragment = null;
 
-      //todo: figure out a way to hold current toolbar title if user cancels exit dialog.
       // Set the default title to the record activity title.
       String title = mainActivityTitle;
       String currentTitle = (String) getSupportActionBar().getTitle();
@@ -270,6 +283,23 @@ public class MainActivity extends AppCompatActivity
          @Override
          public void onClick(DialogInterface dialog, int which) {
             dialog.dismiss();
+         }
+      });
+   }
+
+   // This method sets up a listener for the Report a problem textViiew's onClick.
+   // It attempts to dial 311
+   private void setupDialerListener(View headerView){
+
+      TextView report311 = (TextView) headerView.findViewById(R.id.report311TextView);
+      report311.setOnClickListener(new View.OnClickListener() {
+
+         @Override
+         public void onClick(View v) {
+            Intent dialerIntent = new Intent(Intent.ACTION_DIAL);
+            String p = "tel:" + getString(R.string.phone_number_311);
+            dialerIntent.setData(Uri.parse(p));
+            startActivity(dialerIntent);
          }
       });
    }

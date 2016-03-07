@@ -42,7 +42,7 @@ public class MainActivity_InstrumentationTest {
 
 
    private final String accountDetailsText = "Account Details";
-
+   private final String reportTo311Text = "Report a problem to 311";
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
    @Rule
@@ -92,6 +92,12 @@ public class MainActivity_InstrumentationTest {
    @Test
     public void clickActivityHistory() {
       onView(withText(R.string.navDrawer_activityHistory)).perform(click());
+   }
+
+   @Test
+   public void report311Dialer(){
+
+      onView(withText(reportTo311Text)).check(matches(isDisplayed()));
    }
 
    // Handle the record Activity click after we navigate upwards.
