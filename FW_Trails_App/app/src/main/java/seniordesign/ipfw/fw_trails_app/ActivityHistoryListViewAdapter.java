@@ -55,9 +55,11 @@ public class ActivityHistoryListViewAdapter extends ArrayAdapter<ActivityHistory
 
       // Set text to each TextView of ListView item
       ActivityHistoryModel items = item_list.get(position);
+      String distanceText = String.valueOf(items.getMileage())+" mi";
       ViewHolder holder = (ViewHolder) rowView.getTag();
+
       holder.durationText.setText(items.getDuration());
-      holder.distanceText.setText(String.valueOf(items.getMileage()));
+      holder.distanceText.setText(distanceText);
       holder.caloriesText.setText(String.valueOf(items.getCalsBurned()));
       holder.dateText.setText(items.getDate());
       holder.activityImage.setImageResource(items.getExerciseTypeIconID());

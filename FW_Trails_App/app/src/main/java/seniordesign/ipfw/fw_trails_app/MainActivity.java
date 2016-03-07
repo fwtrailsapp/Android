@@ -127,6 +127,12 @@ public class MainActivity extends AppCompatActivity
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_trailMap);
+      } else if (fragClassName.equals(AboutFragment.class.getName())) {
+         if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(((AboutFragment) fragment).getTitle());
+         }
+         //set selected item position, etc
+         navView.setCheckedItem(R.id.nav_about);
       }
    }
 
@@ -202,6 +208,12 @@ public class MainActivity extends AppCompatActivity
             fragment = new RecordActivityFragment();
             title = ((RecordActivityFragment) fragment).getTitle();
             viewIsAtHome = true;
+            break;
+
+         case R.id.nav_about:
+            fragment = new AboutFragment();
+            title = ((AboutFragment) fragment).getTitle();
+            viewIsAtHome = false;
             break;
 
          case R.id.nav_exit:

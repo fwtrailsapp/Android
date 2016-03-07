@@ -9,10 +9,27 @@
     <string name="navDrawer_trailMap">Trail Map</string>
     <string name="navDrawer_accountStatistics">Account Statistics</string>
     <string name="navDrawer_accountDetails">Account Details</string>
+    <string name="navDrawer_aboutTitle">About</string>
     <string name="navDrawer_exit">Exit</string>
     <string name="navDrawer_311Text">"Please call 311 to request city information or non emergency services."
     </string>
     <!--End Navigation Drawer Strings-->
+
+    <!-- Strings related to the AboutFragment-->
+    <string name="aboutStatement">\nCopyright &#169; 2016 Jared Perry, Jaron Somers, Warren Barnes, Scott Weidenkopf, and Grant Grimm\n\n
+  \tPermission is hereby granted, free of charge, to any person obtaining a copy of this software
+  and associated documentation files (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+  and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:\n\n
+  \tThe above copyright notice and this permission notice shall be included in all copies\n
+  or substantial portions of the Software.\n\n
+  \tTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+  LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+  WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+  THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <!-- End strings related to the AboutFragment-->
 
     <!-- Strings related to RecordActivityFragment-->
     <string name="startStopRecording">Start</string>
@@ -29,15 +46,15 @@
     <string name="error_field_required">This field is required</string>
     <string name="login_hint_name">Username</string>
     <string name="login_hint_password">Password</string>
-    <string name="login_new_user_text">New User?</string>
-    <string name="login_create_account_button_text">Create New Account</string>
+    <string name="login_new_user_text">Don\'t have an Account?</string>
+    <string name="login_create_account_button_text">Create Account</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="button_Ok_text">Ok</string>
+    <string name="button_Login_text">Login</string>
     <string name="button_Cancel_text">Cancel</string>
-    <string name="textview_NewUser_text">New User?</string>
-    <string name="createAccount_text">Create New Account</string>
+    <string name="textview_NewUser_text">Don\'t have an Account?</string>
+    <string name="createAccount_text">Create Account</string>
     <string name="retypePasswordText">Password (retype)</string>
     <!-- End Strings related to LoginActivity-->
 

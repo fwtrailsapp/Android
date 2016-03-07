@@ -57,10 +57,11 @@ public class AccountDetailsModelUnitTests {
    }
 
    @Test
-   public void verifyUsername(){
-      printInfo("verifyUsername", username + " should equal "
+   public void verifyUsernameChanged(){
+      acctDetails.changeUsername(diffUsername);
+      printInfo("verifyUsernameChanged", diffUsername + " should equal "
               + acctDetails.getUsername());
-      assertEquals(username, acctDetails.getUsername());
+      assertEquals(diffUsername, acctDetails.getUsername());
    }
 
    // Tests whether or not the height was changed successfully and that the model recognizes that it
@@ -107,6 +108,7 @@ public class AccountDetailsModelUnitTests {
       assertEquals(diffGender, acctDetails.getGender());
       assertTrue(acctDetails.modelChanged());
    }
+
 
    private void printInfo(String methodName, String info) {
       System.out.println("AccountDetailsModelUnitTest::" + methodName + ": " + info);

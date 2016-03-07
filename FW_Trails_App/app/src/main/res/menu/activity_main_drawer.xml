@@ -27,6 +27,11 @@
             android:icon="@drawable/ic_account_circle_black_24dp"
             android:title="@string/navDrawer_accountDetails" />
         <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_info_outline_black_24dp"
+            android:title="@string/navDrawer_aboutTitle"
+            />
+        <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/ic_not_interested_black_24dp"
             android:title="@string/navDrawer_exit"

@@ -76,6 +76,11 @@ public class AccountDetailsModel {
       gender = newGender;
    }
 
+   public void changeUsername(String newName){
+      modelChange = true;
+      username = newName;
+   }
+
    // Returns true if the data in the model has been changed by the user.
    public boolean modelChanged(){
       return modelChange;

@@ -37,7 +37,7 @@ public class AccountStatisticsFragment extends Fragment {
 
       // Find the textviews likely to change during the lifetime of the fragment once so we don't
       // have to keep finding them again when they need to be changed.
-      assignTextViewControls();
+      assignTextViewControls(loadedRelativeLayout);
 
       //TODO: Make API call to return the statistics for this account. (Asynchronously)
          // Somehow know the account username
@@ -51,16 +51,15 @@ public class AccountStatisticsFragment extends Fragment {
    }
 
    // Sets the text view controls to their appropriate field.
-   private void assignTextViewControls() {
-      View view = getView();
-      overallAccountActive     = (TextView) view.findViewById(R.id.accountActiveAmountTextView);
-      overallDuration          = (TextView) view.findViewById(R.id.overallTotalTimeAmountTextView);
-      overallDistance          = (TextView) view.findViewById(R.id.overallTotalDistanceAmountTextView);
-      overallCalories          = (TextView) view.findViewById(R.id.overallNumberOfAchievementsAmountTextView);
-      overallAchievements      = (TextView) view.findViewById(R.id.overallNumberOfAchievementsAmountTextView);
-      activitySpecificDuration = (TextView) view.findViewById(R.id.activitySpecificTotalTimeAmountTextView);
-      activitySpecificDistance = (TextView) view.findViewById(R.id.activitySpecificTotalDistanceAmountTextView);
-      activitySpecificCalories = (TextView) view.findViewById(R.id.activitySpecificCaloriesExpendedAmountTextView);
+   private void assignTextViewControls(RelativeLayout relativeLayout) {
+      overallAccountActive     = (TextView) relativeLayout.findViewById(R.id.accountActiveAmountTextView);
+      overallDuration          = (TextView) relativeLayout.findViewById(R.id.overallTotalTimeAmountTextView);
+      overallDistance          = (TextView) relativeLayout.findViewById(R.id.overallTotalDistanceAmountTextView);
+      overallCalories          = (TextView) relativeLayout.findViewById(R.id.totalCaloriesExpendedAmountTextView);
+      overallAchievements      = (TextView) relativeLayout.findViewById(R.id.overallNumberOfAchievementsAmountTextView);
+      activitySpecificDuration = (TextView) relativeLayout.findViewById(R.id.activitySpecificTotalTimeAmountTextView);
+      activitySpecificDistance = (TextView) relativeLayout.findViewById(R.id.activitySpecificTotalDistanceAmountTextView);
+      activitySpecificCalories = (TextView) relativeLayout.findViewById(R.id.activitySpecificCaloriesExpendedAmountTextView);
    }
 
    public String getTitle(){
@@ -71,17 +70,19 @@ public class AccountStatisticsFragment extends Fragment {
    // Formats: HH:mm:ss, double ##.# mi, int kcal
    // Should be called when a user changes the spinner item
    private void setActivitySpecificStats(String duration, double distance, int calories){
+      String distanceString = distanceFormatter.format(distance) + distanceUnit;
       activitySpecificDuration.setText(duration);
       activitySpecificCalories.setText(calories);
-      activitySpecificDistance.setText(distanceFormatter.format(distance) + distanceUnit);
+      activitySpecificDistance.setText(distanceString);
    }
 
    // Sets the overall account statistics. Called once in onCreateView
    private void setOverallAccountStatistics(String accountActive, int calories, double distance,
                                             int achievements, String duration){
+      String distanceString = distanceFormatter.format(distance) + distanceUnit;
       overallAccountActive.setText(accountActive);
       overallCalories.setText(calories);
-      overallDistance.setText(distanceFormatter.format(distance));
+      overallDistance.setText(distanceString);
       overallDuration.setText(duration);
       overallAchievements.setText(achievements);
    }
