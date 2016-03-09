@@ -29,10 +29,10 @@ public class LoginActivity_InstrumentationTest {
 
    private String usernameHint     = "Username";
    private String passwordHint     = "Password";
-   private String button_OK_String = "Ok";
+   private String button_OK_String = "Login";
    private String button_CANCEL_String = "Cancel";
-   private String textView_NEW_USER    = "New User?";
-   private String button_CreateNewAccount_String = "Create New Account";
+   private String textView_NEW_USER    = "Don't have an account?";
+   private String button_CreateNewAccount_String = "Create Account";
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
   // @Rule
@@ -71,13 +71,13 @@ public class LoginActivity_InstrumentationTest {
    // Verifies the Ok button exists.
    @Test
    public void okButtonExists(){
-      onView(withId(R.id.button_Ok)).check(matches(isDisplayed()));
+      onView(withId(R.id.button_Login)).check(matches(isDisplayed()));
    }
 
    // Tests if the okay button has the correct text
    @Test
    public void okButtonTextVerification(){
-      onView(withId(R.id.button_Ok)).check(matches(withText(button_OK_String)));
+      onView(withId(R.id.button_Login)).check(matches(withText(button_OK_String)));
    }
 
 

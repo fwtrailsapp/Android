@@ -53,7 +53,7 @@
     </string>
     <string name="button_Login_text">Login</string>
     <string name="button_Cancel_text">Cancel</string>
-    <string name="textview_NewUser_text">Don\'t have an Account?</string>
+    <string name="textview_NewUser_text">Don\'t have an account?</string>
     <string name="createAccount_text">Create Account</string>
     <string name="retypePasswordText">Password (retype)</string>
     <!-- End Strings related to LoginActivity-->

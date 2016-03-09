@@ -31,57 +31,54 @@ public class MainActivity extends AppCompatActivity
    private final String YES = "YES";
    private final String NO = "NO";
    private final String mainActivityTitle = "Record Activity";
+   private boolean userLoggedIn = false;
+   private DrawerLayout drawer;
+   private ActionBarDrawerToggle drawerToggle;
    AlertDialog.Builder builder;
    private boolean viewIsAtHome;  // Record Activity is the Home View.
 
    @Override
    protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
-      setContentView(R.layout.activity_main);
 
-      Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-      setSupportActionBar(toolbar);
+         // Set Layout to Record Activity
+         setContentView(R.layout.activity_main);
 
-      DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-      ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-              this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-      drawer.setDrawerListener(toggle);
-      toggle.syncState();
+         // Add the toolbar to the app
+         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+         setSupportActionBar(toolbar);
 
-      // Add a backstack listener for when the backstack changes.
-      // Also updates the app bar titel and nav drawer with the respective new fragment.
-      setupBackStackListener();
+         // Add the Drawer Layout to the app
+         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawerToggle = new ActionBarDrawerToggle(
+                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+         drawer.setDrawerListener(drawerToggle);
+         drawerToggle.syncState();
+
+         // Add a backstack listener for when the backstack changes.
+         // Also updates the app bar titel and nav drawer with the respective new fragment.
+         setupBackStackListener();
+
+         // Set the nav view
+         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+         navigationView.setNavigationItemSelectedListener(this);
+
+         // Add the nav drawer header w/ dialer and image
+         View headerView  = getLayoutInflater().inflate(R.layout.nav_header_main, navigationView, false);
+         navigationView.addHeaderView(headerView);
+
+         if(userLoggedIn) {
+            // Set the view to Record Activity
+            displayView(R.id.nav_recordActivity);
+         }
+        else{
+            displayView(R.layout.fragment_login);
+         }
+
+         // Setup te onclick listener for the dialer
+         setupDialerListener(headerView);
 
 
-
-      NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-      navigationView.setNavigationItemSelectedListener(this);
-
-      View headerView  = getLayoutInflater().inflate(R.layout.nav_header_main, navigationView, false);
-
-      // Add the nav drawer header
-      navigationView.addHeaderView(headerView);
-
-      displayView(R.id.nav_recordActivity);
-
-      setupDialerListener(headerView);
-
-//      String FILENAME = "hello_file";
-//      String string = "hello world!";
-//
-//      try {
-//         FileOutputStream fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-//         fos.write(string.getBytes());
-//         fos.close();
-//         Log.i("Development", "It happppppeeeeennnnnnnneeeeeedddd");
-//      }catch(Exception e){
-//
-//      }
-//
-//      String[] fileList = fileList();
-//      for(int i = 0; i < fileList.length; i++){
-//         Log.i("Development", "FILENAME: " + fileList[i]);
-//      }
    }
 
    // Method creates a backstack listener and keeps the nav drawer up to date with what
@@ -111,42 +108,61 @@ public class MainActivity extends AppCompatActivity
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_accountDetails);
+         viewIsAtHome = false;
       } else if (fragClassName.equals(AccountStatisticsFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((AccountStatisticsFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_accountStatistics);
+         viewIsAtHome = false;
       } else if (fragClassName.equals(AchievementsFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((AchievementsFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_achievements);
+         viewIsAtHome = false;
       } else if (fragClassName.equals(ActivityHistoryFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((ActivityHistoryFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_activityHistory);
+         viewIsAtHome = false;
       } else if (fragClassName.equals(RecordActivityFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((RecordActivityFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_recordActivity);
+         viewIsAtHome = true;
       } else if (fragClassName.equals(TrailMapFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((TrailMapFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_trailMap);
+         viewIsAtHome = false;
       } else if (fragClassName.equals(AboutFragment.class.getName())) {
          if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(((AboutFragment) fragment).getTitle());
          }
          //set selected item position, etc
          navView.setCheckedItem(R.id.nav_about);
+         viewIsAtHome = false;
+      }
+      else if(fragClassName.equals(LoginFragment.class.getName())) {
+         if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(((LoginFragment) fragment).getTitle());
+         }
+         viewIsAtHome = false;
+      }
+      else if(fragClassName.equals((AccountCreateFragment.class.getName()))) {
+         if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(((AccountCreateFragment) fragment).getTitle());
+         }
+         viewIsAtHome = false;
       }
    }
 
@@ -170,7 +186,7 @@ public class MainActivity extends AppCompatActivity
    // we want to exit the application, else let Android handle the back op.
    @Override
    public void onBackPressed() {
-      if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+      if (getSupportFragmentManager().getBackStackEntryCount() == 1 || viewIsAtHome) {
          finish();
       } else {
          super.onBackPressed();
@@ -221,6 +237,9 @@ public class MainActivity extends AppCompatActivity
             fragment = new RecordActivityFragment();
             title = ((RecordActivityFragment) fragment).getTitle();
             viewIsAtHome = true;
+
+            // Enable full use of the drawer and toggle button
+            setDrawerState(viewIsAtHome);
             break;
 
          case R.id.nav_about:
@@ -235,6 +254,20 @@ public class MainActivity extends AppCompatActivity
             alert.show();
             title = currentTitle;
             break;
+
+         case R.layout.fragment_login:
+            fragment = new LoginFragment();
+            title = ((LoginFragment) fragment).getTitle();
+            viewIsAtHome = false;
+
+            // Disable drawer and toggle button until user is logged into the App
+            setDrawerState(viewIsAtHome);
+            break;
+
+         case R.layout.fragment_account_create:
+            fragment = new AccountCreateFragment();
+            title = ((AccountCreateFragment) fragment).getTitle();
+            viewIsAtHome = false;
       }
 
       if(fragment != null){
@@ -303,4 +336,20 @@ public class MainActivity extends AppCompatActivity
          }
       });
    }
+
+   public void setDrawerState(boolean isEnabled) {
+      if ( isEnabled ) {
+         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+         drawerToggle.setDrawerIndicatorEnabled(true);
+         drawerToggle.syncState();
+
+      }
+      else {
+         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+         drawerToggle.setDrawerIndicatorEnabled(false);
+         drawerToggle.syncState();
+      }
+   }
+
+
 }

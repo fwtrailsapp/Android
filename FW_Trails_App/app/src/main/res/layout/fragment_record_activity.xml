@@ -4,8 +4,6 @@
              android:layout_height="match_parent"
              tools:context="seniordesign.ipfw.fw_trails_app.RecordActivityFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
 
     <fragment
         android:id="@+id/map"

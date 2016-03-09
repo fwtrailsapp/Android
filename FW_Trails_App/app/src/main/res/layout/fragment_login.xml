@@ -72,10 +72,10 @@
         android:inputType="textEmailAddress"
         android:maxLines="1"
         android:singleLine="true"
+        android:layout_marginTop="21dp"
         android:layout_below="@+id/sponsorImage"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="46dp"/>
+        android:layout_alignParentStart="true"/>
 
     <ImageView
         android:layout_width="wrap_content"
@@ -83,16 +83,15 @@
         android:scaleType="fitXY"
         android:id="@+id/sponsorImage"
         android:src="@drawable/sponsor_image2"
-        android:layout_below="@+id/login_progress"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"/>
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"/>
 
     <Button
         style="@style/AppCompat.Button.FW_Trails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_Login_text"
-        android:id="@+id/button_Ok"
+        android:id="@+id/button_Login"
         android:layout_below="@+id/passwordEditText"
         android:layout_marginTop="18dp"
         android:layout_alignLeft="@+id/textViewNewUser"
@@ -106,7 +105,7 @@
         android:text="@string/textview_NewUser_text"
         android:id="@+id/textViewNewUser"
         android:textSize="24dp"
-        android:layout_below="@+id/button_Ok"
+        android:layout_below="@+id/button_Login"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"/>
 
