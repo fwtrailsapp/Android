@@ -1,5 +1,7 @@
 package seniordesign.ipfw.fw_trails_app;
 import android.widget.ArrayAdapter;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 public class ActivityHistoryListViewAdapter extends ArrayAdapter<ActivityHistoryModel> {
    int groupid;
    ArrayList<ActivityHistoryModel> item_list;
+   private final DecimalFormat distanceFormatter = new DecimalFormat("#.#");
 
    Context context;
    public ActivityHistoryListViewAdapter(Context context, int vg, int id, ArrayList<ActivityHistoryModel> item_list){
@@ -55,7 +58,7 @@ public class ActivityHistoryListViewAdapter extends ArrayAdapter<ActivityHistory
 
       // Set text to each TextView of ListView item
       ActivityHistoryModel items = item_list.get(position);
-      String distanceText = String.valueOf(items.getMileage())+" mi";
+      String distanceText = distanceFormatter.format(items.getMileage())+" mi";
       ViewHolder holder = (ViewHolder) rowView.getTag();
 
       holder.durationText.setText(items.getDuration());

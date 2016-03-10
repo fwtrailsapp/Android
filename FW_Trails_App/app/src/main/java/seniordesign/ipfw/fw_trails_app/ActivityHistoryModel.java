@@ -1,5 +1,9 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import android.util.Log;
+
+import java.text.DecimalFormat;
+
 /**
  * Created by Jaron on 2/21/2016.
  */
@@ -11,6 +15,7 @@ public class ActivityHistoryModel {
    private double theMileage;
    private int    theCalsBurned;
    private ExerciseType theExercise;
+   private final DecimalFormat distanceFormatter = new DecimalFormat("#.#");
 
 
    public ActivityHistoryModel(String theDate, Duration theDuration, double theMileage,
@@ -57,13 +62,20 @@ public class ActivityHistoryModel {
    // yyyy-MM-dd'T'HH:mm:ss
    private String formatDate(String originalDate){
       String newDate;
+      try{
 
-      String allDatePieces[] = originalDate.split("T");
+         String allDatePieces[] = originalDate.split("T");
 
-      String datePiece = allDatePieces[0];
-      String onlyDatePieces[] = datePiece.split("-");
+         String datePiece = allDatePieces[0];
+         String onlyDatePieces[] = datePiece.split("-");
 
-      newDate = onlyDatePieces[1]+"/"+onlyDatePieces[2]+"/"+onlyDatePieces[0];
+         newDate = onlyDatePieces[1]+"/"+onlyDatePieces[2]+"/"+onlyDatePieces[0];
+      }
+      catch(Exception ex)
+      {
+         newDate = "00/00/0000";
+         Log.e("FormatDate: ", "Illegal date format: "+originalDate);
+      }
 
       return newDate;
    }
