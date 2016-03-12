@@ -61,7 +61,7 @@ public class ActivityHistoryFragment extends Fragment {
 
    This class extends the AsyncTask to spawn off a new thread that grabs the activity history results
    from the webserver. The HttpClientUtil class is the class that actually sends off the request using
-   an Synchronous Http Response handler.
+   an Synchronous Http handler.
 
    We then parse the returned items in the onSuccess of the AsyncHttpResponseHandler and add the items
    to the items ArrayList in the activity history fragment class.

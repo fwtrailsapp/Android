@@ -606,12 +606,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     /*
   The RecordActivityController class.
 
-  This class extends the AsyncTask to spawn off a new thread that grabs the activity history results
-  from the webserver. The HttpClientUtil class is the class that actually sends off the request using
-  an Synchronous Http Response handler.
+  This class extends the AsyncTask to spawn off a new thread that posts activities to
+   the web server. The HttpClientUtil class is the class that actually sends off the request using
+  a Synchronous Http handler.
 
-  We then parse the returned items in the onSuccess of the AsyncHttpResponseHandler and add the items
-  to the items ArrayList in the activity history fragment class.
+  doInBackground:
+  We get the finished activity, transform it to JSON, and send it to the server in the background.
 
   The onPostExecute method is what updates the actual ListViewAdapter
    */
@@ -619,7 +619,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
 
         private final String defaultPostURL = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity";
-        private final String utf8CharSet = "UTF-8";
         private final String contentType = "application/json";
 
         //TODO: This is where the dialog "Are you sure you wish to complete this activity" goes.
@@ -650,22 +649,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             alertDialog.show();
 
         }
+
         // Send off the activity data to the server.
-        /* Example POST in JSON
-        {
-             "username":"szook",
-             "time_started":"2016-03-07T20:08:54",
-             "duration":"01:20:34",
-             "mileage":14.5765489456,
-             "calories_burned":250,
-             "exercise_type":"bike",
-             "path":"0 0,1 1,2 2,3 3,4 4,5 5"
-            }
-         */
         @Override
         protected Void doInBackground(Void... params) {
 
-            // Build the parameters for the activity via RequestParams
+            // Build the parameters for the activity via JSON
             // If we create a RecordActivityModel, we can use Gson to generate a JSON Object directly
             // from the RecordActivityModel object that contains the data for the Activity. We can then
             // manually add the username property to the Gson object and be done.
@@ -725,6 +714,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         }
 
+        /* Example Activity POST in JSON
+        {
+             "username":"szook",
+             "time_started":"2016-03-07T20:08:54",
+             "duration":"01:20:34",
+             "mileage":14.5765489456,
+             "calories_burned":250,
+             "exercise_type":"bike",
+             "path":"0 0,1 1,2 2,3 3,4 4,5 5"
+            }
+         */
         // Possibly change this to a function that takes in a RecordActivityModel or data and
         // returns a json object representing it if we don't want to use Gson.
         private JSONObject getTestJSONObject() throws JSONException{
