@@ -8,10 +8,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -36,7 +39,15 @@ import com.google.maps.android.SphericalUtil;
 import com.google.maps.android.kml.KmlLayer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -50,11 +61,17 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RecordActivityFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private final String fragmentTitle = "Record Activity";
+
 
     private GoogleMap mMap;
     private Polyline line;
@@ -80,13 +97,15 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     NumberFormat calorieFormat = new DecimalFormat("#0.0");
     //    NumberFormat secondFormat = new IntegerFormat("00");
     NumberFormat speedFormat = new DecimalFormat("#0.00");
+    private final String isoDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private final String UTC = "UTC";
     double tempDistance;
     double totalDistance = 0.0;
     private activityTypes activityType;
 
-    //Jaron Test
+
     private static View view;
-    //
+
     private TextView speed;
     private TextView distance;
     private TextView duration;
@@ -405,6 +424,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
 
+        // Attempt to send to the server
+        //RecordActivityController recordActivityTask = new RecordActivityController();
+        //recordActivityTask.execute();
+
+        // if it fails, write to file
+        // You could write the file writing logic in the onFailure method in the controller.
         String filename = sendToFile();
         File file = getFile(filename);
         if(file == null){
@@ -577,5 +602,155 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Develop", printMe);
 
         Log.i("Development", "openfile");
+    }
+    /*
+  The RecordActivityController class.
+
+  This class extends the AsyncTask to spawn off a new thread that grabs the activity history results
+  from the webserver. The HttpClientUtil class is the class that actually sends off the request using
+  an Synchronous Http Response handler.
+
+  We then parse the returned items in the onSuccess of the AsyncHttpResponseHandler and add the items
+  to the items ArrayList in the activity history fragment class.
+
+  The onPostExecute method is what updates the actual ListViewAdapter
+   */
+    private class RecordActivityController extends AsyncTask<Void, Void, Void> {
+
+
+        private final String defaultPostURL = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity";
+        private final String utf8CharSet = "UTF-8";
+        private final String contentType = "application/json";
+
+        //TODO: This is where the dialog "Are you sure you wish to complete this activity" goes.
+        // See http://stackoverflow.com/questions/6039158/android-cancel-async-task
+        @Override
+        protected void onPreExecute() {
+
+            // Create a dialog to determine if the user wants to post their activity
+            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+            alertDialog.setTitle("Confirm");
+            alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
+            alertDialog.setMessage(getString(R.string.completeActivityPrompt));
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                    new DialogInterface.OnClickListener() {
+
+                        // Cancel the doInBackground task
+                        public void onClick(DialogInterface dialog, int which) {
+                            cancel(true);
+                        }
+                    });
+
+            alertDialog.show();
+
+        }
+        // Send off the activity data to the server.
+        /* Example POST in JSON
+        {
+             "username":"szook",
+             "time_started":"2016-03-07T20:08:54",
+             "duration":"01:20:34",
+             "mileage":14.5765489456,
+             "calories_burned":250,
+             "exercise_type":"bike",
+             "path":"0 0,1 1,2 2,3 3,4 4,5 5"
+            }
+         */
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            // Build the parameters for the activity via RequestParams
+            // If we create a RecordActivityModel, we can use Gson to generate a JSON Object directly
+            // from the RecordActivityModel object that contains the data for the Activity. We can then
+            // manually add the username property to the Gson object and be done.
+            // Currently we do it the old fashioned way since we dont have a model for record actiivty
+            JSONObject recordActivityJSON = null;
+            StringEntity jsonString = null;
+            try{
+                //TODO: need to figure out a way to store your activity and make it to json.
+                // Convert the Activity to JSON then to parameters for the post activity.
+                recordActivityJSON = getTestJSONObject();
+                jsonString = new StringEntity(recordActivityJSON.toString());
+            }
+            catch(Exception ex){
+                Log.i("JSON/Encode Exception:", ex.getMessage());
+            }
+
+
+
+            // Currently hardcoded the URL (using postByUrl). We will eventually be to the point where we just post
+            // username/Activity and the util class will have the long base url name.
+            HttpClientUtil.postByUrl(getContext(), defaultPostURL, jsonString, contentType,
+                    new AsyncHttpResponseHandler(Looper.getMainLooper()) {
+
+                        // Before the actual post happens.
+                        @Override
+                        public void onStart() {
+
+                        }
+
+                        // Here you received http 200, do whatever you want, it worked.
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+
+                        }
+
+                        // If it fails to post, you can issue some sort of alert dialog saying the error
+                        // and writing the activity to file.
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                            // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                        }
+
+                    });
+
+            return null;
+        }
+
+
+        // This method gets executed after the doInBackground process finishes.
+        @Override
+        protected void onPostExecute(Void params) {
+            super.onPostExecute(params);
+
+
+        }
+
+        }
+
+        // Possibly change this to a function that takes in a RecordActivityModel or data and
+        // returns a json object representing it if we don't want to use Gson.
+        private JSONObject getTestJSONObject() throws JSONException{
+            JSONObject testObject = new JSONObject();
+            testObject.put("username","szook");
+
+            // Create dynamic timestamp
+            TimeZone tz = TimeZone.getTimeZone(UTC);
+            java.text.DateFormat df = new SimpleDateFormat(isoDateFormat);
+            df.setTimeZone(tz);
+            String nowAsISO = df.format(new Date());
+            testObject.put("time_started",nowAsISO);
+
+            // Be sure to use Duration Objects when using Duration instead of just hardcoded string types
+            // We can add utils to the duration class when needed and such.
+            testObject.put("duration",new Duration("00:12:51").toString());
+
+            // Use the primitive types Wrapper class when creating the JSON Object (it might be required)
+            testObject.put("mileage", Double.valueOf(2.1));
+
+            testObject.put("calories_burned", Integer.valueOf(241));
+
+            testObject.put("exercise_type", "run");
+
+            testObject.put("path","0 0, 1 2, 3 4, 5 6, 7 8, 9, 0");
+
+            return testObject;
     }
 }

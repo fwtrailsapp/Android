@@ -32,6 +32,7 @@
     <!-- End strings related to the AboutFragment-->
 
     <!-- Strings related to RecordActivityFragment-->
+    <string name="completeActivityPrompt">Are you sure you wish to complete this activity?</string>
     <string name="startStopRecording">Start</string>
     <string name="finishRecording">Finish</string>
     <!-- Strings related to RecordActivityFragment-->
@@ -104,7 +105,7 @@
     <string name="activitySpecificAverageSpeedText">Average Speed</string>
     <string name="accountActiveText">Account Active</string>
     <string name="activeDefaultText">&lt; 1 year</string>
-    <string name="defaultCaloriesExpendedText">Total Calories Expended</string>
+    <string name="defaultCaloriesExpendedText">Total Calories Burned</string>
     <string name="defaultCaloriesExpendedAmount">0 kcal</string>
     <!--End Strings related to Account Statistics Activity-->
 

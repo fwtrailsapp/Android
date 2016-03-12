@@ -52,7 +52,7 @@ public class AccountStatistics_InstrumentationTest {
    private final String dummyNumOfActivities = "0";
    private final String activitySpecificText = "View Activity Statistics";
    private final String[] activitySpinner = {"Running","Biking","Walking"};
-   private final String overallCalsExpendedText = "Total Calories Expended";
+   private final String overallCalsExpendedText = "Total Calories Burned";
    private final String defaultCalorieAmount = "0 kcal";
    private final String accountActiveText = "Account Active";
    private final String accountActiveDefaultAmount = "< 1 year";

@@ -1,5 +1,6 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import android.content.Context;
 import android.os.Looper;
 import android.preference.PreferenceActivity;
 import android.util.Log;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.IllegalFormatException;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpEntity;
 
 /**
  * Created by Jaron on 3/9/2016.
@@ -40,6 +42,10 @@ public class HttpClientUtil {
 
    public static void postByUrl(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
       client.post(url, params, responseHandler);
+   }
+
+   public static void postByUrl(Context context, String url, HttpEntity entity, String contentType, AsyncHttpResponseHandler responseHandler) {
+      client.post(context, url, entity, contentType, responseHandler);
    }
 
 
