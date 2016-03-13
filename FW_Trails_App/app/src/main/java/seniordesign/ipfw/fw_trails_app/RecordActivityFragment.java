@@ -629,6 +629,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             // Create a dialog to determine if the user wants to post their activity
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle("Confirm");
+            // If modal doesn't work, garbage collect the activity.
             alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
             alertDialog.setMessage(getString(R.string.completeActivityPrompt));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",

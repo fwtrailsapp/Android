@@ -13,6 +13,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
@@ -20,8 +21,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.isAssignableFro
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withParent;
+import static android.support.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
 
@@ -35,6 +40,8 @@ import static org.hamcrest.Matchers.not;
 public class TrailMap_InstrumentationTest {
 
    private final String toolbarTitle = "Trail Map";
+   private final String[] mapSpinner = {"Full Map","Full Map Areas","East","North","West", "South"};
+   private final String fullMapText = "Full Map";
 
 
    // Preferred JUnit 4 mechanism of specifying the activity to be launched before each test
@@ -44,6 +51,7 @@ public class TrailMap_InstrumentationTest {
    // Open Nav Drawer before each test.
    @Before
    public void navDrawerOpen(){
+      onView(withId(R.id.button_Login)).perform(click());
       openDrawer();
       onView(withId(R.id.nav_drawerImage)).check(matches(isDisplayed()));
       onView(withText(R.string.navDrawer_trailMap)).perform(click());
@@ -71,6 +79,23 @@ public class TrailMap_InstrumentationTest {
    public void trailMapToolbarTitleVerification() {
       onView(allOf(isAssignableFrom(TextView.class), withParent(isAssignableFrom(Toolbar.class))))
               .check(matches(withText(toolbarTitle)));
+   }
+
+   @Test
+   public void trailMapImageViewVerification(){
+      onView(withId(R.id.trailMapImageView)).check(matches(isDisplayed()));
+      onView(withText(fullMapText)).check(matches(isDisplayed()));
+   }
+
+   @Test
+   public void trailMapButtonsVerification(){
+
+         for(int i = 0; i < mapSpinner.length; i++) {
+            onView(withId(R.id.trailMapSpinner)).perform(click());
+            onData(allOf(is(instanceOf(String.class)), is(mapSpinner[i]))).perform(click());
+            onView(withId(R.id.trailMapSpinner)).check(matches(withSpinnerText(containsString(mapSpinner[i]))));
+         }
+
    }
 
    // Opens the Navigation Drawer

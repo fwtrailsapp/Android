@@ -120,26 +120,6 @@
     <string name="phone_number_311">311</string>
 
     <!-- Strings related to Activity History Fragment-->
-    <string-array name="activity_statistics_test_list_items">
-        <item>00:15:57__3.1 mi__215__07/04/2013</item>
-        <item>02:48:03__26.2 mi__410__11/4/2013</item>
-        <item>00:04:37__1.0 mi__525__5/8/2011</item>
-        <item>00:10:14__2.0 mi__215__5/8/2011</item>
-        <item>00:22:15__1.4 mi__410__2/4/2011</item>
-        <item>00:54:26__4.8 mi__525__2/8/2010</item>
-        <item>01:03:01__2.8 mi__215__1/1/2009</item>
-        <item>00:22:15__4.4 mi__410__2/4/2008</item>
-        <item>00:44:26__4.6 mi__525__2/8/2007</item>
-        <item>01:00:01__2.3 mi__215__1/1/2006</item>
-        <item>00:22:15__4.4 mi__410__2/4/2005</item>
-        <item>00:44:26__4.6 mi__525__2/8/2004</item>
-        <item>01:00:01__2.3 mi__215__1/1/2003</item>
-        <item>00:22:15__4.4 mi__410__2/4/2002</item>
-        <item>00:44:26__4.6 mi__525__2/8/2001</item>
-        <item>01:00:01__2.3 mi__215__1/1/2000</item>
-        <item>00:22:15__4.4 mi__410__2/4/1999</item>
-        <item>02:44:26__24.6 mi__525__2/8/1999</item>
-    </string-array>
     <string name="activityHistoryHeaderDuration">Duration</string>
     <string name="activityHistoryHeaderDistance">Distance</string>
     <string name="activityHistoryHeaderCalories">Calories</string>
@@ -150,23 +130,6 @@
     <string name="achievementsHeaderDateEarned">Date Earned</string>
     <string name="achievementsHeaderName">Name</string>
     <string name="achievementsHeaderDescription">Description</string>
-    <string-array name="achievement_test_list_items">
-        <item>1/03/2016__Daily Dose__Bike for 24 hours</item>
-        <item>4/30/2016__Around The Clock__Run for 24 hours</item>
-        <item>5/25/2016__Day and Night__Walk for 24 hours</item>
-        <item>6/29/2016__Centennial__Run 100 miles</item>
-        <item>7/03/2016__Unbirthday__Use app for 6 months</item>
-        <item>1/03/2017__1 Year Crew__Use app for 1 year</item>
-        <item>1/03/2018__2 Year Crew__Use app for 2 year</item>
-        <item>1/03/2019__3 Year Crew__Use app for 3 year</item>
-        <item>1/03/2020__4 Year Crew__Use app for 4 year</item>
-        <item>1/03/2021__5 Year Crew__Use app for 5 year</item>
-        <item>1/03/2022__6 Year Crew__Use app for 6 year</item>
-        <item>1/03/2023__7 Year Crew__Use app for 7 year</item>
-        <item>1/03/2024__8 Year Crew__Use app for 8 year</item>
-        <item>1/03/2025__9 Year Crew__Use app for 9 year</item>
-        <item>1/03/2026__10 Year Crew__Use app for 10 year</item>
-    </string-array>
     <!-- End Strings related to Achievements Fragment -->
 
     <!-- Strings related to Account Details Fragment -->
@@ -189,6 +152,18 @@
     <string name="accountDetailsTestWeight">188 lbs</string>
     <string name="accountDetailsTestBirthYear">1994</string>
     <!-- End Strings related to Account Details Fragment-->
+
+    <!-- Strings related to the Trail Map Fragment-->
+    <string name="mapSpinnerPrompt">Choose a Map Area</string>
+    <string-array name="trailMapViewArray">
+        <item>Full Map</item>
+        <item>Full Map Area</item>
+        <item>North</item>
+        <item>South</item>
+        <item>East</item>
+        <item>West</item>
+    </string-array>
+    <!-- End Strings related to Trail Map Fragment-->
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

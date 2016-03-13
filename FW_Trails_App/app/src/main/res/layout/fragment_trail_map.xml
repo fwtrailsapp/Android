@@ -5,9 +5,24 @@
              tools:context="seniordesign.ipfw.fw_trails_app.TrailMapFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello Trail Map Fragment"/>
+        android:id="@+id/trailMapImageView"
+        android:src="@drawable/full_overlay"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/trailMapSpinner"
+        android:entries="@array/trailMapViewArray"
+        android:spinnerMode="dialog"
+        android:prompt="@string/mapSpinnerPrompt"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>
