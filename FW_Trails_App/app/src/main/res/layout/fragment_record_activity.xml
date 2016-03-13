@@ -77,11 +77,10 @@
         android:layout_height="wrap_content"
         android:text="Calories: 0.00"
         android:id="@+id/calories"
-        android:layout_below="@+id/map"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="12dp"
-        android:textSize="22dp"/>
+        android:textSize="22dp"
+        android:layout_alignTop="@+id/distance"
+        android:layout_alignLeft="@+id/speed"
+        android:layout_alignStart="@+id/speed" />
 
     <TextView
         android:layout_width="wrap_content"
