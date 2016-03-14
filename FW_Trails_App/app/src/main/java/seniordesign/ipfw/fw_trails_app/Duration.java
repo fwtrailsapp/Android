@@ -59,4 +59,14 @@ public class Duration {
 
       return totalMinutes;
    }
+
+   public void tickOneSecond(){
+      int durationInSeconds = getDurationInSeconds() + 1;
+
+      String hours = String.format("%02d", (durationInSeconds / SECONDS_PER_HOUR));
+      String minutes = String.format("%02d", (durationInSeconds / SECONDS_PER_MINUTE));
+      String seconds = String.format("%02d", (durationInSeconds % SECONDS_PER_MINUTE));
+
+      theDuration = hours + ":" + minutes + ":" + seconds;
+   }
 }

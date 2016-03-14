@@ -2,13 +2,15 @@
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+<<<<<<< HEAD
+=======
 import android.net.Uri;
 import android.os.AsyncTask;
+>>>>>>> bcf5436e07bfc09bf1ab8c68766e7dc9cadc5bcb
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
@@ -51,9 +53,7 @@ import java.util.Date;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
@@ -94,12 +94,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private long finishMillis;
     private double currentSpeed;
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
+    NumberFormat calorieFormat = new DecimalFormat("#0.0");
+    //    NumberFormat secondFormat = new IntegerFormat("00");
     NumberFormat speedFormat = new DecimalFormat("#0.00");
     private final String isoDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     private final String UTC = "UTC";
     double tempDistance;
     double totalDistance = 0.0;
+    private activityTypes activityType;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> bcf5436e07bfc09bf1ab8c68766e7dc9cadc5bcb
     private static View view;
 
     private TextView speed;
@@ -107,13 +114,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private TextView duration;
     private TextView calories;
     private int caloriesInt = 0;
+    private int seconds = 0;
     Button startButton;
     Button pauseButton;
     Button resumeButton;
     Button finishButton;
-
-    ExerciseType exercise;
-    Duration durationTimer;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Check if we have created the view already, if we haven't create it.
@@ -291,16 +296,21 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     private void captureLaterCoordinate(LatLng updatedLocation) {
         caloriesInt++;
-        durationTimer.tickOneSecond();
+        seconds++;
         durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
         lastLocationTime = System.currentTimeMillis();
         tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
         totalDistance += tempDistance;
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
 //            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-        calories.setText("Calories: " + Integer.toString(caloriesInt));
+        calories.setText("Calories: " + Integer.toString(caloriesInt) + ".00");
         Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
-        duration.setText("Duration: " + durationTimer.toString());
+        String seconds = "";
+        if (secondsLong < 10) {
+            seconds += "0";
+        }
+        seconds += secondsLong;
+        duration.setText("Duration: " + Long.toString((lastLocationTime - startMillis) / 1000 / 60) + ":" + seconds);
 //        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
@@ -320,31 +330,30 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         public void onClick(View v) {
             selectActivityType();
-            startRecording();
+//            startRecording();
         }
     };
 
     public void selectActivityType() {
-        durationTimer = new Duration("00:00:00");
-        CharSequence exerciseTypes[] = new CharSequence[]{"Bike", "Run", "Walk"};
+        CharSequence colors[] = new CharSequence[]{"Bike", "Run", "Walk", "Other"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
         builder.setTitle("Select Exercise Type");
-        builder.setItems(exerciseTypes, new DialogInterface.OnClickListener() {
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        exercise = new BikeExerciseType(durationTimer);
+                        startRecording(activityTypes.Bike);
                         break;
                     case 1:
-                        exercise = new RunExerciseType(durationTimer);
+                        startRecording(activityTypes.Run);
                         break;
                     case 2:
-                        exercise = new WalkExerciseType(durationTimer);
+                        startRecording(activityTypes.Walk);
                         break;
                     default:
-                        exercise = new WalkExerciseType(durationTimer);
+                        startRecording(activityTypes.Other);
                         break;
                 }
             }
@@ -352,12 +361,10 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         builder.show();
     }
 
-    public void startRecording() {
+    public void startRecording(activityTypes activityType) {
+        this.activityType = activityType;
         recording = true;
         firstCoordinate = true;
-
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
-
         startButton = (Button) getView().findViewById(R.id.startButton);
         pauseButton = (Button) getView().findViewById(R.id.pauseButton);
         startButton.setVisibility(View.GONE);
@@ -437,7 +444,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Development", "finishRecording");
 
         String message = "";
-        message += "Exercise Type: " + exercise.getExerciseType();
+        message += "Exercise Type: " + activityType;
         Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
         String seconds = "";
         if (secondsLong < 10) {
@@ -447,6 +454,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         message += "\nDuration: " + Long.toString((lastLocationTime - startMillis) / 1000 / 60) + ":" + seconds;
         message += "\nDistance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi";
         message += "\nCalories: " + caloriesInt;
+        message += "\nTop Speed: " + "15 mph";
         message += "\nAverage Speed: " + "10 mph";
         displayStatistics(message);
     }
@@ -476,7 +484,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         int second = cal.get(Calendar.SECOND);
         String FILENAME = "RA " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
         String output = year + "\n" + month + "\n" + day + "\n" + hour + "\n" + minute + "\n" + second;
-        output += "\n" + exercise.toString();
+        output += "\n" + activityType;
         output += "\n" + totalDistance;
         output += "\n" + caloriesInt;
         output += "\n" + duration;
@@ -514,29 +522,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     public void openFile(File file){
-
-//        String eol = System.getProperty("line.separator");
-//        BufferedReader input = null;
-//        try {
-//            input = new BufferedReader(new InputStreamReader(openFileInput(file)));
-//            String line;
-//            StringBuffer buffer = new StringBuffer();
-//            while ((line = input.readLine()) != null) {
-//                buffer.append(line + eol);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (input != null) {
-//                try {
-//                    input.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
-
         FileInputStream fis = null;
         try{
             fis = new FileInputStream(file);
@@ -624,7 +609,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             // Create a dialog to determine if the user wants to post their activity
             AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
             alertDialog.setTitle("Confirm");
-            // If modal doesn't work, garbage collect the activity.
             alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
             alertDialog.setMessage(getString(R.string.completeActivityPrompt));
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",

@@ -20,6 +20,7 @@
         android:id="@+id/startButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:onClick="startRecording"
         android:visibility="visible"/>
 
     <Button
@@ -75,7 +76,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calories: 0.00"
+        android:text="Calories: 0"
         android:id="@+id/calories"
         android:textSize="22dp"
         android:layout_alignTop="@+id/distance"
