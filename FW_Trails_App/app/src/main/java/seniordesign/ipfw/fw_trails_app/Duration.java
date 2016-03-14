@@ -15,6 +15,10 @@ public class Duration {
       this.theDuration = theDuration;
    }
 
+   public Duration(int startSeconds){
+      theDuration = getDurationFromSeconds(startSeconds);
+   }
+
    // Returns the string representation of the duration.
    // i.e. "00:05:21"
    @Override
@@ -39,24 +43,61 @@ public class Duration {
       return totalSeconds;
    }
 
-   // Returns the duration in number of minutes
-   // ie "55:33:11" == 3,333.18 minutes
-   public double getDurationInMinutes(){
-      double totalMinutes;
+   //  Converts the number of seconds into a format of HH:MM:SS as a String
+   public String getDurationFromSeconds(int startSeconds){
+      String duration = "";
+      int hours = startSeconds / SECONDS_PER_HOUR;
+      startSeconds %= SECONDS_PER_HOUR;
 
-      String durationPieces[] = theDuration.split(":");
+      int minutes = startSeconds / SECONDS_PER_MINUTE;
+      startSeconds %= SECONDS_PER_MINUTE;
 
-      double hours = Double.valueOf(durationPieces[0]);
-      double minutes = Double.valueOf(durationPieces[1]);
-      double seconds = Double.valueOf(durationPieces[2]);
+      // Ensure formatting by checking for single digit integers.
+      if(hours < 10){
+         duration+="0"+Integer.toString(hours)+":";
+      }
+      else{
+         duration+=Integer.toString(hours)+":";
+      }
 
-      // Round seconds to two decimal places
-      seconds = Math.round(seconds * 100);
-      seconds = seconds/100;
+      if(minutes < 10){
+         duration+="0"+Integer.toString(minutes)+":";
+      }
+      else{
+         duration+=Integer.toString(minutes)+":";
+      }
 
-      //Calculate the total time in minutes.
-      totalMinutes =  hours*MINUTES_PER_HOUR+minutes+seconds;
-
-      return totalMinutes;
+      if(startSeconds < 10){
+         duration+="0"+Integer.toString(startSeconds);
+      }
+      else{
+         duration+=Integer.toString(startSeconds);
+      }
+      
+      return duration;
    }
+   // Returns the string represntation of the duration with one second added to the object.
+   public String tickString(){
+
+      int seconds = getDurationInSeconds();
+      seconds+=1;
+
+      // Reset the duration String
+      theDuration = getDurationFromSeconds(seconds);
+
+      return theDuration;
+
+   }
+
+   // Returns the string representation of the duration with one second added to the object.
+   public int tickInt(){
+      int seconds = getDurationInSeconds();
+      seconds+=1;
+
+      // Reset the duration String.
+      theDuration = getDurationFromSeconds(seconds);
+
+      return seconds;
+   }
+
 }
