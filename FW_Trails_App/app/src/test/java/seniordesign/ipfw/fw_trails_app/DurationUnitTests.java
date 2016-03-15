@@ -21,13 +21,20 @@ public class DurationUnitTests {
 
 
    private static final String testTime = "55:33:11";
-   private final int testTimeInSeconds = 199991;
+   private static final String testTimeTick = "55:33:12";
+   private static final int testTimeInSeconds = 199991;
    private final double testTimeInMinutes = 3333.18;
    private static Duration duration;
+   private static Duration durationTick;
+   private static Duration durationTick2;
+   private static Duration durationSeconds;
 
    @BeforeClass
    public static void setup(){
       duration = new Duration(testTime);
+      durationSeconds = new Duration(testTimeInSeconds);
+      durationTick = new Duration(testTime);
+      durationTick2 = new Duration(testTime);
    }
 
 
@@ -57,13 +64,34 @@ public class DurationUnitTests {
               testTimeInSeconds-duration.getDurationInSeconds());
    }
 
-   // Tests that the Duration String to total minutes is accurate
+
+
    @Test
-   public void verifyDurationStringToMinutes(){
-      printInfo("verifyDurationStringToSeconds", testTimeInMinutes + "" +
-              " should equal "+duration.getDurationInMinutes());
-      assertEquals(testTimeInSeconds, duration.getDurationInMinutes(),
-              testTimeInSeconds -duration.getDurationInMinutes());
+   public void verifyDurationSecondsToString(){
+
+      printInfo("verifyDurationSecondsToString", testTimeInSeconds + "" +
+              " should equal "+durationSeconds.getDurationInSeconds());
+      assertEquals(testTimeInSeconds, durationSeconds.getDurationInSeconds(),
+              testTimeInSeconds -durationSeconds.getDurationInSeconds());
+   }
+
+   // Tests that the Tick method adds one second to the time in the duration.
+   @Test
+   public void verifyDurationTickInt(){
+      durationTick.tickInt();
+      printInfo("verifyDurationTick", testTimeInSeconds+1 + "" +
+              " should equal "+durationTick.getDurationInSeconds());
+      assertEquals(testTimeInSeconds+1, durationTick.getDurationInSeconds(),
+              (testTimeInSeconds+1) -durationTick.getDurationInSeconds());
+   }
+
+   // Tests that the Tick method adds one second to the time in the duration.
+   @Test
+   public void verifyDurationTickString(){
+      durationTick2.tickString();
+      printInfo("verifyDurationTick", testTimeTick +
+              " should equal " + durationTick2.toString());
+      assertEquals(testTimeTick, durationTick2.toString());
    }
 
    // Helper methods to watch the values of the unit tests as they execute.
