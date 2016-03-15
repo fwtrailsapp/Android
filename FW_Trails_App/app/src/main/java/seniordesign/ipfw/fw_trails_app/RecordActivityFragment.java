@@ -54,7 +54,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.TimeZone;
 
-
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
@@ -63,11 +62,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     private final String fragmentTitle = "Record Activity";
 
+    RecordActivityModel recordActivityModel;
+
     //Map utilities
     private GoogleMap mMap;
     private Polyline line;
-    private GoogleApiClient mGoogleApiClient;
     private Location mLastLocation;
+    private GoogleApiClient mGoogleApiClient;
     private LocationListener locationListener;
     protected LocationRequest mLocationRequest;
 
@@ -87,9 +88,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     NumberFormat speedFormat = new DecimalFormat("#0.00");
     NumberFormat calorieFormat = new DecimalFormat("##0");
     double tempDistance;
-    double totalDistance = 0.0;
-    ExerciseType exercise;
-    Duration durationTimer = new Duration("00:00:01");;
     GenderOptions gender = GenderOptions.Male;//
     int weight = 82;//in kilograms
     int height = 183;//in centemeters
@@ -274,17 +272,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void captureLaterCoordinate(LatLng updatedLocation) {
-        Double caloriesBurned = BMR * exercise.getMETValue() * durationTimer.getDurationInSeconds() / secondsPerHour / 25;
+        Double caloriesBurned = BMR * recordActivityModel.getExerciseType().getMETValue() * recordActivityModel.getDurationInSeconds() / secondsPerHour / 25;
         caloriesInt = caloriesBurned.intValue();
-        durationTimer.tickInt();
+        recordActivityModel.getDuration().tickInt();
         durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
         lastLocationTime = System.currentTimeMillis();
         tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
-        totalDistance += tempDistance;
+        recordActivityModel.addDistance(tempDistance);
 
-        distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
+        distance.setText("Distance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi");
         calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
-        duration.setText("Duration: " + durationTimer.toString());
+        duration.setText("Duration: " + recordActivityModel.getDuration().toString());
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
     }
@@ -316,19 +314,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        exercise = new BikeExerciseType(durationTimer);
+                        recordActivityModel = new RecordActivityModel(new BikeExerciseType(recordActivityModel.getDuration()));
                         startRecording();
                         break;
                     case 1:
-                        exercise = new RunExerciseType(durationTimer);
+                        recordActivityModel = new RecordActivityModel(new RunExerciseType(recordActivityModel.getDuration()));
                         startRecording();
                         break;
                     case 2:
-                        exercise = new WalkExerciseType(durationTimer);
+                        recordActivityModel = new RecordActivityModel(new WalkExerciseType(recordActivityModel.getDuration()));
                         startRecording();
                         break;
                     default:
-                        exercise = new WalkExerciseType(durationTimer);
+                        recordActivityModel = new RecordActivityModel(new WalkExerciseType(recordActivityModel.getDuration()));
                         startRecording();
                         break;
                 }
@@ -419,9 +417,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Development", "finishRecording");
 
         String message = "";
-        message += "Exercise Type: " + exercise.getExerciseType();
-        message += "\nDuration: " + durationTimer.toString();
-        message += "\nDistance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi";
+        message += "Exercise Type: " + recordActivityModel.getExerciseType().getExerciseType();
+        message += "\nDuration: " + recordActivityModel.getDuration().toString();
+        message += "\nDistance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi";
         message += "\nCalories: " + caloriesInt;
         message += "\nAverage Speed: " + "10 mph";
         displayStatistics(message);
@@ -452,8 +450,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         int second = cal.get(Calendar.SECOND);
         String FILENAME = "RA " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
         String output = year + "\n" + month + "\n" + day + "\n" + hour + "\n" + minute + "\n" + second;
-        output += "\n" + exercise.toString();
-        output += "\n" + totalDistance;
+        output += "\n" + recordActivityModel.getExerciseType().toString();
+        output += "\n" + recordActivityModel.getTotalDistance();
         output += "\n" + caloriesInt;
         output += "\n" + duration;
         for (int i = 0; i < coordinates.size(); i++) {
