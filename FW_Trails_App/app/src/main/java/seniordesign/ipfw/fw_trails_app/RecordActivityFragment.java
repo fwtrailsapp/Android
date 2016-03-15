@@ -1,20 +1,16 @@
-//Comment
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -40,9 +36,7 @@ import com.google.maps.android.kml.KmlLayer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -51,16 +45,13 @@ import java.util.Date;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 
@@ -72,36 +63,41 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     private final String fragmentTitle = "Record Activity";
 
-
+    //Map utilities
     private GoogleMap mMap;
     private Polyline line;
     private GoogleApiClient mGoogleApiClient;
-
     private Location mLastLocation;
     private LocationListener locationListener;
     protected LocationRequest mLocationRequest;
 
+    //Recoding utilities
     private boolean recording = false;
     private boolean firstCoordinate = false;
     private ArrayList<LatLng> coordinates = new ArrayList<>();
     private LatLng lastLocation;
 
+    //Calculation utilities
     private double metersPerMile = 1609.34;
     private double secondsPerHour = 3600.0;
     private long lastLocationTime;
     private long durationSinceLastLocation;
-    private long startMillis;
-    private long finishMillis;
     private double currentSpeed;
     NumberFormat distanceFormat = new DecimalFormat("#0.00");
     NumberFormat speedFormat = new DecimalFormat("#0.00");
-    private final String isoDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    private final String UTC = "UTC";
+    NumberFormat calorieFormat = new DecimalFormat("##0");
     double tempDistance;
     double totalDistance = 0.0;
+    ExerciseType exercise;
+    Duration durationTimer = new Duration("00:00:01");;
+    GenderOptions gender = GenderOptions.Male;//
+    int weight = 82;//in kilograms
+    int height = 183;//in centemeters
+    int age = 21;//
+    double BMR = 13.75*weight + 5*height - 6.76*age + 66;//
 
+    //View utilities
     private static View view;
-
     private TextView speed;
     private TextView distance;
     private TextView duration;
@@ -112,8 +108,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     Button resumeButton;
     Button finishButton;
 
-    ExerciseType exercise;
-    Duration durationTimer;
+    //Other utilities
+    private final String isoDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private final String UTC = "UTC";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Check if we have created the view already, if we haven't create it.
@@ -181,8 +178,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onLocationChanged(Location location) {
                 if (recording) {
                     updateLocation(location);
-                } else {
-                    startMillis += 1000;
                 }
             }
         };
@@ -205,15 +200,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         return fragmentTitle;
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -224,7 +210,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         calories = (TextView) getView().findViewById(R.id.calories);
 
         LatLng fortWayne = new LatLng(41.0856087, -85.1397336);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10.5f));
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
@@ -274,44 +260,41 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     private void updateLocation(Location location) {
         LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
-//        Log.i("Development", Double.toString(updatedLocation.latitude) + " " + Double.toString(updatedLocation.longitude));
+        coordinates.add(updatedLocation);
+        line.setPoints(coordinates);
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         if (firstCoordinate) {
             captureFirstCoordinate(updatedLocation);
+            firstCoordinate = false;
         } else {
             captureLaterCoordinate(updatedLocation);
-
             lastLocation = updatedLocation;
         }
-        coordinates.add(updatedLocation);
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
-        line.setPoints(coordinates);
-        firstCoordinate = false;
         Log.i("Development", "updateLocation");
     }
 
     private void captureLaterCoordinate(LatLng updatedLocation) {
-        caloriesInt++;
-        durationTimer.tickOneSecond();
+        Double caloriesBurned = BMR * exercise.getMETValue() * durationTimer.getDurationInSeconds() / secondsPerHour / 25;
+        caloriesInt = caloriesBurned.intValue();
+        durationTimer.tickInt();
         durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
         lastLocationTime = System.currentTimeMillis();
         tempDistance = SphericalUtil.computeDistanceBetween(lastLocation, updatedLocation) / metersPerMile;
         totalDistance += tempDistance;
+
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi");
-//            Log.i("Development", String.valueOf(distanceFormat.format(totalDistance)) + " miles");
-        calories.setText("Calories: " + Integer.toString(caloriesInt));
-        Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
+        calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
         duration.setText("Duration: " + durationTimer.toString());
-//        Log.i("Development", seconds + " " + Long.toString(lastLocationTime-startMillis));
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
-//            Log.i("Development", speedFormat.format(currentSpeed) + " mph");
     }
 
     private void captureFirstCoordinate(LatLng updatedLocation) {
         mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
         lastLocationTime = System.currentTimeMillis();
-        startMillis = lastLocationTime;
         lastLocation = updatedLocation;
     }
 
@@ -320,12 +303,10 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         public void onClick(View v) {
             selectActivityType();
-            startRecording();
         }
     };
 
     public void selectActivityType() {
-        durationTimer = new Duration("00:00:00");
         CharSequence exerciseTypes[] = new CharSequence[]{"Bike", "Run", "Walk"};
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
@@ -336,15 +317,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                 switch (which) {
                     case 0:
                         exercise = new BikeExerciseType(durationTimer);
+                        startRecording();
                         break;
                     case 1:
                         exercise = new RunExerciseType(durationTimer);
+                        startRecording();
                         break;
                     case 2:
                         exercise = new WalkExerciseType(durationTimer);
+                        startRecording();
                         break;
                     default:
                         exercise = new WalkExerciseType(durationTimer);
+                        startRecording();
                         break;
                 }
             }
@@ -355,8 +340,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     public void startRecording() {
         recording = true;
         firstCoordinate = true;
-
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
 
         startButton = (Button) getView().findViewById(R.id.startButton);
         pauseButton = (Button) getView().findViewById(R.id.pauseButton);
@@ -413,7 +396,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public void finishRecording() {
         recording = false;
-        finishMillis = System.currentTimeMillis();
         mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location"));
         resumeButton = (Button) getView().findViewById(R.id.resumeButton);
         finishButton = (Button) getView().findViewById(R.id.finishButton);
@@ -438,13 +420,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         String message = "";
         message += "Exercise Type: " + exercise.getExerciseType();
-        Long secondsLong = ((lastLocationTime - startMillis) / 1000) % 60;
-        String seconds = "";
-        if (secondsLong < 10) {
-            seconds += "0";
-        }
-        seconds += secondsLong;
-        message += "\nDuration: " + Long.toString((lastLocationTime - startMillis) / 1000 / 60) + ":" + seconds;
+        message += "\nDuration: " + durationTimer.toString();
         message += "\nDistance: " + String.valueOf(distanceFormat.format(totalDistance)) + " mi";
         message += "\nCalories: " + caloriesInt;
         message += "\nAverage Speed: " + "10 mph";
@@ -515,34 +491,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public void openFile(File file){
 
-//        String eol = System.getProperty("line.separator");
-//        BufferedReader input = null;
-//        try {
-//            input = new BufferedReader(new InputStreamReader(openFileInput(file)));
-//            String line;
-//            StringBuffer buffer = new StringBuffer();
-//            while ((line = input.readLine()) != null) {
-//                buffer.append(line + eol);
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (input != null) {
-//                try {
-//                    input.close();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-
-
         FileInputStream fis = null;
         try{
             fis = new FileInputStream(file);
         }catch (Exception e) {
             e.printStackTrace();
-            Log.i("Development", "1NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
         }
         InputStreamReader isr = new InputStreamReader(fis);
         BufferedReader br = new BufferedReader(isr);
@@ -555,46 +508,30 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             }
         }catch(Exception e){
             e.printStackTrace();
-            Log.i("Development", "2NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
         }
-
 
         try
         {
             fis.getChannel().position(0);
-            Log.i("Development", "Reset");
         }
         catch (Exception e) {e.printStackTrace();}
-
 
         String[] output = new String[lineCounter];
         String line;
         int counter = 0;
         try{
-            Log.i("Development", "Try printing-----------------------------------------------------------");
             for (int i = 0; i < lineCounter; i++){
-//                String line2 = br.readLine();
-//                output[i] = line2;
                 output[i] = br.readLine();
                 Log.i("Development", output[i]);
             }
-//            while((line = br.readLine()) != null){
-//                output[counter] = line;
-//                Log.i("Development", "Line: " + line);
-//                counter++;
-//            }
         }catch (Exception e){
             e.printStackTrace();
-            Log.i("Development", "3NNNNOOOOOOOOOPPPPPPPPEEEEEEEEE");
         }
 
         String printMe = "";
         for(int i = 0; i < output.length; i++){
-//            Log.i("Development", "Here");
-//            Log.i("Development", Integer.toString(output.length));
             printMe += output[i];
         }
-        Log.i("Develop", printMe);
 
         Log.i("Development", "openfile");
     }
