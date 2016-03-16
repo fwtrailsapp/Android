@@ -88,6 +88,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     NumberFormat speedFormat = new DecimalFormat("#0.00");
     NumberFormat calorieFormat = new DecimalFormat("##0");
     double tempDistance;
+
+    AccountDetailsModel accountDetailsModel = new AccountDetailsModel("szook", 183, 82, 1992, GenderOptions.Male);
+
     GenderOptions gender = GenderOptions.Male;//
     int weight = 82;//in kilograms
     int height = 183;//in centemeters
@@ -105,10 +108,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     Button pauseButton;
     Button resumeButton;
     Button finishButton;
-
-    //Other utilities
-    private final String isoDateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'";
-    private final String UTC = "UTC";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Check if we have created the view already, if we haven't create it.
@@ -314,19 +313,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        recordActivityModel = new RecordActivityModel(new BikeExerciseType(recordActivityModel.getDuration()));
+                        recordActivityModel = new RecordActivityModel(new BikeExerciseType());
                         startRecording();
                         break;
                     case 1:
-                        recordActivityModel = new RecordActivityModel(new RunExerciseType(recordActivityModel.getDuration()));
+                        recordActivityModel = new RecordActivityModel(new RunExerciseType());
                         startRecording();
                         break;
                     case 2:
-                        recordActivityModel = new RecordActivityModel(new WalkExerciseType(recordActivityModel.getDuration()));
+                        recordActivityModel = new RecordActivityModel(new WalkExerciseType());
                         startRecording();
                         break;
                     default:
-                        recordActivityModel = new RecordActivityModel(new WalkExerciseType(recordActivityModel.getDuration()));
+                        recordActivityModel = new RecordActivityModel(new WalkExerciseType());
                         startRecording();
                         break;
                 }
@@ -339,8 +338,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         recording = true;
         firstCoordinate = true;
 
-        startButton = (Button) getView().findViewById(R.id.startButton);
-        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
+        startButton = (Button) view.findViewById(R.id.startButton);
+        pauseButton = (Button) view.findViewById(R.id.pauseButton);
         startButton.setVisibility(View.GONE);
         pauseButton.setVisibility(View.VISIBLE);
         Log.i("Development", "startRecording");
@@ -400,10 +399,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
 
-        // Attempt to send to the server
-        //RecordActivityController recordActivityTask = new RecordActivityController();
-        //recordActivityTask.execute();
-
         // if it fails, write to file
         // You could write the file writing logic in the onFailure method in the controller.
         String filename = sendToFile();
@@ -416,16 +411,18 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         }
         Log.i("Development", "finishRecording");
 
+
+        sendDataToServerDialog();
+    }
+
+    public void displayStatistics(){
         String message = "";
         message += "Exercise Type: " + recordActivityModel.getExerciseType().getExerciseType();
         message += "\nDuration: " + recordActivityModel.getDuration().toString();
         message += "\nDistance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi";
         message += "\nCalories: " + caloriesInt;
         message += "\nAverage Speed: " + "10 mph";
-        displayStatistics(message);
-    }
 
-    public void displayStatistics(String message){
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle("Activity Summary");
         alertDialog.setMessage(message);
@@ -533,6 +530,39 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         Log.i("Development", "openfile");
     }
+
+    private void sendDataToServerDialog() {
+        // Create a dialog to determine if the user wants to post their activity
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Confirm");
+        // If modal doesn't work, garbage collect the activity.
+        alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
+        alertDialog.setMessage(getString(R.string.completeActivityPrompt));
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Attempt to send to the server
+                        RecordActivityController recordActivityTask = new RecordActivityController();
+                        recordActivityTask.execute();
+
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+                new DialogInterface.OnClickListener() {
+
+                    // Cancel the doInBackground task
+                    public void onClick(DialogInterface dialog, int which) {
+                        discardActivity();
+                    }
+                });
+
+        alertDialog.show();
+    }
+
+    private void discardActivity(){
+
+    }
     /*
   The RecordActivityController class.
 
@@ -555,31 +585,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // See http://stackoverflow.com/questions/6039158/android-cancel-async-task
         @Override
         protected void onPreExecute() {
-
-            // Create a dialog to determine if the user wants to post their activity
-            AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-            alertDialog.setTitle("Confirm");
-            // If modal doesn't work, garbage collect the activity.
-            alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
-            alertDialog.setMessage(getString(R.string.completeActivityPrompt));
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
-                    new DialogInterface.OnClickListener() {
-
-                        // Cancel the doInBackground task
-                        public void onClick(DialogInterface dialog, int which) {
-                            cancel(true);
-                        }
-                    });
-
-            alertDialog.show();
+            displayStatistics();
 
         }
+
+
 
         // Send off the activity data to the server.
         @Override
@@ -595,7 +605,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             try{
                 //TODO: need to figure out a way to store your activity and make it to json.
                 // Convert the Activity to JSON then to parameters for the post activity.
-                recordActivityJSON = getTestJSONObject();
+                recordActivityJSON = createActivityJSONObject();
                 jsonString = new StringEntity(recordActivityJSON.toString());
             }
             catch(Exception ex){
@@ -658,30 +668,46 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
          */
         // Possibly change this to a function that takes in a RecordActivityModel or data and
         // returns a json object representing it if we don't want to use Gson.
-        private JSONObject getTestJSONObject() throws JSONException{
-            JSONObject testObject = new JSONObject();
-            testObject.put("username","szook");
+        private JSONObject createActivityJSONObject() throws JSONException{
+            JSONObject activityJSONObject = new JSONObject();
+            activityJSONObject.put("username","szook");
 
-            // Create dynamic timestamp
-            TimeZone tz = TimeZone.getTimeZone(UTC);
-            java.text.DateFormat df = new SimpleDateFormat(isoDateFormat);
-            df.setTimeZone(tz);
-            String nowAsISO = df.format(new Date());
-            testObject.put("time_started",nowAsISO);
+            //Get start timestamp
+            activityJSONObject.put("time_started",recordActivityModel.getStartTimestamp());
 
             // Be sure to use Duration Objects when using Duration instead of just hardcoded string types
             // We can add utils to the duration class when needed and such.
-            testObject.put("duration",new Duration("00:12:51").toString());
+            activityJSONObject.put("duration",recordActivityModel.getDuration());
 
             // Use the primitive types Wrapper class when creating the JSON Object (it might be required)
-            testObject.put("mileage", Double.valueOf(2.1));
+            activityJSONObject.put("mileage", Double.valueOf(recordActivityModel.getTotalDistance()));
 
-            testObject.put("calories_burned", Integer.valueOf(241));
+            activityJSONObject.put("calories_burned", Integer.valueOf(caloriesInt));
 
-            testObject.put("exercise_type", "run");
+            activityJSONObject.put("exercise_type", recordActivityModel.getExerciseType().getExerciseType());
 
-            testObject.put("path","0 0, 1 2, 3 4, 5 6, 7 8, 9, 0");
+            activityJSONObject.put("path",getCoordinates());
 
-            return testObject;
+            return activityJSONObject;
+    }
+
+    // Gets the latitude and longitude coordinates and puts it in the form of
+    // "Lat Long, Lat Long, Lat Long"
+    private String getCoordinates() {
+        String output = "";
+
+        for(int i = 0; i < coordinates.size(); i++){
+
+            output += coordinates.get(i).latitude;
+            output += " ";
+            output += coordinates.get(i).longitude;
+
+            // Don't append comma for the last coordinate points
+            if(i+1 < coordinates.size()){
+                output += ", ";
+            }
+        }
+
+        return output;
     }
 }

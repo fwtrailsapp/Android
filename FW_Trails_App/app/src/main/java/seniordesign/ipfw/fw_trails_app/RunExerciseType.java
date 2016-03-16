@@ -5,9 +5,14 @@ package seniordesign.ipfw.fw_trails_app;
  */
 public class RunExerciseType extends ExerciseType {
    private final int runIcon = R.drawable.ic_directions_run_black_18dp; // icon for running.
-   private final String exerciseType = "Run";
+   private final String exerciseType = "run";
    private final double runningMET = 7.5;
 
+
+   public RunExerciseType(){
+      MET = runningMET;
+      this.duration = new Duration(0);
+   }
 
    public RunExerciseType(Duration duration){
       MET = runningMET;

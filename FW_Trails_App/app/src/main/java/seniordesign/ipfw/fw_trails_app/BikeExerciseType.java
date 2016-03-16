@@ -5,9 +5,14 @@ package seniordesign.ipfw.fw_trails_app;
  */
 public class BikeExerciseType extends ExerciseType {
    private final int bikeIcon =R.drawable.ic_directions_bike_black_18dp; // icon for Biking.
-   private final String exerciseType = "Bike";
+   private final String exerciseType = "bike";
    private final double bikingMET = 8.0;
 
+
+   public BikeExerciseType(){
+      MET = bikingMET;
+      this.duration = new Duration(0);
+   }
 
    public BikeExerciseType(Duration duration){
       MET = bikingMET;

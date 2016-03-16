@@ -1,5 +1,8 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import java.util.Calendar;
+import java.util.Date;
+
 /**
  * Created by Jaron on 3/6/2016.
  */
@@ -11,6 +14,7 @@ public class AccountDetailsModel {
    private int birthYear;
    private GenderOptions gender;
    private boolean modelChange;
+   double BMR;
 
    public AccountDetailsModel(String username, int height, int weight, int birthYear,
                               GenderOptions gender){
@@ -20,6 +24,20 @@ public class AccountDetailsModel {
       this.birthYear = birthYear;
       this.gender = gender;
       modelChange = false;
+      BMR = calculateBMR(height, weight, birthYear);
+   }
+
+   private double calculateBMR(int height, int weight, int birthYear) {
+      return 13.75*weight + 5*height - 6.76*(Calendar.getInstance().get(Calendar.YEAR)-birthYear) + 66;
+   }
+
+   //TODO
+   private double calculateBMRMale(int height, int weight, int birthYear) {
+      return 13.75*weight + 5*height - 6.76*(Calendar.getInstance().get(Calendar.YEAR)-birthYear) + 66;
+   }
+
+   private double calculateBMRFemale(int height, int weight, int birthYear) {
+      return 9.56*weight + 1.85*height - 4.68*(Calendar.getInstance().get(Calendar.YEAR)-birthYear) + 655;
    }
 
    // Returns the username for this account
