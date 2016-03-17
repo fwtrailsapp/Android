@@ -578,7 +578,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private class RecordActivityController extends AsyncTask<Void, Void, Void> {
 
 
-        private final String defaultPostURL = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity";
         private final String contentType = "application/json";
 
         //TODO: This is where the dialog "Are you sure you wish to complete this activity" goes.
@@ -616,7 +615,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
             // Currently hardcoded the URL (using postByUrl). We will eventually be to the point where we just post
             // username/Activity and the util class will have the long base url name.
-            HttpClientUtil.postByUrl(getContext(), defaultPostURL, jsonString, contentType,
+            HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_ACTIVITY, jsonString, contentType,
                     new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
                         // Before the actual post happens.
@@ -670,7 +669,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // returns a json object representing it if we don't want to use Gson.
         private JSONObject createActivityJSONObject() throws JSONException{
             JSONObject activityJSONObject = new JSONObject();
-            activityJSONObject.put("username","szook");
+            activityJSONObject.put("username","ggrim");
 
             //Get start timestamp
             activityJSONObject.put("time_started",recordActivityModel.getStartTimestamp());

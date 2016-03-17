@@ -1,24 +1,41 @@
 package seniordesign.ipfw.fw_trails_app;
 
+import android.os.AsyncTask;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpResponseHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 public class AccountStatisticsFragment extends Fragment {
 
    private final String fragmentTitle = "Your Statistics";
    private final String distanceUnit = " miles";
-   private final DecimalFormat distanceFormatter = new DecimalFormat("#.#");
+   private final int BIKE  = 0;
+   private final int RUN  = 1;
+   private final int WALK = 2;
+   private AccountStatisticsModel statModel;
 
    private TextView overallAccountActive;
    private TextView overallDuration;
@@ -28,24 +45,24 @@ public class AccountStatisticsFragment extends Fragment {
    private TextView activitySpecificDuration;
    private TextView activitySpecificDistance;
    private TextView activitySpecificCalories;
+   private Spinner specificActivitySpinner;
+   private RelativeLayout loadedRelativeLayout;
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
       FragmentActivity    faActivity  = (FragmentActivity)    super.getActivity();
       // Replace LinearLayout by the type of the root element of the layout you're trying to load
-      RelativeLayout loadedRelativeLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_account_statistics, container, false);
+      loadedRelativeLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_account_statistics, container, false);
 
       // Find the textviews likely to change during the lifetime of the fragment once so we don't
       // have to keep finding them again when they need to be changed.
       assignTextViewControls(loadedRelativeLayout);
 
-      //TODO: Make API call to return the statistics for this account. (Asynchronously)
-         // Somehow know the account username
-         // Parse the returned values
-         // Create the AccountStatisticsModel to hold the data
-         // Call a method to update the fields
-      //TODO: Create a listener of some sort to listen for when the user changes the spinner and
-      //TODO: reflect the spinner choice's data on the view.
+
+
+      AccountStatisticsController statTask = new AccountStatisticsController();
+      statTask.execute();
+
 
       return loadedRelativeLayout; // We must return the loaded Layout
    }
@@ -62,6 +79,66 @@ public class AccountStatisticsFragment extends Fragment {
       activitySpecificCalories = (TextView) relativeLayout.findViewById(R.id.activitySpecificCaloriesExpendedAmountTextView);
    }
 
+   // Formats the numbers to either zero decimal places if it has none, or up to 1 dcecimal place if
+   // it has decimals
+   private static String format(Number n) {
+      NumberFormat format = DecimalFormat.getInstance();
+      format.setRoundingMode(RoundingMode.FLOOR);
+      format.setMinimumFractionDigits(0);
+      format.setMaximumFractionDigits(1);
+      return format.format(n);
+   }
+
+   // Listen for when the user selects a new activity stat to view.
+   private void loadSpinnerListener(){
+      specificActivitySpinner = (Spinner) loadedRelativeLayout.findViewById(R.id.activity_Spinner);
+
+      specificActivitySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+         @Override
+         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+            // Don't try to operate on a null model.
+            if(statModel != null) {
+
+               // Position in the spinner: Biking (0), Running (1), Walking (2)
+               switch (position) {
+
+                  case BIKE:
+                     setActivitySpecificStats(statModel.getBikeDuration(), statModel.getBikeDistance(),
+                             statModel.getBikeCalories());
+                     break;
+
+                  case RUN:
+                     setActivitySpecificStats(statModel.getRunDuration(), statModel.getRunDistance(),
+                             statModel.getRunCalories());
+                     break;
+
+                  case WALK:
+                     setActivitySpecificStats(statModel.getWalkDuration(), statModel.getWalkDistance(),
+                             statModel.getWalkCalories());
+                     break;
+
+                  default:
+                     setActivitySpecificStats("00:00:00", 0.0, 0);
+                     break;
+               }
+            }
+            else
+            {
+               setActivitySpecificStats("00:00:00", 0.0, 0);
+            }
+
+
+
+         }
+
+         @Override
+         public void onNothingSelected(AdapterView<?> parent) {
+
+         }
+      });
+   }
+
    public String getTitle(){
       return fragmentTitle;
    }
@@ -70,20 +147,143 @@ public class AccountStatisticsFragment extends Fragment {
    // Formats: HH:mm:ss, double ##.# mi, int kcal
    // Should be called when a user changes the spinner item
    private void setActivitySpecificStats(String duration, double distance, int calories){
-      String distanceString = distanceFormatter.format(distance) + distanceUnit;
+      String distanceString = format(distance) + distanceUnit;
+      String caloriesString = format(calories);
+
       activitySpecificDuration.setText(duration);
-      activitySpecificCalories.setText(calories);
+      activitySpecificCalories.setText(caloriesString);
       activitySpecificDistance.setText(distanceString);
    }
 
    // Sets the overall account statistics. Called once in onCreateView
    private void setOverallAccountStatistics(String accountActive, int calories, double distance,
                                             int achievements, String duration){
-      String distanceString = distanceFormatter.format(distance) + distanceUnit;
+      String distanceString = format(distance) + distanceUnit;
+      String achievementsString = format(achievements);
+      String caloriesString = format(calories);
+
       overallAccountActive.setText(accountActive);
-      overallCalories.setText(calories);
+      overallCalories.setText(caloriesString);
       overallDistance.setText(distanceString);
       overallDuration.setText(duration);
-      overallAchievements.setText(achievements);
+      overallAchievements.setText(achievementsString);
+   }
+
+   // This class handles the connection between the server and the mobile app in regards to the
+   // account statistics. It grabs the overall statistics for the user and the per activity type
+   // statistics for the user.
+   private class AccountStatisticsController extends AsyncTask<Void, Void, Void> {
+
+      // Constants used to parse the JSON Array response we get back.
+      private final int OVERALL = 0;
+      private final int BIKE = 1;
+      private final int RUN = 2;
+      private final int WALK = 3;
+      private final String TOTAL_DURATION = "total_duration";
+      private final String TOTAL_CALORIES = "total_calories";
+      private final String TOTAL_DISTANCE = "total_distance";
+      private final String getTotalStatsForUserResultKey = "GetTotalStatsForUserResult";
+
+      // Attempts to call the server's Statistics/user to get all the generic stats of the account
+      @Override
+      protected Void doInBackground(Void... params) {
+
+         HttpClientUtil.get(HttpClientUtil.BASE_URL_STATISTICS, null, new AsyncHttpResponseHandler(Looper.getMainLooper()) {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            // When we succeed at getting a response back
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
+               try {
+
+                  // Convert the single response to a JSON Object
+                  JSONObject jsonResponse = new JSONObject(new String(response));
+
+                  // Convert the single JSON Object to an array
+                  JSONArray allStatistics = jsonResponse.getJSONArray(getTotalStatsForUserResultKey);
+
+                  // Create the statistics model to hold the data from the server.
+                  loadStatistics(allStatistics);
+
+               } catch (Exception ex) {
+                  Log.i("Networking Exception", ex.getMessage());
+               }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+               // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+            }
+
+         });
+
+         return null;
+      }
+
+      // theItems parameter is the return value of the doInBackground method. This contains the
+      // list of objects to be displayed in the ListView
+      @Override
+      protected void onPostExecute(Void param) {
+
+         // Initiate the listener for the spinner object
+         loadSpinnerListener();
+
+         // Set overall and activity Specific text
+         setOverallAccountStatistics(statModel.getAccountActive(), statModel.getOverallCalories(),
+                 statModel.getOverallDistance(), statModel.getAchievementsEarned(),
+                 statModel.getOverallDuration());
+         setActivitySpecificStats(statModel.getBikeDuration(), statModel.getBikeDistance(),
+                 statModel.getBikeCalories());
+
+      }
+
+      // Loads the statistics into the model from the json object passed in
+      private void loadStatistics(JSONArray allStats){
+         Duration overallDuration, bikeDuration, walkDuration, runDuration;
+         double overallDistance, bikeDistance, walkDistance, runDistance;
+         int overallCalories, bikeCalories, walkCalories, runCalories;
+
+         // These two parts are not yet implemented server side.
+         int achievementsEarned = 0;
+         String acctActive = "< 1 year";
+
+
+         try{
+            JSONObject overall = allStats.getJSONObject(OVERALL);
+            JSONObject bike = allStats.getJSONObject(BIKE);
+            JSONObject run = allStats.getJSONObject(RUN);
+            JSONObject walk = allStats.getJSONObject(WALK);
+
+            overallDuration = new Duration(overall.getString(TOTAL_DURATION));
+            overallCalories = Integer.valueOf(overall.getString(TOTAL_CALORIES));
+            overallDistance = Double.valueOf(overall.getString(TOTAL_DISTANCE));
+
+            bikeDuration = new Duration(bike.getString(TOTAL_DURATION));
+            bikeCalories = Integer.valueOf(bike.getString(TOTAL_CALORIES));
+            bikeDistance = Double.valueOf(bike.getString(TOTAL_DISTANCE));
+
+            runDuration = new Duration(run.getString(TOTAL_DURATION));
+            runCalories = Integer.valueOf(run.getString(TOTAL_CALORIES));
+            runDistance = Double.valueOf(run.getString(TOTAL_DISTANCE));
+
+            walkDuration = new Duration(walk.getString(TOTAL_DURATION));
+            walkCalories = Integer.valueOf(walk.getString(TOTAL_CALORIES));
+            walkDistance = Double.valueOf(walk.getString(TOTAL_DISTANCE));
+
+            statModel = new AccountStatisticsModel(overallDuration,overallDistance,overallCalories,
+                    achievementsEarned,bikeDuration,bikeDistance,bikeCalories,runDuration,
+                    runDistance,runCalories,walkDuration,walkDistance,walkCalories,acctActive);
+         }
+         catch(Exception ex){
+            Log.i("JSON Exception", ex.getMessage());
+         }
+
+      }
+
    }
 }

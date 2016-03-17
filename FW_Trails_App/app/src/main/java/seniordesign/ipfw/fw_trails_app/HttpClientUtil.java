@@ -19,7 +19,9 @@ import cz.msebera.android.httpclient.HttpEntity;
  */
 public class HttpClientUtil {
 
-   public static final String BASE_URL = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity/szook";
+   public static final String BASE_URL_HISTORY = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity/ggrimm";
+   public static final String BASE_URL_STATISTICS = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Statistics/ggrimm";
+   public static final String BASE_URL_ACTIVITY = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Activity";
 
    public HttpClientUtil(){
 
@@ -28,7 +30,7 @@ public class HttpClientUtil {
    private static SyncHttpClient client = new SyncHttpClient();
 
    public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-      client.get(BASE_URL, params, responseHandler);
+      client.get(url, params, responseHandler);
    }
 
    public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
@@ -51,7 +53,7 @@ public class HttpClientUtil {
 
    // Concatenates the relative URL with the base url of our API.
    private static String getAbsoluteUrl(String relativeUrl){
-      return BASE_URL + relativeUrl;
+      return relativeUrl;
    }
 
 
