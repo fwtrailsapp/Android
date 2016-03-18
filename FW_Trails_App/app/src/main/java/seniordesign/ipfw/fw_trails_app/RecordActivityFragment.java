@@ -29,6 +29,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.SphericalUtil;
@@ -71,6 +72,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private GoogleApiClient mGoogleApiClient;
     private LocationListener locationListener;
     protected LocationRequest mLocationRequest;
+    Marker startMarker;
+    Marker finishMarker;
 
     //Recoding utilities
     private boolean recording = false;
@@ -287,7 +290,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void captureFirstCoordinate(LatLng updatedLocation) {
-        mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
+        startMarker = mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
@@ -393,7 +396,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public void finishRecording() {
         recording = false;
-        mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location"));
+        finishMarker = mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
         resumeButton = (Button) getView().findViewById(R.id.resumeButton);
         finishButton = (Button) getView().findViewById(R.id.finishButton);
         resumeButton.setVisibility(View.GONE);
@@ -430,9 +434,25 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        clearActivity();
                     }
                 });
         alertDialog.show();
+    }
+
+    private void clearActivity() {
+        startButton = (Button) getView().findViewById(R.id.startButton);
+        startButton.setVisibility(View.VISIBLE);
+        startMarker.remove();
+        finishMarker.remove();
+
+        coordinates.clear();
+        line.setPoints(coordinates);
+
+        distance.setText("Distance: 0.00 mi");
+        calories.setText("Calories: 0");
+        duration.setText("Duration: 00:00:00");
+        speed.setText("Speed: 0.00 mph");
     }
 
     private String sendToFile() {
@@ -554,6 +574,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                     // Cancel the doInBackground task
                     public void onClick(DialogInterface dialog, int which) {
                         discardActivity();
+                        clearActivity();
                     }
                 });
 
@@ -669,7 +690,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // returns a json object representing it if we don't want to use Gson.
         private JSONObject createActivityJSONObject() throws JSONException{
             JSONObject activityJSONObject = new JSONObject();
-            activityJSONObject.put("username","ggrim");
+            activityJSONObject.put("username","ggrimm");
 
             //Get start timestamp
             activityJSONObject.put("time_started",recordActivityModel.getStartTimestamp());
