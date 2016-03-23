@@ -7,7 +7,9 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -112,6 +114,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     Button resumeButton;
     Button finishButton;
 
+    //Timer
+    long starttime = 0L;
+    long timeInMilliseconds = 0L;
+    long timeSwapBuff = 0L;
+    long updatedtime = 0L;
+    int t = 1;
+    int secs = 0;
+    int mins = 0;
+    int milliseconds = 0;
+    Handler handler = new Handler();
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Check if we have created the view already, if we haven't create it.
         if (view != null) {
@@ -158,7 +171,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     protected void createLocationRequest() {
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
-        mLocationRequest.setFastestInterval(100);
+        mLocationRequest.setFastestInterval(900);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         Log.i("Development", "createLocationRequest");
     }
@@ -284,7 +297,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi");
         calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
-        duration.setText("Duration: " + recordActivityModel.getDuration().toString());
+//        duration.setText("Duration: " + recordActivityModel.getDuration().toString());
         currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
     }
@@ -297,14 +310,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         lastLocationTime = System.currentTimeMillis();
         lastLocation = updatedLocation;
     }
-
-    private View.OnClickListener startButtonListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            selectActivityType();
-        }
-    };
 
     public void selectActivityType() {
         CharSequence exerciseTypes[] = new CharSequence[]{"Bike", "Run", "Walk"};
@@ -337,9 +342,38 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         builder.show();
     }
 
+    public Runnable updateTimer = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
+
+            updatedtime = timeSwapBuff + timeInMilliseconds;
+
+            secs = (int) (updatedtime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            milliseconds = (int) (updatedtime % 1000);
+            duration.setText("Duration: " + mins + ":" + String.format("%02d", secs));
+            handler.postDelayed(this, 0);
+        }
+
+    };
+
+    private View.OnClickListener startButtonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            selectActivityType();
+        }
+    };
+
     public void startRecording() {
         recording = true;
         firstCoordinate = true;
+
+        starttime = SystemClock.uptimeMillis();
+        handler.postDelayed(updateTimer, 0);
 
         startButton = (Button) view.findViewById(R.id.startButton);
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
@@ -353,14 +387,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         public void onClick(View v) {
             pauseRecording();
+
+            timeSwapBuff += timeInMilliseconds;
+            handler.removeCallbacks(updateTimer);
         }
     };
 
     public void pauseRecording() {
         recording = false;
-        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
-        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        pauseButton = (Button) view.findViewById(R.id.pauseButton);
+        resumeButton = (Button) view.findViewById(R.id.resumeButton);
+        finishButton = (Button) view.findViewById(R.id.finishButton);
         pauseButton.setVisibility(View.GONE);
         resumeButton.setVisibility(View.VISIBLE);
         finishButton.setVisibility(View.VISIBLE);
@@ -372,14 +409,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         public void onClick(View v) {
             resumeRecording();
+
+            starttime = SystemClock.uptimeMillis();
+            handler.postDelayed(updateTimer, 0);
         }
     };
 
     public void resumeRecording() {
         recording = true;
-        pauseButton = (Button) getView().findViewById(R.id.pauseButton);
-        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        pauseButton = (Button) view.findViewById(R.id.pauseButton);
+        resumeButton = (Button) view.findViewById(R.id.resumeButton);
+        finishButton = (Button) view.findViewById(R.id.finishButton);
         pauseButton.setVisibility(View.VISIBLE);
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
@@ -398,8 +438,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         recording = false;
         finishMarker = mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        resumeButton = (Button) getView().findViewById(R.id.resumeButton);
-        finishButton = (Button) getView().findViewById(R.id.finishButton);
+        resumeButton = (Button) view.findViewById(R.id.resumeButton);
+        finishButton = (Button) view.findViewById(R.id.finishButton);
         resumeButton.setVisibility(View.GONE);
         finishButton.setVisibility(View.GONE);
 
@@ -441,13 +481,24 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void clearActivity() {
-        startButton = (Button) getView().findViewById(R.id.startButton);
+        startButton = (Button) view.findViewById(R.id.startButton);
         startButton.setVisibility(View.VISIBLE);
         startMarker.remove();
         finishMarker.remove();
 
         coordinates.clear();
         line.setPoints(coordinates);
+
+        starttime = 0L;
+        timeInMilliseconds = 0L;
+        timeSwapBuff = 0L;
+        updatedtime = 0L;
+        t = 1;
+        secs = 0;
+        mins = 0;
+        milliseconds = 0;
+        handler.removeCallbacks(updateTimer);
+        duration.setText("00:00:00");
 
         distance.setText("Distance: 0.00 mi");
         calories.setText("Calories: 0");
