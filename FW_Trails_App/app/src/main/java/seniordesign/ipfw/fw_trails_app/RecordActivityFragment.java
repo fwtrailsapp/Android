@@ -1,10 +1,12 @@
 package seniordesign.ipfw.fw_trails_app;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -85,7 +87,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     //Calculation utilities
     private double metersPerMile = 1609.34;
-    private double secondsPerHour = 3600.0;
+    private int secondsPerHour = 3600;
     private long lastLocationTime;
     private long durationSinceLastLocation;
     private double currentSpeed;
@@ -119,9 +121,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedtime = 0L;
-    int t = 1;
     int secs = 0;
     int mins = 0;
+    int hours = 0;
     int milliseconds = 0;
     Handler handler = new Handler();
 
@@ -275,7 +277,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
         coordinates.add(updatedLocation);
         line.setPoints(coordinates);
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         if (firstCoordinate) {
             captureFirstCoordinate(updatedLocation);
             firstCoordinate = false;
@@ -287,6 +288,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void captureLaterCoordinate(LatLng updatedLocation) {
+        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         Double caloriesBurned = BMR * recordActivityModel.getExerciseType().getMETValue() * recordActivityModel.getDurationInSeconds() / secondsPerHour / 25;
         caloriesInt = caloriesBurned.intValue();
         recordActivityModel.getDuration().tickInt();
@@ -305,8 +307,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private void captureFirstCoordinate(LatLng updatedLocation) {
         startMarker = mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(18.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(updatedLocation, 18.0f), 500, null);
         lastLocationTime = System.currentTimeMillis();
         lastLocation = updatedLocation;
     }
@@ -351,10 +352,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             updatedtime = timeSwapBuff + timeInMilliseconds;
 
             secs = (int) (updatedtime / 1000);
+            hours = secs / secondsPerHour;
             mins = secs / 60;
             secs = secs % 60;
             milliseconds = (int) (updatedtime % 1000);
-            duration.setText("Duration: " + mins + ":" + String.format("%02d", secs));
+            duration.setText("Duration: " + hours + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
             handler.postDelayed(this, 0);
         }
 
@@ -364,7 +366,23 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         @Override
         public void onClick(View v) {
-            selectActivityType();
+            LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if(!statusOfGPS) {
+                AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+                alertDialog.setTitle("GPS");
+                alertDialog.setMessage("Please turn GPS on for accurate results.");
+                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                alertDialog.show();
+            }
+            else {
+                selectActivityType();
+            }
         }
     };
 
@@ -493,7 +511,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         timeInMilliseconds = 0L;
         timeSwapBuff = 0L;
         updatedtime = 0L;
-        t = 1;
         secs = 0;
         mins = 0;
         milliseconds = 0;
