@@ -300,7 +300,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi");
         calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
 //        duration.setText("Duration: " + recordActivityModel.getDuration().toString());
-        currentSpeed = tempDistance / metersPerMile / durationSinceLastLocation * 1000 * secondsPerHour;
+        currentSpeed = tempDistance / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
     }
 
