@@ -72,6 +72,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     //Map utilities
     private GoogleMap mMap;
     private Polyline line;
+    ArrayList<Polyline> lines = new ArrayList<>();
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private LocationListener locationListener;
@@ -225,7 +226,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         calories = (TextView) getView().findViewById(R.id.calories);
 
         LatLng fortWayne = new LatLng(41.0856087, -85.1397336);
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10.5f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(fortWayne, 10.5f), 500, null);
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
@@ -237,28 +238,29 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         addKMLLayerToMap();
         addPolylineToMap();
 
-        locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                //Gets called when a new location is found by the network location provider.
-                updateLocation(location);
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
-        Log.i("Development", "onMapReady");
+//        locationListener = new LocationListener() {
+//            public void onLocationChanged(Location location) {
+//                //Gets called when a new location is found by the network location provider.
+//                updateLocation(location);
+//            }
+//
+//            public void onStatusChanged(String provider, int status, Bundle extras) {
+//            }
+//
+//            public void onProviderEnabled(String provider) {
+//            }
+//
+//            public void onProviderDisabled(String provider) {
+//            }
+//        };
+//        Log.i("Development", "onMapReady");
     }
 
     private void addPolylineToMap() {
         line = mMap.addPolyline(new PolylineOptions()
                 .width(10)
                 .color(Color.BLUE));
+        lines.add(line);
         Log.i("Development", "addPolylineToMap");
     }
 
@@ -362,6 +364,19 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     };
 
+    private void askForGPS() {
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("GPS");
+        alertDialog.setMessage("Please turn GPS on for accurate results.");
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+        alertDialog.show();
+    }
+
     private View.OnClickListener startButtonListener = new View.OnClickListener() {
 
         @Override
@@ -369,16 +384,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
             boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if(!statusOfGPS) {
-                AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-                alertDialog.setTitle("GPS");
-                alertDialog.setMessage("Please turn GPS on for accurate results.");
-                alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                alertDialog.show();
+                askForGPS();
             }
             else {
                 selectActivityType();
@@ -420,6 +426,10 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setVisibility(View.VISIBLE);
         finishButton.setVisibility(View.VISIBLE);
         Log.i("Development", "pauseRecording");
+
+        lines.add(line);
+        finishMarker = mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
     private View.OnClickListener resumeButtonListener = new View.OnClickListener() {
@@ -428,12 +438,25 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         public void onClick(View v) {
             resumeRecording();
 
+            LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
+            boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            if(!statusOfGPS) {
+                askForGPS();
+            }
+
             starttime = SystemClock.uptimeMillis();
             handler.postDelayed(updateTimer, 0);
         }
     };
 
     public void resumeRecording() {
+        firstCoordinate = true;
+        line = mMap.addPolyline(new PolylineOptions()
+                .width(10)
+                .color(Color.BLUE));
+        coordinates.clear();
+        line.setPoints(coordinates);
+
         recording = true;
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
         resumeButton = (Button) view.findViewById(R.id.resumeButton);
@@ -492,7 +515,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        clearActivity();
                     }
                 });
         alertDialog.show();
@@ -641,16 +663,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
                     // Cancel the doInBackground task
                     public void onClick(DialogInterface dialog, int which) {
-                        discardActivity();
+                        displayStatistics();
                         clearActivity();
                     }
                 });
 
         alertDialog.show();
-    }
-
-    private void discardActivity(){
-
     }
     /*
   The RecordActivityController class.
