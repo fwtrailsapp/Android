@@ -49,6 +49,8 @@
     <string name="login_hint_password">Password</string>
     <string name="login_new_user_text">Don\'t have an Account?</string>
     <string name="login_create_account_button_text">Create Account</string>
+    <string name="login_error_no_credentials">Please enter a username and password</string>
+    <string name="login_error_incorrect_credentials">Incorrect Username and Password</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
