@@ -56,6 +56,8 @@ public class LoginFragment extends Fragment {
    private View theView;
    private String theUsername;
    private String thePassword;
+   private boolean loginSuccessful = false;
+
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
       FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
@@ -145,7 +147,7 @@ public class LoginFragment extends Fragment {
    private void displayLoginError(String errorText) {
       // Create a dialog to determine if the user wants to post their activity
       AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-      alertDialog.setTitle("Login Error");
+      alertDialog.setTitle(fragmentTitle+ " Error");
 
       // If modal doesn't work, garbage collect the activity.
       alertDialog.setCancelable(false);
@@ -177,6 +179,7 @@ public class LoginFragment extends Fragment {
 
 
       private final String contentType = "application/json";
+      private final String token = "token";
 
 
       @Override
@@ -208,10 +211,7 @@ public class LoginFragment extends Fragment {
             Log.i("JSON/Encode Exception:", ex.getMessage());
          }
 
-
-
-         // Currently hardcoded the URL (using postByUrl). We will eventually be to the point where we just post
-         // username/Activity and the util class will have the long base url name.
+         // Post the login attempt to the server with the given username and password.
          HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_LOGIN, jsonString, contentType,
                  new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
@@ -225,9 +225,28 @@ public class LoginFragment extends Fragment {
                     // use in subsequent api calls and start record activity.
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                       // parse the response to save the code HttpClientUtil.setAuthCode();
-                       //HttpClientUtil.getInstance().setAuthKeycode(someKeyParsed);
-                       //((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
+                       try{
+
+                          // parse the response to save the auth code for future api calls and
+                          // save the password and username in case we need to login again.
+                          JSONObject jsonResponse = new JSONObject(new String(response));
+                          HttpClientUtil.getInstance().setAuthKeycode(jsonResponse.getString(token));
+                          HttpClientUtil.getInstance().setAccountInfo(theUsername, thePassword);
+                          loginSuccessful = true;
+                           // Run on UI thread due to AsyncTask
+                         /* getActivity().runOnUiThread(new Runnable() {
+
+                             public void run() {
+                                //((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
+                             }
+                          });*/
+
+
+                       } catch(JSONException ex){
+                          Log.i("Networking Exception", ex.getMessage());
+                          Log.i("Response: ", new String(response));
+                       }
+
 
                     }
 
@@ -256,6 +275,11 @@ public class LoginFragment extends Fragment {
       @Override
       protected void onPostExecute(Void params) {
          super.onPostExecute(params);
+
+         // if the login was successful, swap views with the recordActivity.
+         if(loginSuccessful){
+            ((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
+         }
 
 
       }

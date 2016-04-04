@@ -18,7 +18,7 @@ public class ActivityHistoryControllerUnitTests {
    // What needs to be done before the class is ran
    @BeforeClass
    public static void setUp() {
-      activityHistoryController = new HttpClientUtil();
+
    }
 
    // what needs to be done after the class is ran

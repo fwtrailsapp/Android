@@ -58,7 +58,7 @@
     <string name="button_Cancel_text">Cancel</string>
     <string name="textview_NewUser_text">Don\'t have an account?</string>
     <string name="createAccount_text">Create Account</string>
-    <string name="retypePasswordText">Password (retype)</string>
+    <string name="retypePasswordText">Password (confirm)</string>
     <!-- End Strings related to LoginActivity-->
 
 
@@ -66,7 +66,7 @@
     <string name="createNewAccountToolbarTitle">Create New Account</string>
     <string name="height_editText_text">Height (in inches)</string>
     <string name="weight_editText_text">Weight (in pounds)</string>
-    <string name="age_editText_text">Age</string>
+    <string name="age_editText_text">Birth Year</string>
     <string name="gender_dropDown">Gender</string>
     <string name="disclaimer_textView_text">"Disclaimer: This information is used
         for calories burned estimation."
@@ -81,6 +81,15 @@
     <string name="accountInfoText">Account Info</string>
     <string name="usernameText">Username</string>
     <string name="personalInfoText">Personal Info (optional)</string>
+    <string name="create_account_required_params_needed">Please enter a username and password</string>
+    <string name="create_account_max_username_length_exceeded">Cannot create account. Username length must be less than  or equal to 16 characters</string>
+    <string name="create_account_max_password_length_exceeded">Cannot create account. Password length must be less than or equal to 16 characters</string>
+    <string name="create_account_password_mismatch">Cannot create account. Passwords do not match.</string>
+    <string name="create_account_invalid_height">Cannot create account. Please enter a valid height.</string>
+    <string name="create_account_invalid_weight">Cannot create account. Please enter a valid weight.</string>
+    <string name="create_account_invalid_birth_year">Cannot create account. Please enter a valid birth year.</string>
+    <string name="create_account_error">Cannot create account. Server Error</string>
+    <string name="create_account_already_exists_error">Account already exists with this username</string>
     <!-- End Strings related to AccountCreate -->
 
     <!-- Strings related to Account Statistics Activity-->

@@ -70,47 +70,47 @@ public class AccountCreateActivity_InstrumentationTest {
 
    @Test
    public void heightEditTextExists(){
-      onView(withId(R.id.height_editText)).check(matches(isDisplayed()));
+      onView(withId(R.id.accountCreate_heightEditText)).check(matches(isDisplayed()));
    }
 
    @Test
    public void heighteditTextVerification() {
-      onView(withId(R.id.height_editText)).check(matches(withHint(heightEditText)));
+      onView(withId(R.id.accountCreate_heightEditText)).check(matches(withHint(heightEditText)));
    }
 
    @Test
    public void weightEditTextExists(){
-      onView(withId(R.id.weight_editText)).check(matches(isDisplayed()));
+      onView(withId(R.id.accountCreate_weightEditText)).check(matches(isDisplayed()));
    }
 
    @Test
    public void weighteditTextVerification() {
-      onView(withId(R.id.weight_editText)).check(matches(withHint(weightEditText)));
+      onView(withId(R.id.accountCreate_weightEditText)).check(matches(withHint(weightEditText)));
    }
 
    @Test
    public void ageEditTextExists(){
-      onView(withId(R.id.age_editText)).check(matches(isDisplayed()));
+      onView(withId(R.id.accountCreate_birthYearEditText)).check(matches(isDisplayed()));
    }
 
    @Test
    public void ageTextVerification(){
-      onView(withId(R.id.age_editText)).check(matches(withHint(ageEditText)));
+      onView(withId(R.id.accountCreate_birthYearEditText)).check(matches(withHint(ageEditText)));
    }
 
 
 
    @Test
    public void genderSpinnerExists(){
-      onView(withId(R.id.gender_Spinner)).check(matches(isDisplayed()));
+      onView(withId(R.id.accountCreate_genderSpinner)).check(matches(isDisplayed()));
    }
 
    @Test
    public void genderSpinnerVerification(){
       for(int i = 0; i < genderSpinner.length; i++) {
-         onView(withId(R.id.gender_Spinner)).perform(click());
+         onView(withId(R.id.accountCreate_genderSpinner)).perform(click());
          onData(allOf(is(instanceOf(String.class)), is(genderSpinner[i]))).perform(click());
-         onView(withId(R.id.gender_Spinner)).check(matches(withSpinnerText(containsString(genderSpinner[i]))));
+         onView(withId(R.id.accountCreate_genderSpinner)).check(matches(withSpinnerText(containsString(genderSpinner[i]))));
       }
    }
 

@@ -73,7 +73,7 @@ public class ActivityHistoryFragment extends Fragment {
       @Override
       protected ArrayList<ActivityHistoryModel> doInBackground(Void... params) {
 
-         HttpClientUtil.get(HttpClientUtil.BASE_URL_HISTORY, null, new AsyncHttpResponseHandler(Looper.getMainLooper()) {
+         HttpClientUtil.get(HttpClientUtil.BASE_URL_ACTIVITY, null, new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
             @Override
             public void onStart() {

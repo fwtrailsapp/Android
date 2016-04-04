@@ -15,10 +15,10 @@
         android:inputType="numberDecimal"
         android:ems="10"
         android:hint="@string/height_editText_text"
-        android:id="@+id/height_editText"
+        android:id="@+id/accountCreate_heightEditText"
         android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/weight_editText"
-        android:layout_alignStart="@+id/weight_editText"
+        android:layout_alignLeft="@+id/accountCreate_weightEditText"
+        android:layout_alignStart="@+id/accountCreate_weightEditText"
         android:layout_marginTop="18dp"/>
 
     <EditText
@@ -26,32 +26,32 @@
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
-        android:id="@+id/weight_editText"
+        android:id="@+id/accountCreate_weightEditText"
         android:hint="@string/weight_editText_text"
-        android:layout_below="@+id/height_editText"
-        android:layout_alignLeft="@+id/age_editText"
-        android:layout_alignStart="@+id/age_editText"/>
+        android:layout_below="@+id/accountCreate_heightEditText"
+        android:layout_alignLeft="@+id/accountCreate_birthYearEditText"
+        android:layout_alignStart="@+id/accountCreate_birthYearEditText"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/age_editText"
+        android:id="@+id/accountCreate_birthYearEditText"
         android:hint="@string/age_editText_text"
-        android:layout_below="@+id/weight_editText"
-        android:layout_alignLeft="@+id/gender_Spinner"
-        android:layout_alignStart="@+id/gender_Spinner"/>
+        android:layout_below="@+id/accountCreate_weightEditText"
+        android:layout_alignLeft="@+id/accountCreate_genderSpinner"
+        android:layout_alignStart="@+id/accountCreate_genderSpinner"/>
 
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:spinnerMode="dialog"
-        android:id="@+id/gender_Spinner"
+        android:id="@+id/accountCreate_genderSpinner"
         android:entries="@array/gender_array"
         android:prompt="@string/gender_SpinnerPrompt"
-        android:layout_below="@+id/age_editText"
+        android:layout_below="@+id/accountCreate_birthYearEditText"
         android:layout_alignLeft="@+id/disclaimer_Textview"
         android:layout_alignStart="@+id/disclaimer_Textview"
         android:layout_alignRight="@+id/disclaimer_Textview"
@@ -63,7 +63,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/disclaimer_textView_text"
         android:id="@+id/disclaimer_Textview"
-        android:layout_below="@+id/gender_Spinner"
+        android:layout_below="@+id/accountCreate_genderSpinner"
         android:layout_centerHorizontal="true"/>
 
     <Button
@@ -103,14 +103,14 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/createUsernameEditText"
+        android:id="@+id/accountCreate_usernameEditText"
         android:hint="@string/usernameText"
         android:layout_below="@+id/accountInfoTextView"
         android:layout_alignLeft="@+id/accountInfoTextView"
         android:layout_alignStart="@+id/accountInfoTextView"
         android:layout_marginTop="22dp"
-        android:layout_alignRight="@+id/height_editText"
-        android:layout_alignEnd="@+id/height_editText"/>
+        android:layout_alignRight="@+id/accountCreate_heightEditText"
+        android:layout_alignEnd="@+id/accountCreate_heightEditText"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -118,10 +118,10 @@
         android:inputType="textPassword"
         android:ems="10"
         android:hint="@string/login_hint_password"
-        android:id="@+id/createPasswordEditText"
-        android:layout_below="@+id/createUsernameEditText"
-        android:layout_alignLeft="@+id/createUsernameEditText"
-        android:layout_alignStart="@+id/createUsernameEditText"/>
+        android:id="@+id/accountCreate_passwordEditText"
+        android:layout_below="@+id/accountCreate_usernameEditText"
+        android:layout_alignLeft="@+id/accountCreate_usernameEditText"
+        android:layout_alignStart="@+id/accountCreate_usernameEditText"/>
 
     <EditText
         android:layout_width="wrap_content"
@@ -129,10 +129,10 @@
         android:inputType="textPassword"
         android:ems="10"
         android:hint="@string/retypePasswordText"
-        android:id="@+id/retypeCreatePasswordEditText"
-        android:layout_below="@+id/createPasswordEditText"
-        android:layout_alignLeft="@+id/createPasswordEditText"
-        android:layout_alignStart="@+id/createPasswordEditText"/>
+        android:id="@+id/accountCreate_confirmPasswordEditText"
+        android:layout_below="@+id/accountCreate_passwordEditText"
+        android:layout_alignLeft="@+id/accountCreate_passwordEditText"
+        android:layout_alignStart="@+id/accountCreate_passwordEditText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -140,9 +140,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/personalInfoText"
         android:id="@+id/textView"
-        android:layout_below="@+id/retypeCreatePasswordEditText"
-        android:layout_alignLeft="@+id/height_editText"
-        android:layout_alignStart="@+id/height_editText"
+        android:layout_below="@+id/accountCreate_confirmPasswordEditText"
+        android:layout_alignLeft="@+id/accountCreate_heightEditText"
+        android:layout_alignStart="@+id/accountCreate_heightEditText"
         android:layout_marginTop="17dp"/>
 
 </RelativeLayout>
