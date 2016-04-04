@@ -233,14 +233,6 @@ public class LoginFragment extends Fragment {
                           HttpClientUtil.getInstance().setAuthKeycode(jsonResponse.getString(token));
                           HttpClientUtil.getInstance().setAccountInfo(theUsername, thePassword);
                           loginSuccessful = true;
-                           // Run on UI thread due to AsyncTask
-                         /* getActivity().runOnUiThread(new Runnable() {
-
-                             public void run() {
-                                //((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
-                             }
-                          });*/
-
 
                        } catch(JSONException ex){
                           Log.i("Networking Exception", ex.getMessage());

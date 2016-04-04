@@ -91,6 +91,15 @@ public class AccountCreateModelUnitTests {
       assertEquals(testGender,actCreate.getGender());
    }
 
+   @Test
+   public void verifyAccountCreateGenderChange(){
+      actCreate.setGender(GenderOptions.PreferNotToDisclose);
+
+      printInfo("verifyAccountCreateGenderChange", actCreate.getGender() + " should equal " + GenderOptions.PreferNotToDisclose);
+
+      assertEquals(GenderOptions.PreferNotToDisclose,actCreate.getGender());
+   }
+
    private void printInfo(String methodName, String info) {
       System.out.println("AccountCreateModelUnitTest::" + methodName + ": " + info);
    }

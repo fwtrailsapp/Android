@@ -335,14 +335,12 @@ The onPFailure tells the user there was an incorrect username and password combo
  */
    private class AccountCreateController extends AsyncTask<Void, Void, Void> {
 
-
       private final String contentType = "application/json";
       private final int ACCOUNT_ALREADY_EXISTS_ERROR_CODE = 409;
 
 
       @Override
       protected void onPreExecute() {
-
 
       }
 
@@ -382,16 +380,9 @@ The onPFailure tells the user there was an incorrect username and password combo
                     // use in subsequent api calls and start record activity.
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+
                        accountCreationSuccessful = true;
-
-                       getActivity().runOnUiThread(new Runnable() {
-
-                          public void run() {
-
-                          }
-                       });
                     }
-
                     // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                     // If it fails to post, you can issue some sort of alert dialog saying the error
                     // and writing the activity to file.
