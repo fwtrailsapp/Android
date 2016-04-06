@@ -13,6 +13,8 @@ import static org.junit.Assert.assertTrue;
 public class AccountDetailsModelUnitTests {
 
    private static AccountDetailsModel acctDetails;
+   private static String password;
+   private static String diffPassword;
    private static String username;
    private static String diffUsername;
    private static int height;
@@ -31,6 +33,10 @@ public class AccountDetailsModelUnitTests {
       username = "User Test";
       diffUsername = "Diff User Test";
 
+      // Setup the passwords
+      password = "test";
+      diffPassword = "tset";
+
       // Setup the height
       height = 72;
       diffHeight = 71;
@@ -47,7 +53,7 @@ public class AccountDetailsModelUnitTests {
       gender = GenderOptions.Female;
       diffGender = GenderOptions.Male;
 
-      acctDetails = new AccountDetailsModel(username, height, weight, birthYear, gender);
+      acctDetails = new AccountDetailsModel(username,password, height, weight, birthYear, gender);
    }
 
    //Tests the class exists
@@ -106,6 +112,17 @@ public class AccountDetailsModelUnitTests {
       printInfo("verifyGenderChanged", diffGender + " should equal "
               + acctDetails.getGender());
       assertEquals(diffGender, acctDetails.getGender());
+      assertTrue(acctDetails.modelChanged());
+   }
+
+   @Test
+   public void verifyPasswordChanged(){
+      acctDetails.changePassword(diffPassword);
+
+      printInfo("verifyPasswordChanged", diffPassword + " should equal "
+              + acctDetails.getPassword());
+
+      assertEquals(diffPassword, acctDetails.getPassword());
       assertTrue(acctDetails.modelChanged());
    }
 

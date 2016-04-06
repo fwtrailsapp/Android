@@ -25,14 +25,16 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <TextView
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/testUsername"
-        android:id="@+id/accountDetailsActualUsernameTextView"
+        android:id="@+id/accountDetailsUsernameEditText"
         android:layout_alignTop="@+id/accountDetailsUsernameTextView"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignLeft="@+id/accountDetailsHeight_editText"
+        android:layout_alignStart="@+id/accountDetailsHeight_editText"
+        android:layout_alignRight="@+id/personalInfoTextView"
+        android:layout_alignEnd="@+id/personalInfoTextView"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -41,19 +43,21 @@
         android:text="@string/accountDetailsPasswordText"
         android:id="@+id/accountDetailsPasswordTextView"
         android:singleLine="false"
-        android:layout_alignBottom="@+id/accountDetailsResetPWBtn"
+        android:layout_alignBottom="@+id/accountDetailsPasswordEditText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"/>
 
-    <Button
-        style="@style/AppCompat.Button.FW_Trails"
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/accountDetailsPasswordChangeText"
-        android:id="@+id/accountDetailsResetPWBtn"
+        android:hint="@string/accountDetailsPasswordChangeText"
+        android:id="@+id/accountDetailsPasswordEditText"
         android:singleLine="false"
-        android:layout_below="@+id/accountDetailsActualUsernameTextView"
-        android:layout_centerHorizontal="true"/>
+        android:layout_below="@+id/accountDetailsUsernameEditText"
+        android:layout_alignRight="@+id/accountDetailsUsernameEditText"
+        android:layout_alignEnd="@+id/accountDetailsUsernameEditText"
+        android:layout_alignLeft="@+id/accountDetailsUsernameEditText"
+        android:layout_alignStart="@+id/accountDetailsUsernameEditText"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -61,8 +65,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/accountDetailsPersonalInfoText"
         android:id="@+id/personalInfoTextView"
-        android:layout_marginTop="24dp"
-        android:layout_below="@+id/accountDetailsPasswordTextView"
+        android:layout_marginTop="106dp"
+        android:layout_below="@+id/accountDetailsPasswordEditText"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -80,7 +84,6 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:hint="@string/accountDetailsTestHeight"
         android:id="@+id/accountDetailsHeight_editText"
         android:layout_above="@+id/accountDetailsWeightEditText"
         android:layout_alignLeft="@+id/accountDetailsWeightEditText"
@@ -102,7 +105,6 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:hint="@string/accountDetailsTestWeight"
         android:id="@+id/accountDetailsWeightEditText"
         android:layout_above="@+id/accountDetailsBirthYearTextView"
         android:layout_alignRight="@+id/personalInfoTextView"
@@ -124,7 +126,6 @@
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:hint="@string/accountDetailsTestBirthYear"
         android:id="@+id/accountDetailsBirthYearEditText"
         android:layout_above="@+id/accountDetails_gender_Spinner"
         android:layout_alignRight="@+id/personalInfoTextView"
@@ -163,10 +164,10 @@
         android:text="@string/accept"
         android:drawableStart="@drawable/ic_send_white_18dp"
         android:drawableLeft="@drawable/ic_send_white_18dp"
-        android:layout_marginTop="52dp"
-        android:layout_below="@+id/accountDetails_gender_Spinner"
-        android:layout_toRightOf="@+id/accountDetailsSexTextView"
-        android:layout_toEndOf="@+id/accountDetailsSexTextView"/>
+        android:layout_marginBottom="19dp"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/accountDetailsInfoTextView"
+        android:layout_toStartOf="@+id/accountDetailsInfoTextView"/>
 
     <Button
         style="@style/AppCompat.Button.FW_Trails"
@@ -178,5 +179,27 @@
         android:layout_alignBottom="@+id/accountDetailsAcceptButton"
         android:layout_toRightOf="@+id/accountDetailsInfoTextView"
         android:layout_toEndOf="@+id/accountDetailsInfoTextView"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/accountDetailsPasswordText"
+        android:id="@+id/accountDetailsConfirmPasswordTextView"
+        android:layout_below="@+id/accountDetailsPasswordEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="27dp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:ems="10"
+        android:hint="@string/accountDetailsPasswordConfirmText"
+        android:id="@+id/accountDetailsConfirmPasswordEditText"
+        android:layout_alignBottom="@+id/accountDetailsConfirmPasswordTextView"
+        android:layout_alignLeft="@+id/accountDetailsPasswordEditText"
+        android:layout_alignStart="@+id/accountDetailsPasswordEditText"/>
 
 </RelativeLayout>

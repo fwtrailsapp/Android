@@ -148,6 +148,7 @@
     <string name="accountDetailsUsernameText">Username</string>
     <string name="accountDetailsPasswordText">Password</string>
     <string name="accountDetailsPasswordChangeText">Reset Password</string>
+    <string name="accountDetailsPasswordConfirmText">Retype New Password</string>
     <string name="accountDetailsPersonalInfoText">Personal Info (optional)</string>
     <string name="accountDetailsHeightText">Height</string>
     <string name="accountDetailsWeightText">Weight</string>

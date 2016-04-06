@@ -9,6 +9,7 @@ import java.util.Date;
 public class AccountDetailsModel {
 
    private String username;
+   private String password;
    private int height;
    private int weight;
    private int birthYear;
@@ -16,9 +17,10 @@ public class AccountDetailsModel {
    private boolean modelChange;
    double BMR;
 
-   public AccountDetailsModel(String username, int height, int weight, int birthYear,
+   public AccountDetailsModel(String username, String password, int height, int weight, int birthYear,
                               GenderOptions gender){
       this.username = username;
+      this.password = password;
       this.height   = height;
       this.weight   = weight;
       this.birthYear = birthYear;
@@ -43,6 +45,11 @@ public class AccountDetailsModel {
    // Returns the username for this account
    public String getUsername(){
       return username;
+   }
+
+   // Returns the password for this account
+   public String getPassword(){
+      return password;
    }
 
    // Returns the height for this account
@@ -94,9 +101,18 @@ public class AccountDetailsModel {
       gender = newGender;
    }
 
+   // Sets the new username to the parameter.
+   // Typically called if the Fragment has noticed that the user put in a new number in the field
    public void changeUsername(String newName){
       modelChange = true;
       username = newName;
+   }
+
+   // Sets the new Password to the parameter.
+   // Typically called if the Fragment has noticed that the user put in a new number in the field
+   public void changePassword(String newPassword){
+      modelChange = true;
+      password = newPassword;
    }
 
    // Returns true if the data in the model has been changed by the user.

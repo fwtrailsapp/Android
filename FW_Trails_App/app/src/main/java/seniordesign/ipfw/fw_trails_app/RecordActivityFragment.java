@@ -97,8 +97,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     NumberFormat calorieFormat = new DecimalFormat("##0");
     double tempDistance;
 
-    AccountDetailsModel accountDetailsModel = new AccountDetailsModel("szook", 183, 82, 1992, GenderOptions.Male);
-
     GenderOptions gender = GenderOptions.Male;//
     int weight = 82;//in kilograms
     int height = 183;//in centemeters
