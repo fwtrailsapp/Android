@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:hint="@string/accountDetailsPasswordChangeText"
         android:id="@+id/accountDetailsPasswordEditText"
+        android:inputType="textPassword"
         android:singleLine="false"
         android:layout_below="@+id/accountDetailsUsernameEditText"
         android:layout_alignRight="@+id/accountDetailsUsernameEditText"
@@ -65,8 +66,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/accountDetailsPersonalInfoText"
         android:id="@+id/personalInfoTextView"
-        android:layout_marginTop="106dp"
-        android:layout_below="@+id/accountDetailsPasswordEditText"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/accountDetailsConfirmPasswordTextView"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -196,6 +197,7 @@
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:ems="10"
+        android:inputType="textPassword"
         android:hint="@string/accountDetailsPasswordConfirmText"
         android:id="@+id/accountDetailsConfirmPasswordEditText"
         android:layout_alignBottom="@+id/accountDetailsConfirmPasswordTextView"

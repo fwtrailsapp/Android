@@ -6,6 +6,9 @@ package seniordesign.ipfw.fw_trails_app;
 public enum GenderOptions {
    Male,Female,PreferNotToDisclose;
 
+   public static final int MALE = 0;
+   public static final int FEMALE = 1;
+   public static final int PREFER_NOT_TO_DISCLOSE = 2;
    public String getMaleString(){
       return "Male";
    }

@@ -335,7 +335,6 @@ The onPFailure tells the user there was an incorrect username and password combo
  */
    private class AccountCreateController extends AsyncTask<Void, Void, Void> {
 
-      private final String contentType = "application/json";
       private final int ACCOUNT_ALREADY_EXISTS_ERROR_CODE = 409;
 
 
@@ -367,7 +366,7 @@ The onPFailure tells the user there was an incorrect username and password combo
 
          // Currently hardcoded the URL (using postByUrl). We will eventually be to the point where we just post
          // username/Activity and the util class will have the long base url name.
-         HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_CREATE_ACCOUNT, jsonString, contentType,
+         HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_CREATE_ACCOUNT, jsonString, HttpClientUtil.CONTENT_TYPE,
                  new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
                     // Before the actual post happens.
@@ -444,7 +443,7 @@ The onPFailure tells the user there was an incorrect username and password combo
          // add the username and password to the object.
          accountCreateJSONObject.put("username", accountCreateModel.getUsername());
          accountCreateJSONObject.put("password", accountCreateModel.getPassword());
-         accountCreateJSONObject.put("dob", accountCreateModel.getBirthYear());
+         accountCreateJSONObject.put("birthyear", accountCreateModel.getBirthYear());
          accountCreateJSONObject.put("weight", accountCreateModel.getWeight());
          accountCreateJSONObject.put("sex",accountCreateModel.getGender());
          accountCreateJSONObject.put("height",accountCreateModel.getHeight());

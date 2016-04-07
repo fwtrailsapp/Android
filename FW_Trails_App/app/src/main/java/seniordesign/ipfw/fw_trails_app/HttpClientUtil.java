@@ -22,8 +22,10 @@ public class HttpClientUtil {
    public static final String BASE_URL_STATISTICS = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/Statistics";
    public static final String BASE_URL_ACTIVITY = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/trails/api/1/Activity";
    public static final String BASE_URL_ACCOUNT_DETAILS = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/trails/api/1/Account";
+   public static final String BASE_URL_ACCOUNT_DETAILS_UPDATE = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/trails/api/1/Account/edit";
    public static final String BASE_URL_LOGIN = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/trails/api/1/Login";
    public static final String BASE_URL_CREATE_ACCOUNT = "http://68.39.46.187:50000/GreenwayCap/DataRelay.svc/trails/api/1/Account/Create";
+   public static final String CONTENT_TYPE = "application/json";
 
    private String authKeycode;
    private String username;
