@@ -47,6 +47,24 @@ import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 
+/**
+ * This is the Login Fragment of the FW Trails App
+ *
+ * It contains two paths. Login to login into the application to perform activites or
+ * to create an account to use the application.
+ *
+ * The authentication process for this application is custom.  As of April 2016, it
+ * is outlined by the process below:
+ * http://i.imgur.com/AqQj9if.png is a diagram of the process.
+ *
+ * User enters Username or Password and clicks login.
+ * Applicatin sends off a POST with the username and password in plain text.
+ * The server validates the arguments against existing username and password combinations.
+ *
+ * If the username and pw combo is correct, the login fragment should kick off the record activity
+ * fragment while setting the HttpUtils apiKey field to the auth token sent back from the server.
+ * This auth token is then used in the rest of the calls to the server.
+ */
 public class LoginFragment extends Fragment {
 
    private final String fragmentTitle = "Login";
