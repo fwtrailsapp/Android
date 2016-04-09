@@ -121,17 +121,13 @@ public class HttpClientUtil {
    }
 
    /*
-The LoginController class.
-
-This class extends the AsyncTask to spawn off a new thread that posts login attempts to
- the web server. The HttpClientUtil class is the class that actually sends off the request using
-a Synchronous Http handler.
+The HttpClientUtilController class.
 
 doInBackground:
 We send the login credentials to the server to check if they are valid. If they are valid, the
-server should return onSuccess and from there we can instantiate the record activity view.
+server should return onSuccess and from there we can  reassign the updated auth token.
 
-The onPFailure tells the user there was an incorrect username and password combo.
+The onPFailure currently does nothing
  */
    private class HttpClientUtilController extends AsyncTask<Void, Void, Void> {
 
@@ -153,11 +149,6 @@ The onPFailure tells the user there was an incorrect username and password combo
       @Override
       protected Void doInBackground(Void... params) {
 
-         // Build the parameters for the activity via JSON
-         // If we create a RecordActivityModel, we can use Gson to generate a JSON Object directly
-         // from the RecordActivityModel object that contains the data for the Activity. We can then
-         // manually add the username property to the Gson object and be done.
-         // Currently we do it the old fashioned way since we dont have a model for record actiivty
          JSONObject loginJSON = null;
          StringEntity jsonString = null;
          try{
@@ -186,11 +177,9 @@ The onPFailure tells the user there was an incorrect username and password combo
                     public void onSuccess(int statusCode, Header[] headers, byte[] response) {
                        try {
 
-                          // parse the response to save the auth code for future api calls and
-                          // save the password and username in case we need to login again.
+                          // parse the response to save the auth code for future api calls.
                           JSONObject jsonResponse = new JSONObject(new String(response));
                           httpClientUtil.setAuthKeycode(jsonResponse.getString(token));
-                          httpClientUtil.setAccountInfo(username, password);
                           loginSuccessful = true;
 
                        } catch (JSONException ex) {
@@ -203,10 +192,8 @@ The onPFailure tells the user there was an incorrect username and password combo
 
                     // called when response HTTP status is "4XX" (eg. 401, 403, 404)
                     // If it fails to post, you can issue some sort of alert dialog saying the error
-                    // and writing the activity to file.
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-
 
                     }
                  });
@@ -221,13 +208,11 @@ The onPFailure tells the user there was an incorrect username and password combo
          super.onPostExecute(params);
 
 
-
-
       }
 
       /* Example Login POST in JSON
         {
-             "username":"szook",
+             "username":"jsomers",
              "password":"somePW"
         }
       */
