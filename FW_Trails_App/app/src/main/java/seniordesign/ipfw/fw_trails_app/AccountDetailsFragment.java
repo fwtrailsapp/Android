@@ -1,3 +1,21 @@
+/**
+ Copyright (C) 2016 Jared Perry, Jaron Somers, Warren Barnes, Scott Weidenkopf, and Grant Grimm
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies\n
+ or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 package seniordesign.ipfw.fw_trails_app;
 
 import android.content.DialogInterface;
@@ -44,7 +62,6 @@ public class AccountDetailsFragment extends Fragment {
    // fields to contain possibly new values.
    private String username;
    private String password;
-   private String confirmPassword;
    private int weight;
    private int height;
    private int birthYear;
@@ -64,9 +81,6 @@ public class AccountDetailsFragment extends Fragment {
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
-      FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
-
-      // Replace LinearLayout by the type of the root element of the layout you're trying to load
       view = inflater.inflate(R.layout.fragment_account_details, container, false);
 
       // instantiate the controls for this view.
@@ -132,7 +146,7 @@ public class AccountDetailsFragment extends Fragment {
       AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
       alertDialog.setTitle(fragmentTitle+ " Error");
 
-      // Modal settings are set
+      // Modal settings are set, user must click ok before the dialog can be dismissed
       alertDialog.setCancelable(false);
       alertDialog.setMessage(errorText);
       alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
@@ -149,9 +163,9 @@ public class AccountDetailsFragment extends Fragment {
    private void displaySuccess(String successText) {
 
       AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
-      alertDialog.setTitle(fragmentTitle+ " Success");
+      alertDialog.setTitle(fragmentTitle + " Success");
 
-      // Modal settings are set
+      // Modal settings are set, user must click ok before the dialog can be dismissed
       alertDialog.setCancelable(false);
       alertDialog.setMessage(successText);
       alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
@@ -194,7 +208,7 @@ public class AccountDetailsFragment extends Fragment {
          // Check to see if the password changed
          password = passwordEditText.getText().toString();
 
-         // if the password doesnt match the original, check if it is valid. If it is valid and
+         // if the password doesn't match the original, check if it is valid. If it is valid and
          // the new password matches the confirm box, then change the model password.
          if(isValidString(password)){
                // password changed, see if the confirm also matches the new password. If they match,
@@ -369,8 +383,7 @@ public class AccountDetailsFragment extends Fragment {
 
 
 
-         // Currently hardcoded the URL (using postByUrl). We will eventually be to the point where we just post
-         // username/Activity and the util class will have the long base url name.
+         // Send off a post to update the account with the new info.
          HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_ACCOUNT_DETAILS_UPDATE, jsonString, HttpClientUtil.CONTENT_TYPE,
                  new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
@@ -522,7 +535,7 @@ public class AccountDetailsFragment extends Fragment {
                getActivity().runOnUiThread(new Runnable() {
 
                   public void run() {
-                     // Create a dialog to determine if the user wants to post their activity
+                     // Create an error dialog telling the user an error occured.
                      displayError(getString(R.string.accountDetailsAccountDetailsGetError));
                   }
                });
