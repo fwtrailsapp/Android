@@ -118,6 +118,7 @@
     <string name="activeDefaultText">&lt; 1 year</string>
     <string name="defaultCaloriesExpendedText">Total Calories Burned</string>
     <string name="defaultCaloriesExpendedAmount">0 kcal</string>
+    <string name="accountStatisticsLoadError">There was an error loading your stats.</string>
     <!--End Strings related to Account Statistics Activity-->
 
     <string name="title_activity_maps">Map</string>

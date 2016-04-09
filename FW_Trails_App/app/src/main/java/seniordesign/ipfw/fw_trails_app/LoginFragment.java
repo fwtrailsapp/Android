@@ -282,8 +282,7 @@ public class LoginFragment extends Fragment {
              "password":"somePW"
         }
       */
-      // Possibly change this to a function that takes in a RecordActivityModel or data and
-      // returns a json object representing it if we don't want to use Gson.
+      // Creates a Login JSON Object the server can use to verify a user's identity.
       private JSONObject createLoginJSONObject() throws JSONException {
          JSONObject loginJSONObject = new JSONObject();
 

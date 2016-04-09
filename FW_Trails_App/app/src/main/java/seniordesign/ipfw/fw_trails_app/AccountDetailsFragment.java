@@ -196,8 +196,7 @@ public class AccountDetailsFragment extends Fragment {
 
          // if the password doesnt match the original, check if it is valid. If it is valid and
          // the new password matches the confirm box, then change the model password.
-         if(!password.equals(accountDetailsModel.getPassword()) && isValidString(password)){
-            if(isValidString(password)){
+         if(isValidString(password)){
                // password changed, see if the confirm also matches the new password. If they match,
                // change it in the model
                if(password.equals(passwordConfirmEditText.getText().toString())){
@@ -207,12 +206,10 @@ public class AccountDetailsFragment extends Fragment {
                   result = false;
                   displayError(getString(R.string.accountDetailsPWMismatchError));
                }
-            }
-            else {
-               result = false;
-               displayError(getString(R.string.error_invalid_password));
-            }
-
+         }
+         else {
+            result = false;
+            displayError(getString(R.string.error_invalid_password));
          }
 
          // Check to see if the height changed.
