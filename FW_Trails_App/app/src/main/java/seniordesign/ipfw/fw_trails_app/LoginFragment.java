@@ -1,3 +1,21 @@
+/**
+ * This is the Login Fragment of the FW Trails App
+ *
+ * It contains two paths. Login to login into the application to perform activites or
+ * to create an account to use the application.
+ *
+ * The authentication process for this application is custom.  As of April 2016, it
+ * is outlined by the process below:
+ * http://i.imgur.com/AqQj9if.png is a diagram of the process.
+ *
+ * User enters Username or Password and clicks login.
+ * Applicatin sends off a POST with the username and password in plain text.
+ * The server validates the arguments against existing username and password combinations.
+ *
+ * If the username and pw combo is correct, the login fragment should kick off the record activity
+ * fragment while setting the HttpUtils apiKey field to the auth token sent back from the server.
+ * This auth token is then used in the rest of the calls to the server.
+ */
 package seniordesign.ipfw.fw_trails_app;
 
 
@@ -27,6 +45,7 @@ import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
+
 
 /**
  * This is the Login Fragment of the FW Trails App
@@ -60,8 +79,6 @@ public class LoginFragment extends Fragment {
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
-      FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
-      // Replace LinearLayout by the type of the root element of the layout you're trying to load
       theView    = inflater.inflate(R.layout.fragment_login, container, false);
 
       // Assign the Username and Password controls
@@ -97,7 +114,6 @@ public class LoginFragment extends Fragment {
 
    // Sets the Login Listener
    // Currently bypasses any authentication.
-   // TODO: get authentication working
    private void setLoginListener(View view)
    {
       loginBtn = (Button) view.findViewById(R.id.button_Login);
@@ -144,6 +160,8 @@ public class LoginFragment extends Fragment {
    }
 
 
+   // This is a function that displays an error dialog to tell the user that something bad
+   // happened.
    private void displayLoginError(String errorText) {
       // Create a dialog to determine if the user wants to post their activity
       AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
@@ -184,26 +202,21 @@ public class LoginFragment extends Fragment {
 
       @Override
       protected void onPreExecute() {
-
-
       }
-
-
 
       // Send off the activity data to the server.
       @Override
       protected Void doInBackground(Void... params) {
 
-         // Build the parameters for the activity via JSON
-         // If we create a RecordActivityModel, we can use Gson to generate a JSON Object directly
-         // from the RecordActivityModel object that contains the data for the Activity. We can then
-         // manually add the username property to the Gson object and be done.
-         // Currently we do it the old fashioned way since we dont have a model for record actiivty
+         // Build the parameters for the Login JSON
+         // This json will contain the username and password that is verified against an existing
+         // account. If the account exists, we should receive an API token that can be used to
+         // make further calls to the API
          JSONObject loginJSON = null;
          StringEntity jsonString = null;
          try{
 
-            // Convert Login info to JSON then to parameters for the post activity.
+            // Convert Login info to JSON then to parameters for the login request.
             loginJSON = createLoginJSONObject();
             jsonString = new StringEntity(loginJSON.toString());
          }
@@ -243,8 +256,8 @@ public class LoginFragment extends Fragment {
                     }
 
                     // called when response HTTP status is "4XX" (eg. 401, 403, 404)
-                    // If it fails to post, you can issue some sort of alert dialog saying the error
-                    // and writing the activity to file.
+                    // If it fails to post, you can issue some sort of alert dialog saying the login
+                    // error
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
 
@@ -252,7 +265,7 @@ public class LoginFragment extends Fragment {
                        getActivity().runOnUiThread(new Runnable() {
 
                           public void run() {
-                             // Create a dialog to determine if the user wants to post their activity
+                             // Create an error dialog saying the user had incorrect input
                              displayLoginError(getString(R.string.login_error_incorrect_credentials));
                           }
                        });
@@ -282,8 +295,7 @@ public class LoginFragment extends Fragment {
              "password":"somePW"
         }
       */
-      // Possibly change this to a function that takes in a RecordActivityModel or data and
-      // returns a json object representing it if we don't want to use Gson.
+      // Creates a Login JSON Object the server can use to verify a user's identity.
       private JSONObject createLoginJSONObject() throws JSONException {
          JSONObject loginJSONObject = new JSONObject();
 

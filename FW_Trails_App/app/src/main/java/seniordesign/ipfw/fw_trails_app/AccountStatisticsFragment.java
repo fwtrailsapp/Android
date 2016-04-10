@@ -1,16 +1,34 @@
+/**
+ Copyright (C) 2016 Jared Perry, Jaron Somers, Warren Barnes, Scott Weidenkopf, and Grant Grimm
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies\n
+ or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package seniordesign.ipfw.fw_trails_app;
 
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,12 +37,10 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -50,8 +66,7 @@ public class AccountStatisticsFragment extends Fragment {
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
-      FragmentActivity    faActivity  = (FragmentActivity)    super.getActivity();
-      // Replace LinearLayout by the type of the root element of the layout you're trying to load
+
       loadedRelativeLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_account_statistics, container, false);
 
       // Find the textviews likely to change during the lifetime of the fragment once so we don't
@@ -79,7 +94,7 @@ public class AccountStatisticsFragment extends Fragment {
       activitySpecificCalories = (TextView) relativeLayout.findViewById(R.id.activitySpecificCaloriesExpendedAmountTextView);
    }
 
-   // Formats the numbers to either zero decimal places if it has none, or up to 1 dcecimal place if
+   // Formats the numbers to either zero decimal places if it has none, or up to 1 decimal place if
    // it has decimals
    private static String format(Number n) {
       NumberFormat format = DecimalFormat.getInstance();
@@ -98,7 +113,7 @@ public class AccountStatisticsFragment extends Fragment {
          public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
             // Don't try to operate on a null model.
-            if(statModel != null) {
+            if (statModel != null) {
 
                // Position in the spinner: Biking (0), Running (1), Walking (2)
                switch (position) {
@@ -122,12 +137,9 @@ public class AccountStatisticsFragment extends Fragment {
                      setActivitySpecificStats("00:00:00", 0.0, 0);
                      break;
                }
-            }
-            else
-            {
+            } else {
                setActivitySpecificStats("00:00:00", 0.0, 0);
             }
-
 
 
          }
@@ -141,6 +153,25 @@ public class AccountStatisticsFragment extends Fragment {
 
    public String getTitle(){
       return fragmentTitle;
+   }
+
+   // Displays a dialog describing the error passed in.
+   private void displayError(String errorText) {
+
+      AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+      alertDialog.setTitle(fragmentTitle+ " Error");
+
+      // Modal settings are set, user must click ok before the dialog can be dismissed
+      alertDialog.setCancelable(false);
+      alertDialog.setMessage(errorText);
+      alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+              new DialogInterface.OnClickListener() {
+                 public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                 }
+              });
+
+      alertDialog.show();
    }
 
    // Sets the activity specific fields to the values passed in.
@@ -179,10 +210,11 @@ public class AccountStatisticsFragment extends Fragment {
       private final int BIKE = 1;
       private final int RUN = 2;
       private final int WALK = 3;
+      private final int INVALID_AUTH_TOKEN_STATUS_CODE = 419;
       private final String TOTAL_DURATION = "total_duration";
       private final String TOTAL_CALORIES = "total_calories";
       private final String TOTAL_DISTANCE = "total_distance";
-      private final String getTotalStatsForUserResultKey = "GetTotalStatsForUserResult";
+
 
       // Attempts to call the server's Statistics/user to get all the generic stats of the account
       @Override
@@ -201,11 +233,8 @@ public class AccountStatisticsFragment extends Fragment {
 
                try {
 
-                  // Convert the single response to a JSON Object
-                  JSONObject jsonResponse = new JSONObject(new String(response));
-
                   // Convert the single JSON Object to an array
-                  JSONArray allStatistics = jsonResponse.getJSONArray(getTotalStatsForUserResultKey);
+                  JSONArray allStatistics = new JSONArray(new String(response));
 
                   // Create the statistics model to hold the data from the server.
                   loadStatistics(allStatistics);
@@ -218,6 +247,19 @@ public class AccountStatisticsFragment extends Fragment {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+
+               // If we get 419 from the server, we need to reobtain the auth token.
+               if (checkForInvalidAuthToken(statusCode)) {
+                  HttpClientUtil.getInstance().reobtainAuthToken();
+               } else {
+                  getActivity().runOnUiThread(new Runnable() {
+
+                     public void run() {
+                        // Display an error loading account stats.
+                        displayError(getString(R.string.accountStatisticsLoadError));
+                     }
+                  });
+               }
             }
 
          });
@@ -233,13 +275,23 @@ public class AccountStatisticsFragment extends Fragment {
          // Initiate the listener for the spinner object
          loadSpinnerListener();
 
-         // Set overall and activity Specific text
-         setOverallAccountStatistics(statModel.getAccountActive(), statModel.getOverallCalories(),
-                 statModel.getOverallDistance(), statModel.getAchievementsEarned(),
-                 statModel.getOverallDuration());
-         setActivitySpecificStats(statModel.getBikeDuration(), statModel.getBikeDistance(),
-                 statModel.getBikeCalories());
+         // only set the controls if the data is available.
+         if(statModel != null){
+            // Set overall and activity Specific text
+            setOverallAccountStatistics(statModel.getAccountActive(), statModel.getOverallCalories(),
+                    statModel.getOverallDistance(), statModel.getAchievementsEarned(),
+                    statModel.getOverallDuration());
+            setActivitySpecificStats(statModel.getBikeDuration(), statModel.getBikeDistance(),
+                    statModel.getBikeCalories());
+         }
 
+
+      }
+
+      // Checks for a status code 419 which indicates that the auth token is no longer valid and
+      // needs to be reobtained.
+      private boolean checkForInvalidAuthToken(int statusCode){
+         return statusCode == INVALID_AUTH_TOKEN_STATUS_CODE;
       }
 
       // Loads the statistics into the model from the json object passed in

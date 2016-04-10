@@ -1,3 +1,20 @@
+/**
+ Copyright (C) 2016 Jared Perry, Jaron Somers, Warren Barnes, Scott Weidenkopf, and Grant Grimm
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies\n
+ or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package seniordesign.ipfw.fw_trails_app;
 
 import org.junit.BeforeClass;
@@ -7,12 +24,12 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by Jaron on 2/27/2016.
- */
+
 public class AccountDetailsModelUnitTests {
 
    private static AccountDetailsModel acctDetails;
+   private static String password;
+   private static String diffPassword;
    private static String username;
    private static String diffUsername;
    private static int height;
@@ -31,6 +48,10 @@ public class AccountDetailsModelUnitTests {
       username = "User Test";
       diffUsername = "Diff User Test";
 
+      // Setup the passwords
+      password = "test";
+      diffPassword = "tset";
+
       // Setup the height
       height = 72;
       diffHeight = 71;
@@ -47,7 +68,7 @@ public class AccountDetailsModelUnitTests {
       gender = GenderOptions.Female;
       diffGender = GenderOptions.Male;
 
-      acctDetails = new AccountDetailsModel(username, height, weight, birthYear, gender);
+      acctDetails = new AccountDetailsModel(username,password, height, weight, birthYear, gender);
    }
 
    //Tests the class exists
@@ -106,6 +127,17 @@ public class AccountDetailsModelUnitTests {
       printInfo("verifyGenderChanged", diffGender + " should equal "
               + acctDetails.getGender());
       assertEquals(diffGender, acctDetails.getGender());
+      assertTrue(acctDetails.modelChanged());
+   }
+
+   @Test
+   public void verifyPasswordChanged(){
+      acctDetails.changePassword(diffPassword);
+
+      printInfo("verifyPasswordChanged", diffPassword + " should equal "
+              + acctDetails.getPassword());
+
+      assertEquals(diffPassword, acctDetails.getPassword());
       assertTrue(acctDetails.modelChanged());
    }
 

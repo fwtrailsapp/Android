@@ -21,28 +21,28 @@
             android:id="@+id/durationText"
             android:layout_column="1"
             android:padding="10sp"
-            android:gravity="left"
+            android:gravity="center_horizontal"
             >
         </TextView>
         <TextView
             android:id="@+id/distanceText"
             android:layout_column="2"
             android:padding="10sp"
-            android:gravity="left"
+            android:gravity="center_horizontal"
             >
         </TextView>
         <TextView
             android:id="@+id/caloriesText"
             android:layout_column="3"
             android:padding="10sp"
-            android:gravity="left"
+            android:gravity="right"
             >
         </TextView>
         <TextView
             android:id="@+id/dateText"
             android:layout_column="4"
             android:padding="10sp"
-            android:gravity="left"
+            android:gravity="right"
             >
         </TextView>
     </TableRow>

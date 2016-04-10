@@ -82,13 +82,13 @@
     <string name="usernameText">Username</string>
     <string name="personalInfoText">Personal Info (optional)</string>
     <string name="create_account_required_params_needed">Please enter a username and password</string>
-    <string name="create_account_max_username_length_exceeded">Cannot create account. Username length must be less than  or equal to 16 characters</string>
-    <string name="create_account_max_password_length_exceeded">Cannot create account. Password length must be less than or equal to 16 characters</string>
+    <string name="create_account_max_username_length_exceeded">Username length must be less than  or equal to 16 characters</string>
+    <string name="create_account_max_password_length_exceeded">Password length must be less than or equal to 16 characters</string>
     <string name="create_account_password_mismatch">Cannot create account. Passwords do not match.</string>
-    <string name="create_account_invalid_height">Cannot create account. Please enter a valid height.</string>
-    <string name="create_account_invalid_weight">Cannot create account. Please enter a valid weight.</string>
-    <string name="create_account_invalid_birth_year">Cannot create account. Please enter a valid birth year.</string>
-    <string name="create_account_error">Cannot create account. Server Error</string>
+    <string name="create_account_invalid_height">Please enter a valid height.</string>
+    <string name="create_account_invalid_weight">Please enter a valid weight.</string>
+    <string name="create_account_invalid_birth_year">Please enter a valid birth year.</string>
+    <string name="create_account_error">Server Error</string>
     <string name="create_account_already_exists_error">Account already exists with this username</string>
     <!-- End Strings related to AccountCreate -->
 
@@ -118,6 +118,7 @@
     <string name="activeDefaultText">&lt; 1 year</string>
     <string name="defaultCaloriesExpendedText">Total Calories Burned</string>
     <string name="defaultCaloriesExpendedAmount">0 kcal</string>
+    <string name="accountStatisticsLoadError">There was an error loading your stats.</string>
     <!--End Strings related to Account Statistics Activity-->
 
     <string name="title_activity_maps">Map</string>
@@ -148,6 +149,7 @@
     <string name="accountDetailsUsernameText">Username</string>
     <string name="accountDetailsPasswordText">Password</string>
     <string name="accountDetailsPasswordChangeText">Reset Password</string>
+    <string name="accountDetailsPasswordConfirmText">Retype New Password</string>
     <string name="accountDetailsPersonalInfoText">Personal Info (optional)</string>
     <string name="accountDetailsHeightText">Height</string>
     <string name="accountDetailsWeightText">Weight</string>
@@ -162,6 +164,10 @@
     <string name="accountDetailsTestHeight">72 in</string>
     <string name="accountDetailsTestWeight">188 lbs</string>
     <string name="accountDetailsTestBirthYear">1994</string>
+    <string name="accountDetailsPWMismatchError">New passwords do not match! Please retype the passwords so they match.</string>
+    <string name="accountDetailsUpdateGeneralError">There was an error updating your account. Your account was not updated</string>
+    <string name="accountDetailsAccountDetailsGetError">There was an error retrieving your account information.</string>
+    <string name="accountDetailsUpdateSuccess">Account has been updated</string>
     <!-- End Strings related to Account Details Fragment-->
 
     <!-- Strings related to the Trail Map Fragment-->

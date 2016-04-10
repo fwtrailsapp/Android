@@ -1,3 +1,20 @@
+/**
+ Copyright (C) 2016 Jared Perry, Jaron Somers, Warren Barnes, Scott Weidenkopf, and Grant Grimm
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so,
+ subject to the following conditions:
+
+ The above copyright notice and this permission notice shall be included in all copies\n
+ or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT
+ LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+ WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+ THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
 package seniordesign.ipfw.fw_trails_app;
 
 import android.content.Context;
@@ -19,6 +36,7 @@ import android.widget.Spinner;
 public class TrailMapFragment extends Fragment {
 
    private final String fragmentTitle = "Trail Map";
+
    // These constants map to the string array trailMapViewArray
    private final int FULL = 0;
    private final int FULL_MAP_AREAS = 1;
@@ -30,8 +48,6 @@ public class TrailMapFragment extends Fragment {
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
-      FragmentActivity faActivity  = (FragmentActivity)    super.getActivity();
-      // Replace LinearLayout by the type of the root element of the layout you're trying to load
       final RelativeLayout loadedRelativeLayout    = (RelativeLayout)    inflater.inflate(R.layout.fragment_trail_map, container, false);
 
       trailMapSpinner = (Spinner) loadedRelativeLayout.findViewById(R.id.trailMapSpinner);
@@ -64,9 +80,9 @@ public class TrailMapFragment extends Fragment {
    private void setMapImage(int image, View view){
 
       ImageView mapImage = (ImageView) view.findViewById(R.id.trailMapImageView);
-      //Drawable drawable = ResourcesCompat.getDrawable(getResources(), page.getImageId(), null);
 
 
+      // Display the image the user selected from the spinner
       switch(image){
          case FULL:
             mapImage.setImageResource(R.drawable.full);
