@@ -63,6 +63,18 @@
         android:onClick="finishRecording"
         android:visibility="gone"/>
 
+    <Button
+        style="@style/AppCompat.Button.FW_Trails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Clear"
+        android:id="@+id/clearButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="clearRecording"
+        android:visibility="gone"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -96,7 +108,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Speed:  0.00 mph"
+        android:text="Speed: 0.00 mph"
         android:id="@+id/speed"
         android:layout_below="@+id/map"
         android:layout_alignParentRight="true"

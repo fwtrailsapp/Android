@@ -32,7 +32,7 @@
     <!-- End strings related to the AboutFragment-->
 
     <!-- Strings related to RecordActivityFragment-->
-    <string name="completeActivityPrompt">Are you sure you wish to complete this activity?</string>
+    <string name="completeActivityPrompt">Would you like to save this activity?</string>
     <string name="startStopRecording">Start</string>
     <string name="finishRecording">Finish</string>
     <!-- Strings related to RecordActivityFragment-->

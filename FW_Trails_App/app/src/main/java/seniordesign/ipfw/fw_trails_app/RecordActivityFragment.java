@@ -45,7 +45,6 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,7 +56,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.TimeZone;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.entity.StringEntity;
@@ -71,19 +69,18 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     //Map utilities
     private GoogleMap mMap;
-    private Polyline line;
-    ArrayList<Polyline> lines = new ArrayList<>();
     private Location mLastLocation;
     private GoogleApiClient mGoogleApiClient;
     private LocationListener locationListener;
     protected LocationRequest mLocationRequest;
     Marker startMarker;
     Marker finishMarker;
+    ArrayList<Polyline> lines = new ArrayList<>();
+    Polyline line;
 
     //Recoding utilities
     private boolean recording = false;
     private boolean firstCoordinate = false;
-    private ArrayList<LatLng> coordinates = new ArrayList<>();
     private LatLng lastLocation;
 
     //Calculation utilities
@@ -116,6 +113,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     Button pauseButton;
     Button resumeButton;
     Button finishButton;
+    Button clearButton;
 
     //Timer
     long starttime = 0L;
@@ -146,6 +144,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
         resumeButton = (Button) view.findViewById(R.id.resumeButton);
         finishButton = (Button) view.findViewById(R.id.finishButton);
+        clearButton = (Button) view.findViewById(R.id.clearButton);
 
         buildGoogleApiClient();
 
@@ -156,6 +155,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         pauseButton.setOnClickListener(pauseButtonListener);
         resumeButton.setOnClickListener(resumeButtonListener);
         finishButton.setOnClickListener(finishButtonListener);
+        clearButton.setOnClickListener(clearButtonListener);
         Log.i("Development", "onCreateView");
         return view; // We must return the loaded Layout
     }
@@ -237,30 +237,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         addKMLLayerToMap();
         addPolylineToMap();
-
-//        locationListener = new LocationListener() {
-//            public void onLocationChanged(Location location) {
-//                //Gets called when a new location is found by the network location provider.
-//                updateLocation(location);
-//            }
-//
-//            public void onStatusChanged(String provider, int status, Bundle extras) {
-//            }
-//
-//            public void onProviderEnabled(String provider) {
-//            }
-//
-//            public void onProviderDisabled(String provider) {
-//            }
-//        };
-//        Log.i("Development", "onMapReady");
     }
 
     private void addPolylineToMap() {
         line = mMap.addPolyline(new PolylineOptions()
                 .width(10)
                 .color(Color.BLUE));
-        lines.add(line);
         Log.i("Development", "addPolylineToMap");
     }
 
@@ -275,10 +257,28 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Development", "addKMLLayerToMap");
     }
 
+    public Runnable updateTimer = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
+
+            updatedtime = timeSwapBuff + timeInMilliseconds;
+
+            secs = (int) (updatedtime / 1000);
+            hours = secs / secondsPerHour;
+            mins = secs / 60;
+            secs = secs % 60;
+            milliseconds = (int) (updatedtime % 1000);
+            duration.setText("Duration: " + hours + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
+            handler.postDelayed(this, 0);
+        }
+
+    };
+
     private void updateLocation(Location location) {
         LatLng updatedLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        coordinates.add(updatedLocation);
-        line.setPoints(coordinates);
+        recordActivityModel.addLatLng(updatedLocation);
         if (firstCoordinate) {
             captureFirstCoordinate(updatedLocation);
             firstCoordinate = false;
@@ -290,6 +290,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     private void captureLaterCoordinate(LatLng updatedLocation) {
+        line.setPoints(recordActivityModel.getCurrentLatLngs());
         mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
         Double caloriesBurned = BMR * recordActivityModel.getExerciseType().getMETValue() * recordActivityModel.getDurationInSeconds() / secondsPerHour / 25;
         caloriesInt = caloriesBurned.intValue();
@@ -301,12 +302,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi");
         calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
-//        duration.setText("Duration: " + recordActivityModel.getDuration().toString());
+        // Duration is updated by runnable
         currentSpeed = tempDistance / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
     }
 
     private void captureFirstCoordinate(LatLng updatedLocation) {
+//        pcords.add(updatedLocation);
         startMarker = mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(updatedLocation, 18.0f), 500, null);
@@ -315,8 +317,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     }
 
     public void selectActivityType() {
-        CharSequence exerciseTypes[] = new CharSequence[]{"Bike", "Run", "Walk"};
-
+        CharSequence[] exerciseTypes = new ExerciseTypes().getExerciseTypes();
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
         builder.setTitle("Select Exercise Type");
         builder.setItems(exerciseTypes, new DialogInterface.OnClickListener() {
@@ -345,25 +346,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         builder.show();
     }
 
-    public Runnable updateTimer = new Runnable() {
-
-        public void run() {
-
-            timeInMilliseconds = SystemClock.uptimeMillis() - starttime;
-
-            updatedtime = timeSwapBuff + timeInMilliseconds;
-
-            secs = (int) (updatedtime / 1000);
-            hours = secs / secondsPerHour;
-            mins = secs / 60;
-            secs = secs % 60;
-            milliseconds = (int) (updatedtime % 1000);
-            duration.setText("Duration: " + hours + ":" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
-            handler.postDelayed(this, 0);
-        }
-
-    };
-
     private void askForGPS() {
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle("GPS");
@@ -381,6 +363,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         @Override
         public void onClick(View v) {
+            clearActivity();
             LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
             boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if(!statusOfGPS) {
@@ -418,6 +401,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     };
 
     public void pauseRecording() {
+        lines.add(line);
+        recordActivityModel.flushCurrentPath();
         recording = false;
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
         resumeButton = (Button) view.findViewById(R.id.resumeButton);
@@ -426,10 +411,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setVisibility(View.VISIBLE);
         finishButton.setVisibility(View.VISIBLE);
         Log.i("Development", "pauseRecording");
-
-        lines.add(line);
-        finishMarker = mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
     }
 
     private View.OnClickListener resumeButtonListener = new View.OnClickListener() {
@@ -450,12 +431,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     };
 
     public void resumeRecording() {
-        firstCoordinate = true;
-        line = mMap.addPolyline(new PolylineOptions()
-                .width(10)
-                .color(Color.BLUE));
-        coordinates.clear();
-        line.setPoints(coordinates);
+        addPolylineToMap();
 
         recording = true;
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
@@ -477,12 +453,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
     public void finishRecording() {
         recording = false;
-        finishMarker = mMap.addMarker(new MarkerOptions().position(coordinates.get(coordinates.size() - 1)).title("Stop Location")
+        finishMarker = mMap.addMarker(new MarkerOptions().position(lastLocation).title("Stop Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        resumeButton = (Button) view.findViewById(R.id.resumeButton);
-        finishButton = (Button) view.findViewById(R.id.finishButton);
-        resumeButton.setVisibility(View.GONE);
-        finishButton.setVisibility(View.GONE);
 
         // if it fails, write to file
         // You could write the file writing logic in the onFailure method in the controller.
@@ -496,11 +468,27 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         }
         Log.i("Development", "finishRecording");
 
-
         sendDataToServerDialog();
     }
 
-    public void displayStatistics(){
+    private View.OnClickListener clearButtonListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            clearRecording();
+        }
+    };
+
+    public void clearRecording() {
+        clearActivity();
+        startButton = (Button) view.findViewById(R.id.startButton);
+        clearButton = (Button) view.findViewById(R.id.clearButton);
+        startButton.setVisibility(View.VISIBLE);
+        clearButton.setVisibility(View.GONE);
+        Log.i("Development", "clearRecording");
+    }
+
+    public void displaySummary(){
         String message = "";
         message += "Exercise Type: " + recordActivityModel.getExerciseType().getExerciseType();
         message += "\nDuration: " + recordActivityModel.getDuration().toString();
@@ -515,6 +503,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
+                        resumeButton = (Button) view.findViewById(R.id.resumeButton);
+                        finishButton = (Button) view.findViewById(R.id.finishButton);
+                        clearButton = (Button) view.findViewById(R.id.clearButton);
+                        resumeButton.setVisibility(View.GONE);
+                        finishButton.setVisibility(View.GONE);
+                        clearButton.setVisibility(View.VISIBLE);
                     }
                 });
         alertDialog.show();
@@ -523,11 +517,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private void clearActivity() {
         startButton = (Button) view.findViewById(R.id.startButton);
         startButton.setVisibility(View.VISIBLE);
-        startMarker.remove();
-        finishMarker.remove();
 
-        coordinates.clear();
-        line.setPoints(coordinates);
+        if(startMarker != null){
+            startMarker.remove();
+        }
+        if(finishMarker != null) {
+            finishMarker.remove();
+        }
+        for(int i = 0; i < lines.size(); i++){
+            lines.get(i).remove();
+        }
+        addPolylineToMap();
 
         starttime = 0L;
         timeInMilliseconds = 0L;
@@ -537,11 +537,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         mins = 0;
         milliseconds = 0;
         handler.removeCallbacks(updateTimer);
-        duration.setText("00:00:00");
+        duration.setText("0:00:00");
 
         distance.setText("Distance: 0.00 mi");
         calories.setText("Calories: 0");
-        duration.setText("Duration: 00:00:00");
+        duration.setText("Duration: 0:00:00");
         speed.setText("Speed: 0.00 mph");
     }
 
@@ -561,8 +561,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         output += "\n" + recordActivityModel.getTotalDistance();
         output += "\n" + caloriesInt;
         output += "\n" + duration;
-        for (int i = 0; i < coordinates.size(); i++) {
-            output += "\n" + coordinates.get(i).toString();
+        ArrayList allCoordinates = recordActivityModel.getAllLatLngs();
+        for (int i = 0; i < allCoordinates.size(); i++) {
+            output += "\n" + allCoordinates.get(i).toString();
         }
 
         try {
@@ -648,7 +649,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // If modal doesn't work, garbage collect the activity.
         alertDialog.setCancelable(false); // Might make it modal, idk check to be sure.
         alertDialog.setMessage(getString(R.string.completeActivityPrompt));
-        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Ok",
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Save",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // Attempt to send to the server
@@ -658,13 +659,12 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                         dialog.dismiss();
                     }
                 });
-        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+        alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Discard",
                 new DialogInterface.OnClickListener() {
 
                     // Cancel the doInBackground task
                     public void onClick(DialogInterface dialog, int which) {
-                        displayStatistics();
-                        clearActivity();
+                        displaySummary();
                     }
                 });
 
@@ -691,7 +691,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // See http://stackoverflow.com/questions/6039158/android-cancel-async-task
         @Override
         protected void onPreExecute() {
-            displayStatistics();
+            displaySummary();
 
         }
 
@@ -802,14 +802,15 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private String getCoordinates() {
         String output = "";
 
-        for(int i = 0; i < coordinates.size(); i++){
+        ArrayList<LatLng> allCoordinates = recordActivityModel.getAllLatLngs();
+        for(int i = 0; i < allCoordinates.size(); i++){
 
-            output += coordinates.get(i).latitude;
+            output += allCoordinates.get(i).latitude;
             output += " ";
-            output += coordinates.get(i).longitude;
+            output += allCoordinates.get(i).longitude;
 
             // Don't append comma for the last coordinate points
-            if(i+1 < coordinates.size()){
+            if(i+1 < allCoordinates.size()){
                 output += ", ";
             }
         }
