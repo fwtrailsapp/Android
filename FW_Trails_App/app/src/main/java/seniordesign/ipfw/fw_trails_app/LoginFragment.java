@@ -21,9 +21,12 @@ package seniordesign.ipfw.fw_trails_app;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -76,9 +79,26 @@ public class LoginFragment extends Fragment {
    private String theUsername;
    private String thePassword;
    private boolean loginSuccessful = false;
+   private Handler connectionHandler;
 
    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                             Bundle savedInstanceState) {
+
+      // if we have no internet, just forward to the record activity view so users can still
+      // record activities.
+      if(haveNoNetworkConnection()){
+         connectionHandler = new Handler();
+         connectionHandler.postDelayed(new Runnable() {
+            // Wait 3 seconds before kicking off the record activity fragment.
+            // This gives time for the login fragment to get initialized.
+            @Override
+            public void run() {
+               ((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
+            }
+         }, 3000);
+      }
+
+      // Proceed as normal if we have internet
       theView    = inflater.inflate(R.layout.fragment_login, container, false);
 
       // Assign the Username and Password controls
@@ -89,6 +109,7 @@ public class LoginFragment extends Fragment {
       // Get access to the button and set a listener to it.
       setCreateAccountListener(theView);
       setLoginListener(theView);
+
 
       return theView; // We must return the loaded Layout
    }
@@ -110,6 +131,16 @@ public class LoginFragment extends Fragment {
             ((MainActivity)getActivity()).displayView(R.layout.fragment_account_create);
          }
       });
+   }
+
+   // Checks to see if the user is connected to the network or not.
+   private boolean haveNoNetworkConnection(){
+      ConnectivityManager cm = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+
+      NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+      return !(activeNetwork != null &&
+              activeNetwork.isConnectedOrConnecting());
    }
 
    // Sets the Login Listener

@@ -34,7 +34,7 @@ public class ExerciseTypeUnitTests {
 
    // MET Values per http://appliedresearch.cancer.gov/atus-met/met.php
 
-   private final String runType = "Run";
+   private final String runType = "run";
    private final int runIconID = R.drawable.ic_directions_run_black_18dp;
    private final int walkIconID = R.drawable.ic_directions_walk_black_18dp;
    private final int bikeIconID = R.drawable.ic_directions_bike_black_18dp;
@@ -45,8 +45,8 @@ public class ExerciseTypeUnitTests {
    private Duration testDuration = new Duration(testTime);
    private final double defaultBMR = 1577.5;
    private ExerciseType exerciseType;
-   private final String walkType = "Walk";
-   private final String bikeType = "Bike";
+   private final String walkType = "walk";
+   private final String bikeType = "bike";
    private final double runMET = 7.50;
    private final double bikeMET = 8.00;
    private final double walkMET = 3.80;
@@ -62,7 +62,7 @@ public class ExerciseTypeUnitTests {
    // that was passed in initially.
    @Test
    public void verifyExerciseTypeRun(){
-      exerciseType = new RunExerciseType();
+      exerciseType = new RunExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeRun",exerciseType.getExerciseType()+" " +
               "should be "+runType);
@@ -71,7 +71,7 @@ public class ExerciseTypeUnitTests {
 
    @Test
    public void verifyExerciseTypeRunMET(){
-      exerciseType = new RunExerciseType();
+      exerciseType = new RunExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeRunMET",exerciseType.getMETValue()+" " +
               "should be "+runMET);
@@ -82,7 +82,7 @@ public class ExerciseTypeUnitTests {
    // Testst that the running Icon is correct.
    @Test
    public void verifyExerciseTypeRunIcon(){
-      exerciseType = new RunExerciseType();
+      exerciseType = new RunExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeRunIcon",exerciseType.getIconResourceId()+" " +
               "should be "+ runIconID);
@@ -92,7 +92,7 @@ public class ExerciseTypeUnitTests {
    // Test the calories burned calculations for running.
    @Test
    public void verifyExerciseTypeRunCalsBurned(){
-      exerciseType = new RunExerciseType();
+      exerciseType = new RunExerciseType(testDuration);
       printInfo("verifyExerciseTypeRunCalsBurned", exerciseType.calculateCaloriesBurned(defaultBMR) + " " +
               "should be " + testRunCalsBurned);
       assertEquals(exerciseType.calculateCaloriesBurned(defaultBMR),testRunCalsBurned,
@@ -102,7 +102,7 @@ public class ExerciseTypeUnitTests {
    // Tests that the exercise type duration is the correct one.
    @Test
    public void verifyRunDurationObject(){
-      exerciseType = new RunExerciseType();
+      exerciseType = new RunExerciseType(testDuration);
       printInfo("verifyRunDurationObject", exerciseType.getDuration().toString() + " " +
               "should be " + testDuration.toString());
       assertEquals(testDuration.toString(), exerciseType.getDuration().toString());
@@ -111,7 +111,7 @@ public class ExerciseTypeUnitTests {
    // This method checks that the Exercise Type has a walk type.
    @Test
    public void verifyExerciseTypeWalk(){
-      exerciseType = new WalkExerciseType();
+      exerciseType = new WalkExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeWalk",exerciseType.getExerciseType()+" " +
               "should be "+walkType);
@@ -121,7 +121,7 @@ public class ExerciseTypeUnitTests {
    // Testst that the Walking MET is correct.
    @Test
    public void verifyExerciseTypeWalkMET(){
-      exerciseType = new WalkExerciseType();
+      exerciseType = new WalkExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeWalkMET",exerciseType.getMETValue()+" " +
               "should be "+walkMET);
@@ -132,7 +132,7 @@ public class ExerciseTypeUnitTests {
    // Testst that the walking Icon is correct.
    @Test
    public void verifyExerciseTypeWalkIcon(){
-      exerciseType = new WalkExerciseType();
+      exerciseType = new WalkExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeWalkIcon",exerciseType.getIconResourceId()+" " +
               "should be "+ walkIconID);
@@ -142,7 +142,7 @@ public class ExerciseTypeUnitTests {
    // Test the calories burned calculations for biking.
    @Test
    public void verifyExerciseTypeWalkCalsBurned(){
-      exerciseType = new WalkExerciseType();
+      exerciseType = new WalkExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeWalkCalsBurned", exerciseType.calculateCaloriesBurned(defaultBMR) + " " +
               "should be " + testWalkCalsBurned);
@@ -153,7 +153,7 @@ public class ExerciseTypeUnitTests {
    // Tests that the exercise type duration is the correct one.
    @Test
    public void verifyWalkDurationObject(){
-      exerciseType = new WalkExerciseType();
+      exerciseType = new WalkExerciseType(testDuration);
       printInfo("verifyWalkDurationObject", exerciseType.getDuration().toString() + " " +
               "should be " + testDuration.toString());
       assertEquals(testDuration.toString(), exerciseType.getDuration().toString());
@@ -161,7 +161,7 @@ public class ExerciseTypeUnitTests {
    // This method checks that the Exercise Type has a bike type.
    @Test
    public void verifyExerciseTypeBike(){
-      exerciseType = new BikeExerciseType();
+      exerciseType = new BikeExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeBike",exerciseType.getExerciseType()+" " +
               "should be "+bikeType);
@@ -171,7 +171,7 @@ public class ExerciseTypeUnitTests {
    // Testst that the Walking MET is correct.
    @Test
    public void verifyExerciseTypeBikeMET(){
-      exerciseType = new BikeExerciseType();
+      exerciseType = new BikeExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeBikeMET",exerciseType.getMETValue()+" " +
               "should be "+bikeMET);
@@ -182,7 +182,7 @@ public class ExerciseTypeUnitTests {
    // Tests that the biking Icon is correct.
    @Test
    public void verifyExerciseTypeBikeIcon(){
-      exerciseType = new BikeExerciseType();
+      exerciseType = new BikeExerciseType(testDuration);
 
       printInfo("verifyExerciseTypeBikeIcon",exerciseType.getIconResourceId()+" " +
               "should be "+ bikeIconID);
@@ -193,7 +193,7 @@ public class ExerciseTypeUnitTests {
    // Test the calories burned calculations for biking.
    @Test
    public void verifyExerciseTypeBikeCalsBurned(){
-      exerciseType = new BikeExerciseType();
+      exerciseType = new BikeExerciseType(testDuration);
       printInfo("verifyExerciseTypeBikeCalsBurned", exerciseType.calculateCaloriesBurned(defaultBMR) + " " +
               "should be " + testBikeCalsBurned);
       assertEquals(exerciseType.calculateCaloriesBurned(defaultBMR),testBikeCalsBurned,
@@ -203,7 +203,7 @@ public class ExerciseTypeUnitTests {
    // Tests that the exercise type duration is the correct one.
    @Test
    public void verifyBikeDurationObject(){
-      exerciseType = new BikeExerciseType();
+      exerciseType = new BikeExerciseType(testDuration);
       printInfo("verifyBikeDurationObject", exerciseType.getDuration().toString() + " " +
               "should be " + testDuration.toString());
       assertEquals(testDuration.toString(), exerciseType.getDuration().toString());
