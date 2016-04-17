@@ -171,6 +171,9 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         resumeButton.setOnClickListener(resumeButtonListener);
         finishButton.setOnClickListener(finishButtonListener);
         clearButton.setOnClickListener(clearButtonListener);
+
+//        uploadLocalActivities();
+
         Log.i("Development", "onCreateView");
         return view; // We must return the loaded Layout
     }
@@ -304,6 +307,14 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         Log.i("Development", "updateLocation");
     }
 
+    private void captureFirstCoordinate(LatLng updatedLocation) {
+        startMarker = mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(updatedLocation, 18.0f), 500, null);
+        lastLocationTime = System.currentTimeMillis();
+        lastLocation = updatedLocation;
+    }
+
     private void captureLaterCoordinate(LatLng updatedLocation) {
         line.setPoints(recordActivityModel.getCurrentLatLngs());
         mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
@@ -320,15 +331,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         // Duration is updated by runnable
         currentSpeed = tempDistance / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
-    }
-
-    private void captureFirstCoordinate(LatLng updatedLocation) {
-//        pcords.add(updatedLocation);
-        startMarker = mMap.addMarker(new MarkerOptions().position(updatedLocation).title("Start Location")
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(updatedLocation, 18.0f), 500, null);
-        lastLocationTime = System.currentTimeMillis();
-        lastLocation = updatedLocation;
     }
 
     public void selectActivityType() {
@@ -471,16 +473,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         finishMarker = mMap.addMarker(new MarkerOptions().position(lastLocation).title("Stop Location")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-        // if it fails, write to file
-        // You could write the file writing logic in the onFailure method in the controller.
-        String filename = sendToFile();
-        File file = getFile(filename);
-        if(file == null){
-            Log.i("Development", "Returned file is null");
-        }
-        else{
-            openFile(file);
-        }
         Log.i("Development", "finishRecording");
 
         sendDataToServerDialog();
@@ -509,7 +501,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         message += "\nDuration: " + recordActivityModel.getDuration().toString();
         message += "\nDistance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi";
         message += "\nCalories: " + caloriesInt;
-        message += "\nAverage Speed: " + "10 mph";
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle("Activity Summary");
@@ -570,20 +561,34 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         int hour = cal.get(Calendar.HOUR_OF_DAY);
         int minute = cal.get(Calendar.MINUTE);
         int second = cal.get(Calendar.SECOND);
-        String FILENAME = "RA " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-        String output = year + "\n" + month + "\n" + day + "\n" + hour + "\n" + minute + "\n" + second;
-        output += "\n" + recordActivityModel.getExerciseType().toString();
-        output += "\n" + recordActivityModel.getTotalDistance();
-        output += "\n" + caloriesInt;
-        output += "\n" + duration;
-        ArrayList allCoordinates = recordActivityModel.getAllLatLngs();
-        for (int i = 0; i < allCoordinates.size(); i++) {
-            output += "\n" + allCoordinates.get(i).toString();
-        }
+        String FILENAME = "RecordedActivity " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
+
+        StringBuilder output = new StringBuilder();
+        //Username
+        output.append("username");
+        output.append("\nggrimm");
+        //Start timestamp
+        output.append("\ntime_started");
+        output.append("\n" + recordActivityModel.getStartTimestamp());
+        //Duration
+        output.append("\nduration");
+        output.append("\n" + recordActivityModel.getDuration());
+        //Distance
+        output.append("\nmileage");
+        output.append("\n" + Double.valueOf(recordActivityModel.getTotalDistance()));
+        //Calories burned
+        output.append("\ncalories_burned");
+        output.append("\n" + Integer.valueOf(caloriesInt));
+        //Exercise type
+        output.append("\nexercise_type");
+        output.append("\n" + recordActivityModel.getExerciseType().getExerciseType());
+        //Path
+        output.append("\npath");
+        output.append("\n" + getCoordinates());
 
         try {
             FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
-            fos.write(output.getBytes());
+            fos.write(output.toString().getBytes());
             fos.close();
         } catch (Exception e) {
 
@@ -643,7 +648,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         try{
             for (int i = 0; i < lineCounter; i++){
                 output[i] = br.readLine();
-                Log.i("Development", output[i]);
+                Log.i("Development", i + " " + output[i]);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -685,6 +690,43 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         alertDialog.show();
     }
+
+    private void cannotSendActivtyDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Network Failure");
+
+        // Modal settings are set, user must click ok before the dialog can be dismissed
+        alertDialog.setCancelable(false);
+        alertDialog.setMessage("Cannot connect to internet. Your activity will be saved later.");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog.show();
+        Log.i("Development", "cannotSendActivityDialog");
+    }
+
+    private void activitySavedDialog(){
+        AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
+        alertDialog.setTitle("Save Success");
+
+        // Modal settings are set, user must click ok before the dialog can be dismissed
+        alertDialog.setCancelable(false);
+        alertDialog.setMessage("Your activity was saved to your account.");
+        alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog.show();
+        Log.i("Development", "cannotSendActivityDialog");
+    }
+
     /*
   The RecordActivityController class.
 
@@ -707,7 +749,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         protected void onPreExecute() {
             displaySummary();
-
         }
 
 
@@ -723,11 +764,17 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             // Currently we do it the old fashioned way since we dont have a model for record actiivty
             JSONObject recordActivityJSON = null;
             StringEntity jsonString = null;
+
             try{
                 //TODO: need to figure out a way to store your activity and make it to json.
                 // Convert the Activity to JSON then to parameters for the post activity.
                 recordActivityJSON = createActivityJSONObject();
                 jsonString = new StringEntity(recordActivityJSON.toString());
+
+
+                //Upload activities that were recorded offline and saved to a file
+//                previousActivityJSON = uploadLocalActivities();
+
             }
             catch(Exception ex){
                 Log.i("JSON/Encode Exception:", ex.getMessage());
@@ -749,8 +796,11 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                         // Here you received http 200, do whatever you want, it worked.
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-
-
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    activitySavedDialog();
+                                }
+                            });
                         }
 
                         // If it fails to post, you can issue some sort of alert dialog saying the error
@@ -758,9 +808,134 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                         @Override
                         public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
                             // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+                            getActivity().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    cannotSendActivtyDialog();
+                                }
+                            });
+
+                            String filename = sendToFile();
+                            File file = getFile(filename);
+                            if(file == null){
+                                Log.i("Development", "Returned file is null");
+                            }
+                            else{
+                                openFile(file);
+                            }
                         }
 
                     });
+
+            //Upload old activities
+            boolean uploadingLocalActivities = true;
+            while(uploadingLocalActivities){
+                uploadingLocalActivities = false;
+
+                String[] fileList = getContext().fileList();
+                for(int i = 0; i < fileList.length; i++){
+                    if(fileList[i].contains("RecordedActivity")){
+                        uploadingLocalActivities = true;
+
+                        String filename = fileList[i];
+                        final File file = getFile(filename);
+
+                        //Read everything in from the file
+                        FileInputStream fis = null;
+                        try {
+                            fis = new FileInputStream(file);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        InputStreamReader isr = new InputStreamReader(fis);
+                        BufferedReader br = new BufferedReader(isr);
+
+                        String temp;
+                        int lineCounter = 0;
+                        try {
+                            while ((temp = br.readLine()) != null) {
+                                lineCounter++;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            fis.getChannel().position(0);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        String[] output = new String[lineCounter];
+                        String line;
+                        int counter = 0;
+                        try {
+                            for (int k = 0; k < lineCounter; k++) {
+                                output[k] = br.readLine();
+                                Log.i("Development", output[k]);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        //Put all of the file contents into a JSONObject
+                        try {
+                            JSONObject activityJSONObject = new JSONObject();
+                            activityJSONObject.put(output[0], output[1]);
+
+                            //Get start timestamp
+                            activityJSONObject.put(output[2], output[3]);
+
+                            // Be sure to use Duration Objects when using Duration instead of just hardcoded string types
+                            // We can add utils to the duration class when needed and such.
+                            activityJSONObject.put(output[4], output[5]);
+
+                            // Use the primitive types Wrapper class when creating the JSON Object (it might be required)
+                            activityJSONObject.put(output[6], output[7]);
+
+                            activityJSONObject.put(output[8], output[9]);
+
+                            activityJSONObject.put(output[10], output[11]);
+
+                            activityJSONObject.put(output[12], output[13]);
+
+                            StringEntity jsonStringLocal = null;
+                            try{
+                                jsonStringLocal = new StringEntity(activityJSONObject.toString());
+                            }
+                            catch(Exception e){
+
+                            }
+
+                            HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_ACTIVITY, jsonStringLocal, contentType,
+                                    new AsyncHttpResponseHandler(Looper.getMainLooper()) {
+
+                                        // Before the actual post happens.
+                                        @Override
+                                        public void onStart() {
+
+                                        }
+
+                                        // Here you received http 200, do whatever you want, it worked.
+                                        @Override
+                                        public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                                            Log.i("Development", "OFFLINE ACTIVITY UPLOADED!!!!!!!!!!");
+                                            file.delete();
+                                        }
+
+                                        // If it fails to post, you can issue some sort of alert dialog saying the error
+                                        // and writing the activity to file.
+                                        @Override
+                                        public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                                            Log.i("Development", "OFFLINE ACTIVITY FAILED><><><><><><><");
+                                        }
+                                    });
+
+                        } catch (JSONException e) {
+                            Log.e("Error", "JSONObject error");
+                        }
+                    }
+                }
+            }
 
             return null;
         }
@@ -815,21 +990,21 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     // Gets the latitude and longitude coordinates and puts it in the form of
     // "Lat Long, Lat Long, Lat Long"
     private String getCoordinates() {
-        String output = "";
+        StringBuilder output = new StringBuilder();
 
         ArrayList<LatLng> allCoordinates = recordActivityModel.getAllLatLngs();
         for(int i = 0; i < allCoordinates.size(); i++){
 
-            output += allCoordinates.get(i).latitude;
-            output += " ";
-            output += allCoordinates.get(i).longitude;
+            output.append(allCoordinates.get(i).latitude);
+            output.append(" ");
+            output.append(allCoordinates.get(i).longitude);
 
             // Don't append comma for the last coordinate points
             if(i+1 < allCoordinates.size()){
-                output += ", ";
+                output.append(", ");
             }
         }
 
-        return output;
+        return output.toString();
     }
 }

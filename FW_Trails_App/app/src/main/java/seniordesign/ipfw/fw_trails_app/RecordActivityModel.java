@@ -20,7 +20,6 @@ package seniordesign.ipfw.fw_trails_app;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class RecordActivityModel {
     public void addLatLng(LatLng ll){
         currentCoordinates.add(ll);
         allCoordinates.add(ll);
-        Log.i("Development", Integer.toString(currentCoordinates.size()));
+        Log.i("Development", "Current points: " + Integer.toString(currentCoordinates.size()));
     }
 
     public ArrayList<LatLng> getCurrentLatLngs(){
