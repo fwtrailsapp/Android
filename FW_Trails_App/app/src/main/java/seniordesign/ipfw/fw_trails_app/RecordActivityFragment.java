@@ -62,6 +62,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.io.BufferedReader;
 import java.io.File;
@@ -551,7 +552,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         speed.setText("Speed: 0.00 mph");
     }
 
-    private String sendToFile() {
+    private String sendToFile() throws JSONException, UnsupportedEncodingException{
         Date date = new Date();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -563,32 +564,23 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         int second = cal.get(Calendar.SECOND);
         String FILENAME = "RecordedActivity " + year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
 
-        StringBuilder output = new StringBuilder();
-        //Username
-        output.append("username");
-        output.append("\nggrimm");
-        //Start timestamp
-        output.append("\ntime_started");
-        output.append("\n" + recordActivityModel.getStartTimestamp());
-        //Duration
-        output.append("\nduration");
-        output.append("\n" + recordActivityModel.getDuration());
-        //Distance
-        output.append("\nmileage");
-        output.append("\n" + Double.valueOf(recordActivityModel.getTotalDistance()));
-        //Calories burned
-        output.append("\ncalories_burned");
-        output.append("\n" + Integer.valueOf(caloriesInt));
-        //Exercise type
-        output.append("\nexercise_type");
-        output.append("\n" + recordActivityModel.getExerciseType().getExerciseType());
-        //Path
-        output.append("\npath");
-        output.append("\n" + getCoordinates());
+        //Put it all in a JSONObject
+        JSONObject activityJSONObject = new JSONObject();
+        activityJSONObject.put("username","ggrimm");
+        //Get start timestamp
+        activityJSONObject.put("time_started",recordActivityModel.getStartTimestamp());
+        // Be sure to use Duration Objects when using Duration instead of just hardcoded string types
+        // We can add utils to the duration class when needed and such.
+        activityJSONObject.put("duration",recordActivityModel.getDuration());
+        // Use the primitive types Wrapper class when creating the JSON Object (it might be required)
+        activityJSONObject.put("mileage", Double.valueOf(recordActivityModel.getTotalDistance()));
+        activityJSONObject.put("calories_burned", Integer.valueOf(caloriesInt));
+        activityJSONObject.put("exercise_type", recordActivityModel.getExerciseType().getExerciseType());
+        activityJSONObject.put("path",getCoordinates());
 
         try {
             FileOutputStream fos = getContext().openFileOutput(FILENAME, getContext().MODE_PRIVATE);
-            fos.write(output.toString().getBytes());
+            fos.write(activityJSONObject.toString().getBytes());
             fos.close();
         } catch (Exception e) {
 
@@ -814,7 +806,14 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                                 }
                             });
 
-                            String filename = sendToFile();
+                            String filename = null;
+                            try {
+                                filename = sendToFile();
+                            }catch (UnsupportedEncodingException ee){
+
+                            }catch (JSONException je){
+
+                            }
                             File file = getFile(filename);
                             if(file == null){
                                 Log.i("Development", "Returned file is null");
@@ -849,90 +848,69 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
                         InputStreamReader isr = new InputStreamReader(fis);
                         BufferedReader br = new BufferedReader(isr);
 
-                        String temp;
+                        String temp = "";
                         int lineCounter = 0;
                         try {
-                            while ((temp = br.readLine()) != null) {
-                                lineCounter++;
-                            }
+                            temp = br.readLine();
+//                            while ((temp = br.readLine()) != null) {
+//                                lineCounter++;
+//                            }
                         } catch (Exception e) {
                             e.printStackTrace();
+                            Log.e("File read error", "Couldn't read file");
                         }
 
-                        try {
-                            fis.getChannel().position(0);
-                        } catch (Exception e) {
-                            e.printStackTrace();
+//                        try {
+//                            fis.getChannel().position(0);
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+
+//                        String[] output = new String[lineCounter];
+//                        String line;
+//                        int counter = 0;
+//                        try {
+//                            for (int k = 0; k < lineCounter; k++) {
+//                                output[k] = br.readLine();
+//                                Log.i("Development", output[k]);
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+
+
+                        StringEntity jasonStringLocal = null;
+                        try{
+                            jasonStringLocal = new StringEntity(temp);
+                        }
+                        catch(Exception e){
+
                         }
 
-                        String[] output = new String[lineCounter];
-                        String line;
-                        int counter = 0;
-                        try {
-                            for (int k = 0; k < lineCounter; k++) {
-                                output[k] = br.readLine();
-                                Log.i("Development", output[k]);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_ACTIVITY, jasonStringLocal, contentType,
+                                new AsyncHttpResponseHandler(Looper.getMainLooper()) {
 
-                        //Put all of the file contents into a JSONObject
-                        try {
-                            JSONObject activityJSONObject = new JSONObject();
-                            activityJSONObject.put(output[0], output[1]);
+                                    // Before the actual post happens.
+                                    @Override
+                                    public void onStart() {
 
-                            //Get start timestamp
-                            activityJSONObject.put(output[2], output[3]);
+                                    }
 
-                            // Be sure to use Duration Objects when using Duration instead of just hardcoded string types
-                            // We can add utils to the duration class when needed and such.
-                            activityJSONObject.put(output[4], output[5]);
+                                    // Here you received http 200, do whatever you want, it worked.
+                                    @Override
+                                    public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+                                        Log.i("Development", "OFFLINE ACTIVITY UPLOADED!!!!!!!!!!");
+                                        file.delete();
+                                    }
 
-                            // Use the primitive types Wrapper class when creating the JSON Object (it might be required)
-                            activityJSONObject.put(output[6], output[7]);
+                                    // If it fails to post, you can issue some sort of alert dialog saying the error
+                                    // and writing the activity to file.
+                                    @Override
+                                    public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+                                        Log.i("Development", "OFFLINE ACTIVITY FAILED><><><><><><><");
+                                    }
+                                });
 
-                            activityJSONObject.put(output[8], output[9]);
-
-                            activityJSONObject.put(output[10], output[11]);
-
-                            activityJSONObject.put(output[12], output[13]);
-
-                            StringEntity jsonStringLocal = null;
-                            try{
-                                jsonStringLocal = new StringEntity(activityJSONObject.toString());
-                            }
-                            catch(Exception e){
-
-                            }
-
-                            HttpClientUtil.postByUrl(getContext(), HttpClientUtil.BASE_URL_ACTIVITY, jsonStringLocal, contentType,
-                                    new AsyncHttpResponseHandler(Looper.getMainLooper()) {
-
-                                        // Before the actual post happens.
-                                        @Override
-                                        public void onStart() {
-
-                                        }
-
-                                        // Here you received http 200, do whatever you want, it worked.
-                                        @Override
-                                        public void onSuccess(int statusCode, Header[] headers, byte[] response) {
-                                            Log.i("Development", "OFFLINE ACTIVITY UPLOADED!!!!!!!!!!");
-                                            file.delete();
-                                        }
-
-                                        // If it fails to post, you can issue some sort of alert dialog saying the error
-                                        // and writing the activity to file.
-                                        @Override
-                                        public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
-                                            Log.i("Development", "OFFLINE ACTIVITY FAILED><><><><><><><");
-                                        }
-                                    });
-
-                        } catch (JSONException e) {
-                            Log.e("Error", "JSONObject error");
-                        }
                     }
                 }
             }
