@@ -455,12 +455,23 @@ The onPFailure tells the user there was an incorrect username and password combo
       private JSONObject createAccountCreateJSONObject() throws JSONException {
          JSONObject accountCreateJSONObject = new JSONObject();
 
+         // The server does not accept prefernottodisclose as a gender type. It expects null in this
+         // case. So if the user does not want to specify gender, then we send null instead of male
+         // or female
+         String theGender = "";
+         if(accountCreateModel.getGender() == GenderOptions.PreferNotToDisclose) {
+            theGender = "null";
+         }
+         else{
+            theGender = accountCreateModel.getGender().toString();
+         }
+
          // add the username and password to the object.
          accountCreateJSONObject.put("username", accountCreateModel.getUsername());
          accountCreateJSONObject.put("password", accountCreateModel.getPassword());
          accountCreateJSONObject.put("birthyear", accountCreateModel.getBirthYear());
          accountCreateJSONObject.put("weight", accountCreateModel.getWeight());
-         accountCreateJSONObject.put("sex",accountCreateModel.getGender());
+         accountCreateJSONObject.put("sex",theGender);
          accountCreateJSONObject.put("height",accountCreateModel.getHeight());
 
          return accountCreateJSONObject;
