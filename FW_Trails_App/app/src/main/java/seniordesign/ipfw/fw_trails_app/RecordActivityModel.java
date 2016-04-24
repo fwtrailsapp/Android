@@ -101,4 +101,8 @@ public class RecordActivityModel {
         return durationTimer;
     }
 
+    public void setDuration(Duration d){
+        durationTimer = d;
+    }
+
 }

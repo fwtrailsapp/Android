@@ -422,6 +422,8 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         lines.add(line);
         recordActivityModel.flushCurrentPath();
         recording = false;
+        recordActivityModel.setDuration(new Duration((int) updatedtime/1000));
+
         pauseButton = (Button) view.findViewById(R.id.pauseButton);
         resumeButton = (Button) view.findViewById(R.id.resumeButton);
         finishButton = (Button) view.findViewById(R.id.finishButton);
@@ -544,7 +546,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         mins = 0;
         milliseconds = 0;
         handler.removeCallbacks(updateTimer);
-        duration.setText("0:00:00");
 
         distance.setText("Distance: 0.00 mi");
         calories.setText("Calories: 0");

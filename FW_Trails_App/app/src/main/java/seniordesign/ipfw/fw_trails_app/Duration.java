@@ -22,7 +22,6 @@ public class Duration {
    private String theDuration;
    private final int SECONDS_PER_HOUR = 3600;
    private final int SECONDS_PER_MINUTE = 60;
-   private final int MINUTES_PER_HOUR = 60;
 
 
    public Duration(String theDuration) {
