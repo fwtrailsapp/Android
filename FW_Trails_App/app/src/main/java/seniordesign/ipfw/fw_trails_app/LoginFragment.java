@@ -314,6 +314,7 @@ public class LoginFragment extends Fragment {
 
          // if the login was successful, swap views with the recordActivity.
          if(loginSuccessful){
+            HttpClientUtil.getInstance().pullAccountDetails();
             ((MainActivity) getActivity()).displayView(R.id.nav_recordActivity);
          }
 

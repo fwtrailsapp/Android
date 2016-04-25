@@ -49,8 +49,12 @@ public class HttpClientUtil {
    private String password;
    private boolean loginSuccessful;
 
+   private final int NOT_PROVIDED = -1;
+
    private static HttpClientUtil httpClientUtil = new HttpClientUtil();
    private static SyncHttpClient client = new SyncHttpClient();
+
+   AccountDetailsModel accountDetailsModel;
 
    private HttpClientUtil(){
 
@@ -118,6 +122,16 @@ public class HttpClientUtil {
    // Concatenates the relative URL with the base url of our API.
    private static String getAbsoluteUrl(String relativeUrl){
       return relativeUrl;
+   }
+
+   public void pullAccountDetails(){
+      // populate the view with the data from the server
+      AccountDetailsGetController accountDetailsGetController = new AccountDetailsGetController();
+      accountDetailsGetController.execute();
+   }
+
+   public AccountDetailsModel getAccountDetailsModel(){
+      return accountDetailsModel;
    }
 
    /*
@@ -229,5 +243,136 @@ The onPFailure currently does nothing
 
    }
 
+   private void createAccountDetailsObject(int height, int weight, int birthYear, GenderOptions gender){
+      accountDetailsModel = new AccountDetailsModel(username, password, height, weight, birthYear, gender);
+   }
+
+
+   // This class handles the connection between the server and the mobile app in regards to the
+   // account details. It grabs the details from the server and displays it on the screen.
+   private class AccountDetailsGetController extends AsyncTask<Void, Void, Void> {
+      // fields to contain the original data sent from the server
+      private int dob;
+      private int weight;
+      private GenderOptions gender;
+      private int height;
+
+      @Override
+      protected void onPreExecute() {
+
+      }
+
+
+      // Attempts to grab the user details from the server
+      @Override
+      protected Void doInBackground(Void... params) {
+
+         HttpClientUtil.get(HttpClientUtil.BASE_URL_ACCOUNT_DETAILS, null, new AsyncHttpResponseHandler(Looper.getMainLooper()) {
+
+            @Override
+            public void onStart() {
+
+            }
+
+            // When we succeed at getting a response back, parse the response and display the info
+            // to the screen
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] response) {
+               try {
+                  // parse the json
+
+                  JSONObject jsonResponse = new JSONObject(new String(response));
+
+                  // parse the returned json and use it to create the accountDetailsModel
+                  assignJsonToFields(jsonResponse);
+
+                  // Create the accountDetailsModel object.
+                  accountDetailsModel = new AccountDetailsModel(HttpClientUtil.getInstance().getAccountUsername(),
+                          HttpClientUtil.getInstance().getAccountPassword(), height,weight,dob, gender);
+
+               }
+               catch(JSONException ex){
+                  Log.i("Network/JSON Exception", ex.getMessage());
+               }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] errorResponse, Throwable e) {
+               // called when response HTTP status is "4XX" (eg. 401, 403, 404)
+//We should notify the user that we couldn't access their account details
+//               getActivity().runOnUiThread(new Runnable() {
+//
+//                  public void run() {
+//                     // Create an error dialog telling the user an error occured.
+//                     displayError(getString(R.string.accountDetailsAccountDetailsGetError));
+//                  }
+//               });
+            }
+
+         });
+
+         return null;
+      }
+
+      // Assign the fields to the values sent back from the server
+      private void assignJsonToFields(JSONObject source){
+         try{
+            String birthYear = String.valueOf(source.get("birthyear"));
+            String theWeight = String.valueOf(source.get("weight"));
+            String theHeight = String.valueOf(source.get("height"));
+            String sex    = String.valueOf(source.get("sex"));
+
+            // if the user did not previously provide details, just make it a blank edit text.
+            if(birthYear.equalsIgnoreCase("null")){
+               dob = NOT_PROVIDED;
+            }
+            else {
+               dob = Integer.valueOf(birthYear);
+            }
+
+            if(theWeight.equalsIgnoreCase("null")){
+               weight = NOT_PROVIDED;
+            }
+            else{
+               weight = Integer.valueOf(theWeight);
+            }
+
+            if(theHeight.equalsIgnoreCase("null")){
+               height = NOT_PROVIDED;
+            }
+            else{
+               height = Integer.valueOf(theHeight);
+            }
+
+            // If they do not specify a gender, they choose not to disclose.
+            if(sex.equalsIgnoreCase("null")){
+               gender = GenderOptions.PreferNotToDisclose;
+            }
+            else if(sex.equalsIgnoreCase("male")){
+               gender = GenderOptions.Male;
+            }
+            else{
+               gender = GenderOptions.Female;
+            }
+         }
+         catch(JSONException ex){
+            Log.i("JSON Get Exception", ex.getMessage());
+         }
+
+      }
+
+
+      // last method that is called before the controller completes. This assigns the edit text's values
+      // to the server values.
+      @Override
+      protected void onPostExecute(Void param) {
+         // only assign the values in the view if accountDetails has been instantiated.
+         if(accountDetailsModel != null){
+//            assignAccountDetailsModelInfo();
+            createAccountDetailsObject(height, weight, dob, gender);
+         }
+
+      }
+   }
 
 }

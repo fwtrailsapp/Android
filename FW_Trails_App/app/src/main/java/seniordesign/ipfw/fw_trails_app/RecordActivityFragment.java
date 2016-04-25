@@ -112,6 +112,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     NumberFormat calorieFormat = new DecimalFormat("##0");
     double tempDistance;
 
+    AccountDetailsModel accountDetailsModel;
     GenderOptions gender = GenderOptions.Male;//
     int weight = 82;//in kilograms
     int height = 183;//in centemeters
@@ -382,6 +383,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         @Override
         public void onClick(View v) {
             clearActivity();
+
+            accountDetailsModel = HttpClientUtil.getInstance().getAccountDetailsModel();
+            weight = accountDetailsModel.getWeight();
+            height = accountDetailsModel.getHeight();
+            age = Calendar.getInstance().get(Calendar.YEAR) - accountDetailsModel.getBirthYear();
+            BMR = 13.75*weight + 5*height - 6.76*age + 66;
+
             LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
             boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
             if(!statusOfGPS) {
