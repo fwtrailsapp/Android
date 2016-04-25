@@ -117,7 +117,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     int weight = 82;//in kilograms
     int height = 183;//in centemeters
     int age = 21;//
-    double BMR = 13.75*weight + 5*height - 6.76*age + 66;//
+    double BMR = 0;//
 
     //View utilities
     private static View view;
@@ -320,7 +320,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
     private void captureLaterCoordinate(LatLng updatedLocation) {
         line.setPoints(recordActivityModel.getCurrentLatLngs());
         mMap.animateCamera(CameraUpdateFactory.newLatLng(updatedLocation));
-        Double caloriesBurned = BMR * recordActivityModel.getExerciseType().getMETValue() * recordActivityModel.getDurationInSeconds() / secondsPerHour / 25;
+        Double caloriesBurned = BMR * recordActivityModel.getExerciseType().getMETValue() * secs / secondsPerHour / 25;
         caloriesInt = caloriesBurned.intValue();
         recordActivityModel.getDuration().tickInt();
         durationSinceLastLocation = System.currentTimeMillis() - lastLocationTime;
@@ -329,7 +329,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         recordActivityModel.addDistance(tempDistance);
 
         distance.setText("Distance: " + String.valueOf(distanceFormat.format(recordActivityModel.getTotalDistance())) + " mi");
-        calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesBurned)));
+        calories.setText("Calories: " + String.valueOf(calorieFormat.format(caloriesInt)));
         // Duration is updated by runnable
         currentSpeed = tempDistance / durationSinceLastLocation * 1000 * secondsPerHour;
         speed.setText("Speed: " + speedFormat.format(currentSpeed) + " mph");
@@ -388,7 +388,13 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             weight = accountDetailsModel.getWeight();
             height = accountDetailsModel.getHeight();
             age = Calendar.getInstance().get(Calendar.YEAR) - accountDetailsModel.getBirthYear();
-            BMR = 13.75*weight + 5*height - 6.76*age + 66;
+            if(gender == GenderOptions.Male) {
+                BMR = 13.75 * weight + 5 * height - 6.76 * age + 66;
+            }
+            if(gender == GenderOptions.Female){
+                BMR = 9.56 * weight - 4.68 * age + 655;
+//                For females: BMR = (9.56 x WKG) + (1.85 x HC) - (4.68 x age) + 655
+            }
 
             LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
             boolean statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
