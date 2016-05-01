@@ -316,6 +316,7 @@ public class MainActivity extends AppCompatActivity
       // Set the properties
       builder.setTitle(exitDialogTitle);
       builder.setMessage(exitDialogMessage);
+      builder.setCancelable(false);
 
       // Create the yes and no listeners
       builder.setPositiveButton(YES, new DialogInterface.OnClickListener() {

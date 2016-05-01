@@ -339,6 +339,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
         CharSequence[] exerciseTypes = new ExerciseTypes().getExerciseTypes();
         AlertDialog.Builder builder = new AlertDialog.Builder(getChildFragmentManager().findFragmentById(R.id.map).getContext());
         builder.setTitle("Select Exercise Type");
+        builder.setCancelable(false);
         builder.setItems(exerciseTypes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -393,7 +394,6 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
             }
             if(gender == GenderOptions.Female){
                 BMR = 9.56 * weight - 4.68 * age + 655;
-//                For females: BMR = (9.56 x WKG) + (1.85 x HC) - (4.68 x age) + 655
             }
 
             LocationManager manager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE );
@@ -521,6 +521,7 @@ public class RecordActivityFragment extends Fragment implements OnMapReadyCallba
 
         AlertDialog alertDialog = new AlertDialog.Builder(getContext()).create();
         alertDialog.setTitle("Activity Summary");
+        alertDialog.setCancelable(false);
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Ok",
                 new DialogInterface.OnClickListener() {
