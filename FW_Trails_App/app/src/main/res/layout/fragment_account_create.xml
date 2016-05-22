@@ -1,148 +1,164 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="seniordesign.ipfw.fw_trails_app.AccountCreateFragment">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                 xmlns:tools="http://schemas.android.com/tools"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 tools:context="seniordesign.ipfw.fw_trails_app.AccountCreateFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
-
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:hint="@string/height_editText_text"
-        android:id="@+id/accountCreate_heightEditText"
-        android:layout_below="@+id/textView"
-        android:layout_alignLeft="@+id/accountCreate_weightEditText"
-        android:layout_alignStart="@+id/accountCreate_weightEditText"
-        android:layout_marginTop="18dp"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:ems="10"
-        android:id="@+id/accountCreate_weightEditText"
-        android:hint="@string/weight_editText_text"
-        android:layout_below="@+id/accountCreate_heightEditText"
-        android:layout_alignLeft="@+id/accountCreate_birthYearEditText"
-        android:layout_alignStart="@+id/accountCreate_birthYearEditText"/>
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/accountCreate_birthYearEditText"
-        android:hint="@string/age_editText_text"
-        android:layout_below="@+id/accountCreate_weightEditText"
-        android:layout_alignLeft="@+id/accountCreate_genderSpinner"
-        android:layout_alignStart="@+id/accountCreate_genderSpinner"/>
+        <!-- TODO: Update blank fragment layout -->
 
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dialog"
-        android:id="@+id/accountCreate_genderSpinner"
-        android:entries="@array/gender_array"
-        android:prompt="@string/gender_SpinnerPrompt"
-        android:layout_below="@+id/accountCreate_birthYearEditText"
-        android:layout_alignLeft="@+id/disclaimer_Textview"
-        android:layout_alignStart="@+id/disclaimer_Textview"
-        android:layout_alignRight="@+id/disclaimer_Textview"
-        android:layout_alignEnd="@+id/disclaimer_Textview"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/disclaimer_textView_text"
-        android:id="@+id/disclaimer_Textview"
-        android:layout_below="@+id/accountCreate_genderSpinner"
-        android:layout_centerHorizontal="true"/>
 
-    <Button
-        style="@style/AppCompat.Button.FW_Trails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_createAccount_text"
-        android:id="@+id/createAccountButton"
-        android:layout_alignTop="@+id/cancelCreateAccountButton"
-        android:layout_alignRight="@+id/accountInfoTextView"
-        android:layout_alignEnd="@+id/accountInfoTextView"
-        android:layout_marginRight="29dp"
-        android:layout_marginEnd="29dp"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:hint="@string/height_editText_text"
+            android:id="@+id/accountCreate_heightEditText"
+            android:layout_below="@+id/textView"
+            android:layout_alignLeft="@+id/accountCreate_weightEditText"
+            android:layout_alignStart="@+id/accountCreate_weightEditText"
+            android:layout_marginTop="18dp"/>
 
-    <Button
-        style="@style/AppCompat.Button.FW_Trails"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_Cancel_text"
-        android:id="@+id/cancelCreateAccountButton"
-        android:layout_below="@+id/disclaimer_Textview"
-        android:layout_toRightOf="@+id/createAccountButton"
-        android:layout_toEndOf="@+id/createAccountButton"
-        android:layout_marginLeft="44dp"
-        android:layout_marginStart="44dp"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:ems="10"
+            android:id="@+id/accountCreate_weightEditText"
+            android:hint="@string/weight_editText_text"
+            android:layout_below="@+id/accountCreate_heightEditText"
+            android:layout_alignLeft="@+id/accountCreate_birthYearEditText"
+            android:layout_alignStart="@+id/accountCreate_birthYearEditText"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/accountInfoText"
-        android:id="@+id/accountInfoTextView"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:ems="10"
+            android:id="@+id/accountCreate_birthYearEditText"
+            android:hint="@string/age_editText_text"
+            android:layout_below="@+id/accountCreate_weightEditText"
+            android:layout_alignLeft="@+id/accountCreate_genderSpinner"
+            android:layout_alignStart="@+id/accountCreate_genderSpinner"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/accountCreate_usernameEditText"
-        android:hint="@string/usernameText"
-        android:layout_below="@+id/accountInfoTextView"
-        android:layout_alignLeft="@+id/accountInfoTextView"
-        android:layout_alignStart="@+id/accountInfoTextView"
-        android:layout_marginTop="22dp"
-        android:layout_alignRight="@+id/accountCreate_heightEditText"
-        android:layout_alignEnd="@+id/accountCreate_heightEditText"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="@string/login_hint_password"
-        android:id="@+id/accountCreate_passwordEditText"
-        android:layout_below="@+id/accountCreate_usernameEditText"
-        android:layout_alignLeft="@+id/accountCreate_usernameEditText"
-        android:layout_alignStart="@+id/accountCreate_usernameEditText"/>
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
+            android:id="@+id/accountCreate_genderSpinner"
+            android:entries="@array/gender_array"
+            android:prompt="@string/gender_SpinnerPrompt"
+            android:layout_below="@+id/accountCreate_birthYearEditText"
+            android:layout_alignLeft="@+id/disclaimer_Textview"
+            android:layout_alignStart="@+id/disclaimer_Textview"
+            android:layout_alignRight="@+id/disclaimer_Textview"
+            android:layout_alignEnd="@+id/disclaimer_Textview"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:hint="@string/retypePasswordText"
-        android:id="@+id/accountCreate_confirmPasswordEditText"
-        android:layout_below="@+id/accountCreate_passwordEditText"
-        android:layout_alignLeft="@+id/accountCreate_passwordEditText"
-        android:layout_alignStart="@+id/accountCreate_passwordEditText"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="@string/disclaimer_textView_text"
+            android:id="@+id/disclaimer_Textview"
+            android:layout_below="@+id/accountCreate_genderSpinner"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/personalInfoText"
-        android:id="@+id/textView"
-        android:layout_below="@+id/accountCreate_confirmPasswordEditText"
-        android:layout_alignLeft="@+id/accountCreate_heightEditText"
-        android:layout_alignStart="@+id/accountCreate_heightEditText"
-        android:layout_marginTop="17dp"/>
+        </LinearLayout>
 
-</RelativeLayout>
+        <Button
+            style="@style/AppCompat.Button.FW_Trails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_createAccount_text"
+            android:id="@+id/createAccountButton"
+            android:layout_alignTop="@+id/cancelCreateAccountButton"
+            android:layout_alignRight="@+id/accountInfoTextView"
+            android:layout_alignEnd="@+id/accountInfoTextView"
+            android:layout_marginRight="29dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginBottom="20dp"/>
+
+        <Button
+            style="@style/AppCompat.Button.FW_Trails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/button_Cancel_text"
+            android:id="@+id/cancelCreateAccountButton"
+            android:layout_below="@+id/disclaimer_Textview"
+            android:layout_toRightOf="@+id/createAccountButton"
+            android:layout_toEndOf="@+id/createAccountButton"
+            android:layout_marginLeft="44dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/accountInfoText"
+            android:id="@+id/accountInfoTextView"
+            android:layout_marginTop="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/textView"
+            android:layout_alignStart="@+id/textView"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/accountCreate_usernameEditText"
+            android:hint="@string/usernameText"
+            android:layout_below="@+id/accountInfoTextView"
+            android:layout_alignLeft="@+id/accountInfoTextView"
+            android:layout_alignStart="@+id/accountInfoTextView"
+            android:layout_marginTop="22dp"
+            android:layout_alignRight="@+id/accountCreate_heightEditText"
+            android:layout_alignEnd="@+id/accountCreate_heightEditText"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="@string/login_hint_password"
+            android:id="@+id/accountCreate_passwordEditText"
+            android:layout_below="@+id/accountCreate_usernameEditText"
+            android:layout_alignLeft="@+id/accountCreate_usernameEditText"
+            android:layout_alignStart="@+id/accountCreate_usernameEditText"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:hint="@string/retypePasswordText"
+            android:id="@+id/accountCreate_confirmPasswordEditText"
+            android:layout_below="@+id/accountCreate_passwordEditText"
+            android:layout_alignLeft="@+id/accountCreate_passwordEditText"
+            android:layout_alignStart="@+id/accountCreate_passwordEditText"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/personalInfoText"
+            android:id="@+id/textView"
+            android:layout_below="@+id/accountCreate_confirmPasswordEditText"
+            android:layout_alignLeft="@+id/accountCreate_heightEditText"
+            android:layout_alignStart="@+id/accountCreate_heightEditText"
+            android:layout_marginTop="17dp"/>
+
+    </RelativeLayout>
+</ScrollView>
